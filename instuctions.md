@@ -25,15 +25,18 @@ Obviously all preparation don't have to be done in an particular order. So if yo
 
 **Solder Microcontroller**\
 Solder the pin header to the microcontroller and add wires to the battery pads.
+
 <img src="img/esp_top.png" height="200">
 <img src="img/esp_bottom.png" height="200">
 
 **Crimp Cable**\
 Crimp one 3-pin JST (PH) connector on one side of the cable and a 3-pin male Dupont connector on the other. Make sure the wires follow the correct order: VCC (red), SIGNAL (yellow), GND (black). If you want the cable to fit tightly through the hole in the housing, feed the cable through the hole before crimping the connector, as crimped plugs won’t fit through small openings.
+
 <img src="img/sensor_connectors.png" height="200">
 
 **Prepare Sensor**\
 Discard the cable that comes with the sensor. Connect the sensor with the longer round cable you just prepared. Put the sensor into the 3D-printed housing and screw it together.
+
 <img src="img/sensor_connection.png" height="200">
 <img src="img/sensor_housing.png" height="200">
 <img src="img/sensor_final.png" height="200">
@@ -63,8 +66,8 @@ We will connect the battery pack through the Schottky diode in the last steps.
 
 It should look like this in the end:
 
-<img src="img/full_circuit.png" height="200">
-<img src="img/circuit_close_up.png" height="200">
+<img src="img/full_circuit.png" height="400">
+<img src="img/circuit_close_up.png" height="400">
 
 ## Program the Microcontroller
 You should already have the Arduino IDE with the respective libraries set up. If not, check out these [instructions](https://wiki.seeedstudio.com/xiao_esp32c6_getting_started/#software-preparation).
