@@ -1,6 +1,6 @@
 # Build Instructions
 
-## Collect All Parts
+## 1. Collect All Parts
 At the beginning get all the necessary parts together. 
 
 **List of parts**
@@ -18,7 +18,7 @@ At the beginning get all the necessary parts together.
 - 8x Wood Screws
 - Velco Tape
 
-## Prepare Parts
+## 2. Prepare Parts
 Some parts have to be prepared (soldered/crimped/glued). You have the option to get them pre-prepared from us if you feel unconfortable using the tools but you are encouraged to try even if you never used them before!
 
 Obviously all preparation don't have to be done in an particular order. So if you see that some tools are in use that you need, just do some other preparation.
@@ -36,16 +36,18 @@ Crimp one 3-pin JST (PH) connector on one side of the cable and a 3-pin male Dup
 **Prepare Sensor**\
 Discard the cable that comes with the sensor. Connect the sensor with the longer round cable you just prepared. Put the sensor into the 3D-printed housing and screw it together.
 
-<img src="img/sensor_connection.png" height="200">
-<img src="img/sensor_housing.png" height="200">
-<img src="img/sensor_final.png" height="200">
+<img src="img/sensor_connection.png" height="200"> <img src="img/sensor_housing.png" height="200"> <img src="img/sensor_final.png" height="200">
 
 **Prepare the Housing**\
 Assemble the laser-cut housing. Drill a hole into one wall for the sensor cable. Use a 8mm drill for the hole. If you want to have the cable fit very in the hole, you can use a 5mm drill but you might need to remove the connector end of the cable to fit it through (or put it through the hole before crimping). 
 
-## Assemble the Circuit
+## 3. Assemble the Circuit
 Add all parts to the breadboard as shown in the circuit below.
 ![image](img/moisture_circuit.png)
+
+XIAO ESP32C6 Pinout
+<img src="https://wdcdn.qpic.cn/MTY4ODg1Nzc0ODUwMjM3NA_318648_dMoXitoaQiq2N3-a_1711678067?w=1486&h=1228" alt="XIAO ESP32C6 Pinout"> 
+
 
 ⚠️ Important: Do not connect the battery pack yet. We’ll add it only after programming and testing to avoid accidental powering.
 
@@ -68,7 +70,7 @@ It should look like this in the end:
 <img src="img/full_circuit.png" height="400">
 <img src="img/circuit_close_up.png" height="400">
 
-## Program the Microcontroller
+## 4. Program the Microcontroller
 You should already have the Arduino IDE with the respective libraries set up. If not, check out these [instructions](https://wiki.seeedstudio.com/xiao_esp32c6_getting_started/#software-preparation).
 
 If you want to test the connection, you can programm your microcontroller with an example script: [Blink LED](https://wiki.seeedstudio.com/xiao_esp32c6_getting_started/#run-your-first-blink-program).
@@ -88,7 +90,7 @@ Here are the general steps to upload a programm to your microcontroller:
 4. Release the button after 2 seconds
 5. Try uploading again
 
-### Test Moisture Sensor
+### 4.1 Test Moisture Sensor
 Copy this script into your Arduino IDE and flash the ESP with it. You should see output in the Serial Monitor (if not active yet, Tools>Serial Monitor)
 
 Note: Make sure the sensor cable is fully plugged in and the metal prongs of the sensor are not touching each other. Readings may be unstable if the power to the sensor is not reliable.
@@ -141,7 +143,7 @@ void loop() {
 
 ```
 
-### Moisture Sensor Calibration (optional)
+### 4.2 Moisture Sensor Calibration (optional)
 
 The moisture sensor gives you a voltage that decreases as moisture increases. To convert this into a percentage, you need to define two reference points:
 
@@ -174,7 +176,7 @@ const float maxMoistureVoltage = 2.5;
 ```
 Note: Use these values in the final code as well!
 
-### Upload Final Script
+### 4.3 Upload Final Script
 Download or copy the final code from this repository.
 
 Before uploading the final code, open the sketch in Arduino IDE and scroll to the "USER SETTINGS" section at the top. Adjust the following values to match your setup:
@@ -217,9 +219,9 @@ Upload the code and monitor the dashboard. You should see your plant/device comi
 
 Tip: For battery-powered operation, it's best to set the sleep time to 3600 seconds (1 hour). This gives you a good balance between data frequency and battery life.
 
-### Final Test and Assembly
+## 5.Final Test and Assembly
 
-Now unplug the Microcontroller and add the battery pack to the circuit (keep it switched off first). Connect the - of the battery pack to the - rail. Connect  the + of the pack to the + rail through the Schottky diode. The diode protects the batteries. Take a close look at the orientation of the diode!
+Unplug the Microcontroller and add the battery pack to the circuit (keep it switched off first). Connect the - of the battery pack to the - rail. Connect  the + of the pack to the + rail through the Schottky diode. The diode protects the batteries. Take a close look at the orientation of the diode!
 
 If everything is connected correctly (double check) and no USB is connected to the microcontroller, flip the switch of the battery pack and watch for your data coming in on the dashboard.
 
