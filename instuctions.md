@@ -26,8 +26,7 @@ Obviously all preparation don't have to be done in an particular order. So if yo
 **Solder Microcontroller**\
 Solder the pin header to the microcontroller and add wires to the battery pads.
 
-<img src="img/esp_top.png" height="200">
-<img src="img/esp_bottom.png" height="200">
+<img src="img/esp_top.png" height="200"> <img src="img/esp_bottom.png" height="200">
 
 **Crimp Cable**\
 Crimp one 3-pin JST (PH) connector on one side of the cable and a 3-pin male Dupont connector on the other. Make sure the wires follow the correct order: VCC (red), SIGNAL (yellow), GND (black). If you want the cable to fit tightly through the hole in the housing, feed the cable through the hole before crimping the connector, as crimped plugs won’t fit through small openings.
@@ -89,7 +88,7 @@ Here are the general steps to upload a programm to your microcontroller:
 4. Release the button after 2 seconds
 5. Try uploading again
 
-**Test Moisture Sensor**\
+### Test Moisture Sensor
 Copy this script into your Arduino IDE and flash the ESP with it. You should see output in the Serial Monitor (if not active yet, Tools>Serial Monitor)
 
 Note: Make sure the sensor cable is fully plugged in and the metal prongs of the sensor are not touching each other. Readings may be unstable if the power to the sensor is not reliable.
@@ -142,7 +141,7 @@ void loop() {
 
 ```
 
-**Moisture Sensor Calibration (optional)**
+### Moisture Sensor Calibration (optional)
 
 The moisture sensor gives you a voltage that decreases as moisture increases. To convert this into a percentage, you need to define two reference points:
 
@@ -175,7 +174,7 @@ const float maxMoistureVoltage = 2.5;
 ```
 Note: Use these values in the final code as well!
 
-**Upload Final Script**
+### Upload Final Script
 Download or copy the final code from this repository.
 
 Before uploading the final code, open the sketch in Arduino IDE and scroll to the "USER SETTINGS" section at the top. Adjust the following values to match your setup:
@@ -218,7 +217,7 @@ Upload the code and monitor the dashboard. You should see your plant/device comi
 
 Tip: For battery-powered operation, it's best to set the sleep time to 3600 seconds (1 hour). This gives you a good balance between data frequency and battery life.
 
-## Final Test and Assembly
+### Final Test and Assembly
 
 Now unplug the Microcontroller and add the battery pack to the circuit (keep it switched off first). Connect the - of the battery pack to the - rail. Connect  the + of the pack to the + rail through the Schottky diode. The diode protects the batteries. Take a close look at the orientation of the diode!
 
