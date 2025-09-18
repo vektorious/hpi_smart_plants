@@ -71,7 +71,7 @@ These modules are not required for the starter project. Maybe we will add more i
 
 ## 📷 Example Setup
 
-![Example device](img/full_circuit.png)
+![Example device](img/final_build.png)
 
 ---
 
