@@ -46,7 +46,7 @@ Add all parts to the breadboard as shown in the circuit below.
 ![image](img/moisture_circuit.png)
 
 XIAO ESP32C6 Pinout
-<img src="https://wdcdn.qpic.cn/MTY4ODg1Nzc0ODUwMjM3NA_318648_dMoXitoaQiq2N3-a_1711678067?w=1486&h=1228" alt="XIAO ESP32C6 Pinout"> 
+<img src="img/XIAO_ESP32C6_pinout.png" alt="XIAO ESP32C6 Pinout"> 
 
 
 ⚠️ Important: Do not connect the battery pack yet. We’ll add it only after programming and testing to avoid accidental powering.
