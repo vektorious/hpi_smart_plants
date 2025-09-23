@@ -27,7 +27,7 @@ const float batteryDividerRatio = 2.0;
 // Measurement interval (in seconds)
 // 300 = 5 minutes, 3600 = 1 hour
 // Measuring every hour is recommended for longer battery life
-#define TIME_TO_SLEEP 300 
+#define TIME_TO_SLEEP 3600 
 
 // ================= PIN CONFIG ====================
 const int moisturePin     = A1;
