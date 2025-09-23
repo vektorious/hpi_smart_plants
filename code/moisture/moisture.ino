@@ -1,28 +1,24 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include <WiFiManager.h>  // https://github.com/tzapu/WiFiManager
 
 // ================= USER SETTINGS =================
-
-// Wi-Fi credentials
-// Replace with your own 2.4 GHz Wi-Fi network name and password
-const char* ssid     = "YOUR_WIFI_SSID";
-const char* password = "YOUR_WIFI_PASSWORD";
 
 // Device identification
 // Choose a unique name and short ID for your device
 // You can use an UUID generator and just use the first part (8 symbols) of the generated ID
 // https://www.uuidgenerator.net/version4
-const char* deviceName = "plant XIAO ESP32C6 test";
-const char* deviceUUID = "22593b17";
+const char* deviceName = "Maker Universe";
+const char* deviceUUID = "22593b21";
 
 // API endpoint
-const char* apiUrl  = "URL";
-const char* apiKey  = "KEY";
+const char* apiUrl  = "https://plants.makeruniverse.de/plants/measurements";
+const char* apiKey  = "vKpsikScqRUt2CdC";
 
 // Moisture sensor calibration
 // Measure voltage when sensor is in water (100%) and dry soil or air (0%)
-const float minMoistureVoltage = 0.60;  // wet reading (e.g. in water)
-const float maxMoistureVoltage = 2.45;  // dry reading (e.g. in air)
+const float minMoistureVoltage = 0.60;
+const float maxMoistureVoltage = 2.45;
 
 // Battery voltage divider ratio
 // Only change this if you are using a different resistor setup
@@ -31,18 +27,18 @@ const float batteryDividerRatio = 2.0;
 // Measurement interval (in seconds)
 // 300 = 5 minutes, 3600 = 1 hour
 // Measuring every hour is recommended for longer battery life
-#define TIME_TO_SLEEP 300
+#define TIME_TO_SLEEP 300 
 
-// ================= INTERNAL =================
-
+// ================= PIN CONFIG ====================
 const int moisturePin     = A1;
 const int batteryPin      = A0;
 const int sensorPowerPin  = D10;
 
+
 #define uS_TO_S_FACTOR 1000000ULL
 RTC_DATA_ATTR int bootCount = 0;
 
-// ========== FUNCTIONS ==========
+/// ========== FUNCTIONS ==========
 
 void printWakeupReason() {
   esp_sleep_wakeup_cause_t reason = esp_sleep_get_wakeup_cause();
@@ -56,8 +52,11 @@ void printWakeupReason() {
   }
 }
 
-void connectToWiFi() {
-  WiFi.begin(ssid, password);
+void setupWiFi() {
+  WiFi.mode(WIFI_STA);
+  WiFi.begin();
+
+  Serial.print("Connecting to Wi-Fi");
   int retries = 0;
   while (WiFi.status() != WL_CONNECTED && retries < 20) {
     delay(500);
@@ -65,24 +64,30 @@ void connectToWiFi() {
     retries++;
   }
   Serial.println();
+
   if (WiFi.status() == WL_CONNECTED) {
-    Serial.println("WiFi connected, IP: " + WiFi.localIP().toString());
-  } else {
-    Serial.println("WiFi connection failed");
+    Serial.println("Wi-Fi connected: " + WiFi.localIP().toString());
+    return;
+  }
+
+  Serial.println("Wi-Fi failed. Starting WiFiManager...");
+  WiFiManager wm;
+  String apName = "SmartPlant-Setup-" + String(deviceName);
+  wm.setConfigPortalTimeout(120);  // 2 min timeout
+  if (!wm.autoConnect(apName.c_str())) {
+    Serial.println("WiFiManager failed or timed out. Sleeping...");
+    shutdownAndSleep();
   }
 }
 
 float readBatteryVoltage() {
-  analogRead(batteryPin);  // dummy read
+  analogRead(batteryPin);
   delay(50);
-
   uint32_t Vbatt = 0;
   for (int i = 0; i < 16; i++) {
     Vbatt += analogReadMilliVolts(batteryPin);
   }
-
-  float voltage = batteryDividerRatio * Vbatt / 16 / 1000.0;
-  return voltage;
+  return batteryDividerRatio * Vbatt / 16 / 1000.0;
 }
 
 float readMoistureVoltage() {
@@ -128,16 +133,15 @@ void shutdownAndSleep() {
   digitalWrite(sensorPowerPin, LOW);
   WiFi.disconnect(true);
   WiFi.mode(WIFI_OFF);
-  btStop();
   delay(200);
   Serial.flush();
   Serial.end();
-
   esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
   esp_deep_sleep_start();
 }
 
 // ========== MAIN ==========
+
 void setup() {
   Serial.begin(115200);
   delay(1000);
@@ -146,9 +150,8 @@ void setup() {
   Serial.println("Boot #" + String(bootCount));
   printWakeupReason();
 
-  connectToWiFi();
+  setupWiFi();
 
-  // Power on and read moisture sensor
   pinMode(sensorPowerPin, OUTPUT);
   digitalWrite(sensorPowerPin, HIGH);
   delay(200);
@@ -156,10 +159,8 @@ void setup() {
   float moisturePercent = moistureVoltageToPercent(moistureVoltage);
   digitalWrite(sensorPowerPin, LOW);
 
-  // Read battery voltage last
   float batteryVoltage = readBatteryVoltage();
 
-  // Logging for debug
   Serial.println("Moisture voltage: " + String(moistureVoltage, 3) + " V");
   Serial.println("Moisture percent: " + String(moisturePercent, 1) + " %");
   Serial.println("Battery voltage: " + String(batteryVoltage, 2) + " V");
@@ -169,5 +170,5 @@ void setup() {
 }
 
 void loop() {
-  // Not used
+  // Nothing here
 }
