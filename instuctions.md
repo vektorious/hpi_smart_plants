@@ -183,26 +183,21 @@ Before uploading the final code, open the sketch in Arduino IDE and scroll to th
 ```cpp
 // ================= USER SETTINGS =================
 
-// Wi-Fi credentials
-// Replace with your own 2.4 GHz Wi-Fi network name and password
-const char* ssid     = "YOUR_WIFI_SSID";
-const char* password = "YOUR_WIFI_PASSWORD";
-
 // Device identification
 // Choose a unique name and short ID for your device
 // You can use an UUID generator and just use the first part (8 symbols) of the generated ID
 // https://www.uuidgenerator.net/version4
-const char* deviceName = "plant XIAO ESP32C6 test";
-const char* deviceUUID = "22593b17";
+const char* deviceName = "Maker Universe";
+const char* deviceUUID = "22593b21";
 
 // API endpoint
-const char* apiUrl  = "URL";
-const char* apiKey  = "KEY";
+const char* apiUrl  = "https://plants.makeruniverse.de/plants/measurements";
+const char* apiKey  = "vKpsikScqRUt2CdC";
 
 // Moisture sensor calibration
 // Measure voltage when sensor is in water (100%) and dry soil or air (0%)
-const float minMoistureVoltage = 0.60;  // wet reading (e.g. in water)
-const float maxMoistureVoltage = 2.45;  // dry reading (e.g. in air)
+const float minMoistureVoltage = 0.60;
+const float maxMoistureVoltage = 2.45;
 
 // Battery voltage divider ratio
 // Only change this if you are using a different resistor setup
@@ -211,11 +206,12 @@ const float batteryDividerRatio = 2.0;
 // Measurement interval (in seconds)
 // 300 = 5 minutes, 3600 = 1 hour
 // Measuring every hour is recommended for longer battery life
-#define TIME_TO_SLEEP 300
+#define TIME_TO_SLEEP 300 
 
 ```
+This project uses WiFiManager, a user-friendly tool that allows the device to connect to a Wi-Fi network without hardcoded credentials. When powered on for the first time (or if no connection can be established), the device automatically starts a temporary Wi-Fi access point for 2 minutes, where users can enter their home Wi-Fi details via a web interface. After configuration, the device connects automatically in future sessions without needing to re-enter the credentials. You can always re-trigger the launch of the access point by switching the device off and on again.
 
-Upload the code and monitor the dashboard. You should see your plant/device coming up soon! If that worked, you are ready for the final Assembly.
+Upload the code, look out for a Wi-Fi access point named "SmartPlant-Setup-DEVICE_NAME". Connect to it and enter the Wifi credentials. Now monitor the dashboard. You should see your plant/device coming up soon! If that worked, you are ready for the final Assembly.
 
 Tip: For battery-powered operation, it's best to set the sleep time to 3600 seconds (1 hour). This gives you a good balance between data frequency and battery life.
 
