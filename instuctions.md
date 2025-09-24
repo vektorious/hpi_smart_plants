@@ -40,7 +40,7 @@ _Discard the cable that comes with the sensor_ (give it to us). Connect the sens
 **Prepare the Housing (skip if in the workshop and do it home or after everything else is done)**\
 Assemble the laser-cut housing. Drill a hole into one wall for the sensor cable. Use a 8mm drill for the hole. If you want to have the cable fit very tightly in the hole, you can use a 5mm drill but you might need to remove the connector end of the cable to fit it through (or put it through the hole before crimping).
 
-⚠️ Important: Add the corners NOT at the end. Add them while you are connecting the sides. Otherwise you won't be able to fit them in there!
+⚠️ Important: ADO NOT add the small corners at the end. Add them while you are connecting the sides. Otherwise you won't be able to fit them in there!
 
 ## 3. Assemble the Circuit
 Add all parts to the breadboard as shown in the circuit below.
@@ -78,7 +78,7 @@ You should already have the Arduino IDE with the respective board libraries set 
 ### 4.2 Install the WiFiManager Library
 You still need to install the WiFiManager libary. In the Arduino IDE select Tools > Manage Libraries. In the search bar enter "wifimanager" and install the library from "tzapu" (see below).
 
-<img src="img/install_wm.png" height="300">
+<img src="img/install_wm.png" height="400">
 
 ### 4.3 How to upload code to the Microcontroller
 Here are the general steps to upload a programm to your microcontroller:
@@ -238,7 +238,7 @@ void printWakeupReason() {
       break;
     default:
       Serial.printf("Wakeup not from timer: %d\n", reason);
-      break;
+      break;hab leider eine kleine Unbekannte 
   }
 }
 
