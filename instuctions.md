@@ -238,7 +238,7 @@ void printWakeupReason() {
       break;
     default:
       Serial.printf("Wakeup not from timer: %d\n", reason);
-      break;hab leider eine kleine Unbekannte 
+      break;
   }
 }
 
