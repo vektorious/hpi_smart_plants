@@ -1,4 +1,4 @@
-# Build Instructions
+# Build Instructions Base Module
 ## 1. Collect All Parts
 At the beginning get all the necessary parts together. 
 
@@ -22,12 +22,12 @@ Some parts have to be prepared (soldered/crimped/glued). You have the option to 
 
 Obviously all preparation don't have to be done in an particular order. So if you see that some tools are in use that you need, just do some other preparation.
 
-**Solder Microcontroller (skip if in the workshop)**\
+**Solder Microcontroller**\
 Solder the pin header to the microcontroller and add wires to the battery pads.
 
 <img src="img/esp_top.png" height="200"> <img src="img/esp_bottom.png" height="200">
 
-**Crimp Cable (skip if in the workshop)**\
+**Crimp Cable**\
 Crimp one 3-pin JST (PH) connector on one side of the cable and a 3-pin male Dupont connector on the other. Make sure the wires follow the correct order: VCC (red), SIGNAL (yellow), GND (black). If you want the cable to fit tightly through the hole in the housing, feed the cable through the hole before crimping the connector, as crimped plugs won’t fit through small openings.
 
 <img src="img/sensor_connectors.png" height="200">
@@ -37,10 +37,10 @@ _Discard the cable that comes with the sensor_ (give it to us). Connect the sens
 
 <img src="img/sensor_connection.png" height="200"> <img src="img/sensor_housing.png" height="200"> <img src="img/sensor_final.png" height="200">
 
-**Prepare the Housing (skip if in the workshop and do it home or after everything else is done)**\
-Assemble the laser-cut housing. Drill a hole into one wall for the sensor cable. Use a 8mm drill for the hole. If you want to have the cable fit very tightly in the hole, you can use a 5mm drill but you might need to remove the connector end of the cable to fit it through (or put it through the hole before crimping).
+**Prepare the Housing**\
+Assemble the laser-cut housing. If there is not yet a hole for the sensor cable, drill one (use a 8mm drill). If you want to have the cable fit very tightly in the hole, you can use a 5mm drill but you might need to remove the connector end of the cable to fit it through (or put it through the hole before crimping). You can also use the cable plugs to have neat cable exits. 
 
-⚠️ Important: ADO NOT add the small corners at the end. Add them while you are connecting the sides. Otherwise you won't be able to fit them in there!
+⚠️ Important: ADO NOT add the small corners of the housing at the end. Add them while you are connecting the sides. Otherwise you won't be able to fit them in there!
 
 ## 3. Assemble the Circuit
 Add all parts to the breadboard as shown in the circuit below.
@@ -149,7 +149,7 @@ void loop() {
 
 ```
 
-### 4.5 Moisture Sensor Calibration (skip if in the workshop)
+### 4.5 Moisture Sensor Calibration (optional!)
 
 The moisture sensor gives you a voltage that decreases as moisture increases. To convert this into a percentage, you need to define two reference points:
 

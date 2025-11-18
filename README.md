@@ -34,7 +34,7 @@ No soldering experience required – but you'll have the chance to try!
 
 Detailed step-by-step assembly, wiring, programming, and calibration instructions are provided here:
 
-📄 [**instructions.md**](./instructions.md)
+📄 [**instructions.md**](./instructions/base_module_batteries.md)
 
 ---
 
