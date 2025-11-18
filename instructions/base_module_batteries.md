@@ -25,17 +25,17 @@ Obviously all preparation don't have to be done in an particular order. So if yo
 **Solder Microcontroller**\
 Solder the pin header to the microcontroller and add wires to the battery pads.
 
-<img src="img/esp_top.png" height="200"> <img src="img/esp_bottom.png" height="200">
+<img src="../img/esp_top.png" height="200"> <img src="img/esp_bottom.png" height="200">
 
 **Crimp Cable**\
 Crimp one 3-pin JST (PH) connector on one side of the cable and a 3-pin male Dupont connector on the other. Make sure the wires follow the correct order: VCC (red), SIGNAL (yellow), GND (black). If you want the cable to fit tightly through the hole in the housing, feed the cable through the hole before crimping the connector, as crimped plugs won’t fit through small openings.
 
-<img src="img/sensor_connectors.png" height="200">
+<img src="../img/sensor_connectors.png" height="200">
 
 **Prepare Sensor**\
 _Discard the cable that comes with the sensor_ (give it to us). Connect the sensor with the longer round cable you just prepared. Put the sensor into the 3D-printed housing and screw it together. We recommend to push the black isolation of the cable into the housing hole so it seals it tightly.
 
-<img src="img/sensor_connection.png" height="200"> <img src="img/sensor_housing.png" height="200"> <img src="img/sensor_final.png" height="200">
+<img src="../img/sensor_connection.png" height="200"> <img src="../img/sensor_housing.png" height="200"> <img src="../img/sensor_final.png" height="200">
 
 **Prepare the Housing**\
 Assemble the laser-cut housing. If there is not yet a hole for the sensor cable, drill one (use a 8mm drill). If you want to have the cable fit very tightly in the hole, you can use a 5mm drill but you might need to remove the connector end of the cable to fit it through (or put it through the hole before crimping). You can also use the cable plugs to have neat cable exits. 
@@ -44,10 +44,10 @@ Assemble the laser-cut housing. If there is not yet a hole for the sensor cable,
 
 ## 3. Assemble the Circuit
 Add all parts to the breadboard as shown in the circuit below.
-![image](img/moisture_circuit.png)
+![image](../img/moisture_circuit.png)
 
 XIAO ESP32C6 Pinout
-<img src="img/XIAO_ESP32C6_pinout.png" alt="XIAO ESP32C6 Pinout"> 
+<img src="../img/XIAO_ESP32C6_pinout.png" alt="XIAO ESP32C6 Pinout"> 
 
 
 ⚠️ Important: Do not connect the battery pack yet. We’ll add it only after programming and testing to avoid accidental powering.
@@ -68,8 +68,8 @@ We will connect the battery pack through the Schottky diode in the last steps.
 
 It should look like this in the end:
 
-<img src="img/full_circuit.png" height="400">
-<img src="img/circuit_close_up.png" height="400">
+<img src="../img/full_circuit.png" height="400">
+<img src="../img/circuit_close_up.png" height="400">
 
 ## 4. Program the Microcontroller
 ### 4.1 Preparations
@@ -78,7 +78,7 @@ You should already have the Arduino IDE with the respective board libraries set 
 ### 4.2 Install the WiFiManager Library
 You still need to install the WiFiManager libary. In the Arduino IDE select Tools > Manage Libraries. In the search bar enter "wifimanager" and install the library from "tzapu" (see below).
 
-<img src="img/install_wm.png" height="400">
+<img src="../img/install_wm.png" height="400">
 
 ### 4.3 How to upload code to the Microcontroller
 Here are the general steps to upload a programm to your microcontroller:

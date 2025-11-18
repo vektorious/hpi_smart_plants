@@ -36,7 +36,7 @@ Solder a two-core cable to the pumps connectors. Insert the pump into the housin
 ## 4. Assemble the Pump Add-On Circuit
 
 Follow the diagram:
-![image](img/moisture_circuit.png)
+![image](../img/moisture_circuit.png)
 
 Here are all the connections written out:
 
