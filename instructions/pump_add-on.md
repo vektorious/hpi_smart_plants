@@ -36,6 +36,7 @@ Solder a two-core cable to the pumps connectors. Insert the pump into the housin
 ## 4. Assemble the Pump Add-On Circuit
 
 Follow the diagram:
+
 **Battery Pack Version**
 ![image](../img/moisture+pump_circuit_bb.png)
 
