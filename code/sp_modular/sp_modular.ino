@@ -8,7 +8,7 @@
 RTC_DATA_ATTR int bootCount = 0;
 
 // Define the externs from config.h
-const char* DEVICE_NAME = "PCB-all-sensors";
+const char* DEVICE_NAME = "Test";
 const char* DEVICE_UUID = "22593b11";
 const char* API_URL     = "https://plants.makeruniverse.de/plants/measurements";
 const char* API_KEY     = "vKpsikScqRUt2CdC";

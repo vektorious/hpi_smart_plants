@@ -50,7 +50,7 @@
       "conflict_shadows",
       "shapes"
     ],
-    "visible_layers": "ffffffff_ffffffff_ffffd575_df55ddfb",
+    "visible_layers": "ffffffff_ffffffff_fffffff5_ff55fffa",
     "zone_display_mode": 0
   },
   "git": {
@@ -59,7 +59,7 @@
     "ssh_key": ""
   },
   "meta": {
-    "filename": "smart_plants_breakout_rev1.kicad_prl",
+    "filename": "smart_plants_breakout_ws-board_rev1.kicad_prl",
     "version": 5
   },
   "net_inspector_panel": {
