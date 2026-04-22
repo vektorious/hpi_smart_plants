@@ -1,0 +1,36 @@
+name: Agent Ailex
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned, labeled]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  claude-response:
+    runs-on: ubuntu-latest
+    if: github.event.comment.user.login == 'vektorious'
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ steps.app-token.outputs.token }}
+          bot_name: "Ailex"
+          bot_id: "275067115"
+          trigger_phrase: "@ailex"

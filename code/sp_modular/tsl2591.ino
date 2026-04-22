@@ -9,7 +9,10 @@ bool readTSL(float &lux, uint16_t &ir, uint16_t &full) {
   digitalWrite(PIN_TSL_POWER, HIGH);
   delay(150);
 
-  if (!tsl.begin()) return false;
+  if (!tsl.begin()) {
+    digitalWrite(PIN_TSL_POWER, LOW);
+    return false;
+  }
 
   tsl.setGain(TSL2591_GAIN_MED);
   tsl.setTiming(TSL2591_INTEGRATIONTIME_100MS);
@@ -19,6 +22,7 @@ bool readTSL(float &lux, uint16_t &ir, uint16_t &full) {
   full = lum & 0xFFFF;
   lux  = tsl.calculateLux(full, ir);
 
+  digitalWrite(PIN_TSL_POWER, LOW);
   return true;
 }
 #endif
