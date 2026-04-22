@@ -12,6 +12,7 @@ on:
 jobs:
   claude-response:
     runs-on: ubuntu-latest
+    if: github.event.comment.user.login == 'vektorious'
     permissions:
       contents: write
       pull-requests: write
