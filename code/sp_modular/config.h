@@ -16,14 +16,14 @@ extern const char* API_KEY;
 #define uS_TO_S_FACTOR 1000000ULL
 
 // ============ PIN CONFIG ============
-#define PIN_MOISTURE     A1
-#define PIN_BATTERY      A0
-#define PIN_SENSOR_POWER D8
-#define PIN_BME_POWER    D3
-#define PIN_TSL_POWER    D6
-#define PIN_PUMP         D7
-#define PIN_SDA          D4
-#define PIN_SCL          D5
+#define PIN_MOISTURE     1
+#define PIN_BATTERY      0
+#define PIN_SENSOR_POWER 21
+#define PIN_BME_POWER    2
+#define PIN_TSL_POWER    3
+#define PIN_PUMP         22
+#define PIN_SDA          4
+#define PIN_SCL          5
 
 // ============ CALIBRATION ============
 #define MIN_MOIST_V   0.60f
@@ -32,7 +32,7 @@ extern const char* API_KEY;
 
 // Pump settings
 #define MOISTURE_THRESHOLD  30.0f
-#define PUMP_DURATION_SEC   10
+#define PUMP_DURATION_SEC   2
 
 // Shared data struct
 struct SensorPacket {
