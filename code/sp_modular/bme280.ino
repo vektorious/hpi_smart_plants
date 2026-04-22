@@ -9,12 +9,16 @@ bool readBME280(float &t, float &h, float &p) {
   digitalWrite(PIN_BME_POWER, HIGH);
   delay(150);
 
-  Wire.begin(PIN_SDA, PIN_SCL);
-  if (!bme.begin(0x76)) return false;
+  if (!bme.begin(0x76)) {
+    digitalWrite(PIN_BME_POWER, LOW);
+    return false;
+  }
 
   t = bme.readTemperature();
   h = bme.readHumidity();
   p = bme.readPressure() / 100.0F;
+
+  digitalWrite(PIN_BME_POWER, LOW);
   return true;
 }
 
