@@ -1,0 +1,18 @@
+Smart Plants Starter Kit — License Overview
+===========================================
+
+This project uses separate licenses for its different components:
+
+  Software (code/)
+    MIT License
+    See: LICENSE.code
+
+  Hardware (hardware/, src/)
+    CERN Open Hardware Licence Version 2 - Weakly Reciprocal (CERN-OHL-W-2.0)
+    See: LICENSE.hardware
+
+  Documentation (instructions/, README.md, img/)
+    Creative Commons Attribution 4.0 International (CC-BY-4.0)
+    See: LICENSE.docs
+
+Copyright (c) 2026 Alexander Kutschera

@@ -1,0 +1,272 @@
+CERN Open Hardware Licence Version 2 - Weakly Reciprocal
+
+SPDX-License-Identifier: CERN-OHL-W-2.0
+
+Copyright Alexander Kutschera 2026
+
+                                                              Preamble
+
+CERN has developed this licence to promote collaboration among hardware
+designers and to provide a legal tool which supports the freedom to use,
+study, modify, share and distribute hardware designs and products based on
+those designs. Version 2 of the CERN OHL comes in three variants:
+CERN-OHL-P (permissive); and two reciprocal licences: this licence,
+CERN-OHL-W (weakly reciprocal) and CERN-OHL-S (strongly reciprocal).
+
+The CERN-OHL-W is copyright CERN 2020. Anyone is welcome to use it, in
+unmodified form only.
+
+Use of this Licence does not imply any endorsement by CERN of any Licensor
+or their designs nor does it imply any involvement by CERN in their
+development.
+
+                                                           1 Definitions
+
+  1.1 'Licence' means this CERN-OHL-W.
+
+  1.2 'Compatible Licence' means
+
+       a) any version of the CERN-OHL-W; or
+
+       b) a licence which:
+
+           i) is available from a URL listed in Appendix A; and
+
+          ii) permits the Licensed Source to be licensed under this Licence.
+
+  1.3 'Source' means information such as design materials or digital code
+      which can be applied to Make or test a Product or to prepare a Product
+      for use, distribution or sale, regardless of its medium or how it is
+      expressed. It may include Notices.
+
+  1.4 'Covered Source' means Source that is explicitly made available under
+      this Licence.
+
+  1.5 'Product' means any device, component, work or physical object,
+      whether in finished or intermediate form, arising from the use,
+      application or processing of Covered Source.
+
+  1.6 'Make' means to create or configure something, whether by
+      manufacture, assembly, compiling, loading or applying Covered Source
+      or another Product or otherwise.
+
+  1.7 'Available Component' means any part, tool, library or code which:
+
+       a) is licensed under a Compatible Licence; or
+
+       b) is available as a component to be incorporated into a design
+          without restriction.
+
+  1.8 'External Material' means anything (including Source) which:
+
+       a) is only combined with Covered Source in such a way that it
+          interfaces with Covered Source using documented interfaces which
+          are publicly available and whose documentation is publicly
+          available; and
+
+       b) is not a derivative of or does not include Covered Source, or if
+          it does, only to the extent necessary to facilitate such
+          interfacing.
+
+  1.9 'Notices' means copyright, acknowledgement and trademark notices,
+      references to the location of any Notices, modification notices
+      (subsection 3.3(b)) and all notices that refer to this Licence and to
+      the disclaimer of warranties that are included in the Covered Source.
+
+ 1.10 'Licensor' means any person who creates or modifies Covered Source.
+      A person may be a Licensor for some aspects of Covered Source and not
+      others.
+
+ 1.11 'Recipient' means the person receiving the Covered Source from the
+      Licensor.
+
+ 1.12 'Publicly Available' means that the information is available for
+      access by anyone upon request without restrictions or conditions which
+      prevent access to it being given to any person.
+
+ 1.13 'Repository' means a place where Covered Source is stored and
+      accessible for download.
+
+ 1.14 'CERN' means the European Organisation for Nuclear Research.
+
+                                                         2 Applicability
+
+  2.1 This Licence governs the use, copying, modification, Making of, and
+      distribution of Covered Source and Products, and the Making of
+      Products. By exercising any right granted under this Licence, the
+      Recipient irrevocably accepts these terms and conditions.
+
+  2.2 This Licence is granted by the Licensor directly to the Recipient,
+      and shall apply worldwide and without limitation in time.
+
+  2.3 The Recipient shall not attempt to restrict by contract or otherwise
+      the rights granted under this Licence to other Recipients.
+
+  2.4 CERN reserves the right to publish new versions of this Licence and
+      so authorises the Licensor, at their sole discretion, to use any
+      subsequent version of the CERN-OHL or, where a Compatible Licence
+      specifies that it may use any subsequent version of itself, such
+      subsequent version.
+
+                              3 Copying, modifying and distributing Covered Source
+
+  3.1 The Recipient may copy and distribute verbatim copies of the Covered
+      Source in any medium, provided it keeps intact all the Notices.
+
+  3.2 The Recipient may modify Covered Source, provided that:
+
+       a) it keeps intact all the Notices related to the original Covered
+          Source or, where these become no longer applicable, it includes
+          reasonable alternative Notices;
+
+       b) it includes a Notice referencing this Licence and the location at
+          which the Covered Source is available, together with the date of
+          modification;
+
+       c) it follows the provisions set out in Section 3.4 to make such
+          modification Publicly Available in the form of Covered Source,
+          under this Licence or a Compatible Licence, within thirty (30)
+          calendar days of Making a Product with such modification; and
+
+       d) where it makes any change to the Covered Source which results in
+          a change to the functionality or operation of any Product made
+          from that Covered Source, it (or, where applicable, a Related
+          Product) has been tested in some reasonable manner.
+
+  3.3 The Recipient shall, when distributing modified Covered Source:
+
+       a) include a copy of this Licence and any Notices associated with
+          the Covered Source;
+
+       b) include a Notice characterising each modification made by each
+          Licensor and specifying the date of each modification;
+
+       c) provide a Repository location for the modified Covered Source,
+          which shall be available to any Recipient for a period of no less
+          than three years; and
+
+       d) not impose any additional restrictions on the rights granted by
+          this Licence or by any Compatible Licence.
+
+  3.4 Subject to Section 4, Covered Source made available for download from
+      a Repository shall be made available in the preferred form for making
+      modifications to it. If the Covered Source includes scripts or
+      automated tools to control compilation and installation of a Product,
+      all such necessary scripts and tools shall also be included.
+
+                                          4 Making and distributing Products
+
+  4.1 Where the Recipient Makes a Product which incorporates the Covered
+      Source, the Recipient may do so for any purpose whatsoever and
+      without having to make the Covered Source or modifications thereto
+      available under the terms of this Licence, subject to Sections 4.2
+      and 4.3.
+
+  4.2 Where the Recipient incorporates the Covered Source into a Product
+      (but not where it is an Available Component of the Product), the
+      Recipient shall provide either:
+
+       a) A copy of the Covered Source (and of any modifications thereto
+          made by the Recipient) in accordance with Section 3; or
+
+       b) A written offer (valid for at least three years or for as long as
+          the Recipient offers spare parts or product support for that
+          Product model) to provide, to any third party requesting it, a
+          complete copy of the Covered Source in accordance with Section 3
+          at no more than the cost of providing it.
+
+  4.3 Where the Recipient Makes a modified version of the Covered Source
+      into a Product and distributes that Product, the modified Covered
+      Source shall be provided to any Recipient requesting it, in accordance
+      with Section 3.
+
+  4.4 The Recipient may not impose any further restrictions on the exercise
+      of the rights granted or affirmed under this Licence. The Recipient
+      acknowledges that the Licensor is not responsible for third party
+      licences which may apply to the Covered Source or to Products based
+      on it.
+
+                                                  5 Warranties and Liability
+
+  5.1 The Covered Source and any Products are provided 'as is' and any
+      express or implied warranties, including, but not limited to, implied
+      warranties of merchantability, of satisfactory quality, non-
+      infringement of third party rights, and fitness for a particular
+      purpose or use, are disclaimed in respect of any Source or Product to
+      the maximum extent permitted by applicable law. The Licensor makes no
+      representation that the Covered Source, modifications thereto or any
+      Product will not infringe any patent, copyright, trade secret or other
+      proprietary right. The entire risk as to the use, quality, and
+      performance of any Source or Product shall be with the Recipient.
+      Should any Source or Product prove defective, the Recipient (and not
+      the Licensor or any other contributor) shall assume the cost of any
+      necessary servicing, repair or correction. The Licensor reserves the
+      right to offer the Covered Source and/or modified Covered Source under
+      additional or different licence terms and conditions in addition to, or
+      instead of, those set out in this Licence.
+
+  5.2 To the extent permitted by law, the Licensor shall not be liable to
+      the Recipient for:
+
+       a) any loss of use, revenues, profits, anticipated savings, goodwill
+          or data;
+
+       b) any indirect, special or consequential loss or damage;
+
+       c) any loss or damage of any kind arising out of the Recipient's use
+          of the Covered Source or any Product, except to the extent that
+          any death, personal injury, or property damage is attributable to
+          gross negligence or fraud by the Licensor.
+
+  5.3 Nothing in this Licence shall exclude or limit liability for:
+
+       a) fraud or fraudulent misrepresentation;
+
+       b) death or personal injury caused by negligence; and
+
+       c) any other liability which cannot be excluded by applicable law.
+
+                                                               6 Patents
+
+  6.1 Subject to the terms and conditions of this Licence, each Licensor
+      hereby grants to the Recipient a perpetual, worldwide, non-exclusive,
+      no-charge, royalty-free, irrevocable (except as stated in subsection
+      6.2) patent licence to Make, have Made, use, offer to sell, sell,
+      import, and otherwise transfer the Covered Source and Products, where
+      such licence applies only to those patent claims licensable by the
+      Licensor that are necessarily infringed by exercising rights under the
+      Covered Source as Licensor provides it. If the Recipient institutes or
+      orders or agrees to the institution of patent litigation against any
+      entity (including cross-claim or counterclaim in a lawsuit) alleging
+      that the Covered Source or a Product constitutes direct or
+      contributory patent infringement, then any patent licences granted to
+      the Recipient under this Licence shall terminate as of the date such
+      litigation is filed.
+
+  6.2 Where the Licensor is an organisation or company, the licence granted
+      in subsection 6.1 shall also apply to any Licensor who is an
+      employee, officer, director, agent or shareholder of that organisation
+      or company, and who authorises others to exercise the patent licence
+      granted in subsection 6.1 by using this Licence for the Covered
+      Source.
+
+                                                              7 General
+
+  7.1 If any provisions of this Licence are or subsequently become invalid
+      or unenforceable for any reason, the remaining provisions shall remain
+      effective.
+
+  7.2 Where there is a conflict between this Licence and the terms of any
+      agreement or licence entered into between the Recipient and a Licensor
+      other than CERN, the terms of the other agreement or licence shall
+      take precedence.
+
+  7.3 This Licence shall be governed by the law of the jurisdiction of the
+      Licensor's principal place of business unless otherwise agreed.
+
+                                                            Appendix A
+
+Compatible Licences:
+
+- CERN-OHL-W, available at https://ohwr.org/cern_ohl_w_v2.txt
+- CERN-OHL-S, available at https://ohwr.org/cern_ohl_s_v2.txt

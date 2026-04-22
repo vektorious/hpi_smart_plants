@@ -77,7 +77,13 @@ These modules are not required for the starter project. Maybe we will add more i
 
 ## 📘 License and Reuse
 
-All code and instructions in this project are open source and may be reused under the [MIT License](LICENSE).
+This project uses separate licenses for its different components:
+
+| Component | License |
+|-----------|---------|
+| Software (`code/`) | [MIT](LICENSE.code) |
+| Hardware (`hardware/`, `src/`) | [CERN-OHL-W 2.0](LICENSE.hardware) |
+| Documentation (`instructions/`, `README.md`, `img/`) | [CC-BY 4.0](LICENSE.docs) |
 
 ---
 
