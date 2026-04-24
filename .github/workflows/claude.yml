@@ -12,7 +12,7 @@ on:
 jobs:
   claude-response:
     runs-on: ubuntu-latest
-    if: github.event.comment.user.login == 'vektorious'
+    if: github.event.comment.user.login == 'vektorious' || github.event.issue.user.login == 'vektorious'
     permissions:
       contents: write
       pull-requests: write
@@ -33,4 +33,4 @@ jobs:
           github_token: ${{ steps.app-token.outputs.token }}
           bot_name: "Ailex"
           bot_id: "275067115"
-          trigger_phrase: "@ailex"
+          trigger_phrase: "@ailex-1"

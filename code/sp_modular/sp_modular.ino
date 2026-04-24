@@ -39,7 +39,7 @@ void setup() {
 
   SensorPacket d;
   d.temp = d.hum = d.press = NAN;
-  d.lux = 0; d.ir = d.full = 0;
+  d.lux = NAN; d.ir = d.full = 0;
   d.pumpSeconds = 0;
 
   // Moisture always on

@@ -20,7 +20,8 @@ bool readTSL(float &lux, uint16_t &ir, uint16_t &full) {
   uint32_t lum = tsl.getFullLuminosity();
   ir   = lum >> 16;
   full = lum & 0xFFFF;
-  lux  = tsl.calculateLux(full, ir);
+  // calculateLux divides by full internally; avoid NaN when both channels read 0 (e.g. at night)
+  lux  = (full == 0 && ir == 0) ? 0.0f : tsl.calculateLux(full, ir);
 
   digitalWrite(PIN_TSL_POWER, LOW);
   return true;

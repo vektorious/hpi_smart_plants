@@ -26,8 +26,6 @@ void sendData(const SensorPacket &d) {
 #if USE_TSL2591
   if (isValidFloat(d.lux)) {
     json += "\"lux\":{\"value\":" + String(d.lux,2) + "},";
-  }
-  if (d.ir > 0 || d.full > 0) {
     json += "\"ir\":{\"value\":" + String(d.ir) + "},";
     json += "\"full\":{\"value\":" + String(d.full) + "},";
   }
