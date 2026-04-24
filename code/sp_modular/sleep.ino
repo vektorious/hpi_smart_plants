@@ -1,4 +1,9 @@
 void goToSleep() {
+  pinMode(PIN_BME_POWER, OUTPUT);
+  digitalWrite(PIN_BME_POWER, LOW);
+  pinMode(PIN_TSL_POWER, OUTPUT);
+  digitalWrite(PIN_TSL_POWER, LOW);
+
   WiFi.disconnect(true);
   WiFi.mode(WIFI_OFF);
   delay(100);

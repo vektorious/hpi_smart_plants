@@ -17,8 +17,6 @@ bool readBME280(float &t, float &h, float &p) {
   t = bme.readTemperature();
   h = bme.readHumidity();
   p = bme.readPressure() / 100.0F;
-
-  digitalWrite(PIN_BME_POWER, LOW);
   return true;
 }
 
