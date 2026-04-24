@@ -75,7 +75,7 @@ These modules are not required for the starter project. Maybe we will add more i
 
 ---
 
-## 📘 License and Reuse
+## 📘 Licenses
 
 This project uses separate licenses for its different components:
 
@@ -85,6 +85,10 @@ This project uses separate licenses for its different components:
 | Hardware (`hardware/`, `src/`) | [CERN-OHL-W 2.0](LICENSE.hardware) |
 | Documentation (`instructions/`, `README.md`, `img/`) | [CC-BY 4.0](LICENSE.docs) |
 
+![Open Source Licenses](img/open-source-licenses.svg)
+
+This project is certified open source hardware by OSHWA under certification ID `DE000173`.
+
+![OSHWA certification mark](img/oshwa-certification-mark-stacked-DE000173.svg)
+
 ---
-
-
