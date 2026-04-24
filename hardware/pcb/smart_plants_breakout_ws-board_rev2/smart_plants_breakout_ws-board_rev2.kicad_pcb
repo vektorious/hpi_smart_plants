@@ -6699,8 +6699,8 @@
 		(at 73 51 90)
 		(descr "JST XH series connector, B3B-XH-A (http://www.jst-mfg.com/product/pdf/eng/eXH.pdf), generated with kicad-footprint-generator")
 		(tags "connector JST XH vertical")
-		(property "Reference" "Moisture D1-powered"
-			(at 2.5 -3.55 90)
+		(property "Reference" "Moisture"
+			(at 11 1 90)
 			(layer "F.SilkS")
 			(uuid "699a92c3-a416-478f-a636-4e77db1f20f6")
 			(effects
@@ -9552,14 +9552,38 @@
 			(justify left bottom)
 		)
 	)
+	(gr_text "D21-powered"
+		(at 76.51 43.44 90)
+		(layer "F.SilkS")
+		(uuid "4f582acf-af9f-458b-bf81-e7fa46f93e14")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
+			)
+			(justify left bottom)
+		)
+	)
 	(gr_text "Alexander Kutschera 2026\nSmart Plant Breakout Board\ngithub.com/vektorious/hpi_smart_plants"
-		(at 38.5 98 0)
+		(at 54 98.5 0)
 		(layer "F.SilkS")
 		(uuid "e9881d1a-603f-4f30-a3b9-f13a7097f284")
 		(effects
 			(font
 				(size 1 1)
 				(thickness 0.125)
+			)
+			(justify bottom)
+		)
+	)
+	(gr_text "S VDC GND"
+		(at 70 52 90)
+		(layer "F.SilkS")
+		(uuid "ff8b61f1-72d0-49a6-a482-0ac449d9cb83")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.1)
 			)
 			(justify left bottom)
 		)

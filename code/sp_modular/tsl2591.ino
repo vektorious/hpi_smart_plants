@@ -7,7 +7,7 @@ Adafruit_TSL2591 tsl = Adafruit_TSL2591(2591);
 bool readTSL(float &lux, uint16_t &ir, uint16_t &full) {
   pinMode(PIN_TSL_POWER, OUTPUT);
   digitalWrite(PIN_TSL_POWER, HIGH);
-  delay(150);
+  delay(300);
 
   if (!tsl.begin()) {
     digitalWrite(PIN_TSL_POWER, LOW);
