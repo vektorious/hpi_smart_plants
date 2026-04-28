@@ -73,20 +73,34 @@ Set any flag to `0` to disable that module — no code changes needed elsewhere.
 
 ```
 code/
-  sp_modular/        Modular firmware (current, for all builds)
-  legacy/            Old monolithic sketches (breadboard era, unsupported)
+  sp_modular/              Modular firmware (current, for all builds)
+    config.h               Feature flags, pin assignments, calibration
+    sp_modular.ino         Entry point
+    *.ino                  Sensor and actuator modules
+  legacy/                  Old monolithic sketches (breadboard era, unsupported)
 
 hardware/
-  pcb/               KiCAD projects + Gerber files for both PCB variants
-  3d-print/          STL/OBJ files for sensor and pump housings
-  laser_files/       SVG templates for the laser-cut enclosure
+  pcb/
+    smart_plants_breakout_ws-board_rev2/   Main build PCB (Waveshare)
+    smart_plants_breakout_rev1/            Alternative build PCB (XIAO)
+    legacy/                                Older PCB revisions
+    ext_files/                             KiCAD footprints and symbols
+  3d-print/
+    bme_housing/           Miniature Stevenson screen for BME280
+    light_sensor/          TSL2591 mount with diffuser
+    moisture_sensor/       Soil probe housing
+    pump/                  Diaphragm pump enclosure
+    cable_plugs/           M12 cable gland plug
+  laser_files/
+    SmartPlants_4mm_v3.svg Current enclosure template (4 mm material)
+    legacy/                Older enclosure versions
 
 instructions/
-  waveshare_pcb.md          Main build guide (start here)
-  background_information.md Sensor theory and design rationale
-  legacy/                   Old breadboard-era guides (unsupported)
+  build_instructions.md    Main build guide — start here
+  background_information.md Sensor theory, system overview, design rationale
+  legacy/                  Old breadboard-era guides (unsupported)
 
-img/               Photos and diagrams referenced by the instructions
+img/                       Photos and diagrams referenced by the instructions
 ```
 
 ---
