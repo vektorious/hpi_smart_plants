@@ -79,7 +79,7 @@ The separate IR channel available on some sensors is particularly useful: plants
 
 For this project we use the **AMS TSL2591**. Its extremely wide dynamic range makes it useful both indoors and outdoors without needing to change settings. It exposes both a full-spectrum channel and a separate IR channel over I2C, which the firmware uses to calculate lux and log raw channel values for later analysis.
 
-The sensor is housed in the small mount in `hardware/3d-print/light_sensor/` to shield it from direct contact while keeping it exposed to ambient light.
+The sensor is housed in the small mount in `hardware/3d-print/light_sensor/` to shield it from direct contact while keeping it exposed to ambient light. A half ping-pong ball glued over the sensor acts as a diffuser: it scatters incoming light so the sensor integrates illumination from a wide angle rather than a narrow beam. This makes readings less sensitive to the exact orientation of the device and prevents direct sunlight from saturating the sensor from a single direction — the same principle used in professional lux meters and pyranometers.
 
 ---
 

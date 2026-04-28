@@ -15,8 +15,8 @@ and discrete resistors from the old build.
 - Waveshare ESP32-C6 Zero microcontroller
 - Smart Plants Breakout PCB (ws-board rev2) + all components
 - Capacitive soil moisture sensor + 3-core cable
-- BME280 sensor module (temperature, humidity, pressure)
-- TSL2591 sensor module (light)
+- BME280 sensor module (temperature, humidity, pressure) + pre-crimped 4-core cable
+- TSL2591 sensor module (light) + pre-crimped 4-core cable
 - Mini diaphragm pump + 2-core cable
 - Battery pack (3× AA)
 - USB-C connector with cable
@@ -28,11 +28,17 @@ and discrete resistors from the old build.
 - 3D-printed pump housing
 - 3D-printed BME280 housing (Stevenson Screen)
 - 3D-printed TSL2591 housing + half ping pong ball as diffusor
+- 3D-printed cable plugs (2x)
 - Laser-cut enclosure
-- 8× wood screws
+- 12× wood screws
 - Velcro tape
 - PG7 cable gland (for pump cable)
 - Tubes (pump inlet/outlet)
+
+**Tools**
+- Soldering iron + solder
+- Screwdriver
+- Hot-glue gun (or other glue)
 
 ---
 
@@ -43,7 +49,7 @@ if a tool you need is in use, move on to another step.
 
 ### 2.1 Prepare the PCB
 
-Solder all components on the PCB (suggested order below). Component orientation is indicated by the silkscreen markings. All components but the resitstors are orientation sensitive!
+Solder all components on the PCB (suggested order below). Component orientation is indicated by the silkscreen markings. All components but the resistors are orientation sensitive!
 
 | Reference | Component | Qty | Value | Notes |
 |-----------|-----------|-----|-------|-------|
@@ -76,19 +82,16 @@ Suggested soldering order:
 
 <img src="../img/wv_pcb_soldering.jpg" height="400">
 
-### 2.2 Crimp the Sensor Cable
+### 2.2 Crimp the Moisture Sensor Cable
 
 The moisture sensor uses a custom cable with a JST connector on either side
 
-1. Crimp a **3-pin JST PH** connector on one end.
-2. Crimp a **3-pin male Dupont** connector on the other end.
-3. Wire order: **VCC (red) — SIGNAL (yellow) — GND (black)**. This must match the sensor
+1. Cut 3-core cable to preferred length
+2. Crimp **3-pin JST PH** connectors on both ends.
+3. Wire order: **GND (black) — VCC (red) — SIGNAL (yellow)** . This must match the sensor
    connector and the PCB header labels.
 
-> **Tip:** If you want the cable to pass tightly through the housing hole, thread the cable
-> through the hole *before* crimping the connectors — crimped plugs won't fit through.
-
-<img src="../img/sensor_connectors.png" height="200">
+<img src="../img/sensor_connectors_JST.png" height="120">
 
 ### 2.3 Assemble the Moisture Sensor
 
@@ -104,9 +107,45 @@ The moisture sensor uses a custom cable with a JST connector on either side
 1. Solder a two-core cable to the pump terminals.
 2. Insert the pump into the 3D-printed pump housing.
 3. Thread the cable through the housing hole, fit the PG7 cable gland, and screw it tight.
-4. Crimp a **2-pin Dupont** connector on the free cable end.
+4. Crimp a **2-pin JST PH** connector on the free cable end.
 
-### 2.5 Assemble the Laser-Cut Enclosure
+<img src="../img/2-pin_JST_connector.jpg" height="200"> <img src="../img/pump_setup.jpg" height="200">
+
+### 2.5 Prepare the BME280 Sensor
+
+1. Solder the pre-crimped cable to the sensor.
+2. Wire order: **VCC (black) — GND (red) — SCL (yellow) — SDA (white)**
+3. Insert the sensor into the 3D-printed mini Stevenson screen.
+4. Thread the cable through the threaded tube and screw it into the Stevenson screen.
+
+> **Note:** The black/red wire colours are swapped relative to convention — black is VCC and red is GND. This is a quirk of the pre-crimped cables. Double-check against the labels above before soldering.
+
+<img src="../img/bme_insertion.jpg" height="200"> <img src="../img/bme_assembled.jpg" height="200">
+### 2.6 Prepare the TSL2591 Sensor
+
+1. Solder the pre-crimped cable to the sensor.
+2. Wire order: **VCC (black) — GND (red) — SCL (yellow) — SDA (white)**
+3. Thread the cables through the housing bottom and hot-glue the sensor onto it. The sensor should face upwards.
+4. Cut a ping-pong ball in half and glue it onto the sensor housing as a diffuser. It should fit tightly into the groove.
+
+> **Note:** The black/red wire colours are swapped relative to convention — black is VCC and red is GND. This is a quirk of the pre-crimped cables. Double-check against the labels above before soldering.
+
+The ping-pong ball half acts as a diffuser: it scatters incoming light so the sensor measures ambient light from a wide angle rather than a narrow beam from one direction. This makes readings less sensitive to the exact orientation of the housing and reduces the effect of direct sunlight hitting the sensor from a single spot. The same principle is used in professional lux meters and pyranometers.
+
+<!-- TODO: add TSL2591 assembly images -->
+
+### 2.7 Prepare the Switch
+
+1. Solder two wires to the switch. 
+2. Add a 2-pin JST connector. 
+3. Wire order: does not matter in this case but to stay consistent: VCC (black), GND (red)
+
+### 2.8 Prepare the battery pack
+
+1. Add a 2-pin JST connector to the battery cables
+2. Wire order: VCC (black), GND (red)
+
+### 2.9 Assemble the Laser-Cut Enclosure
 
 Assemble the housing panels before anything goes inside — it is much harder to add panels
 after components are mounted.
@@ -118,23 +157,40 @@ after components are mounted.
 
 ---
 
-## 3. Connect Components to the PCB
+## 3. Assembly
+
+### 3.1 Mount Sensors to the Lid
+
+1. BME280: slide the distance piece onto the threaded tube, insert it through the hole in the housing lid, and fix it with the locking piece on the other side.
+2. Hot-glue the TSL2591 housing to the lid.
+
+> Keep as much distance between the two sensors as possible — the Stevenson screen can otherwise cast a shadow on the TSL2591.
+
+<img src="../img/bme+tsl_lid.jpg" height="300">
+
+### 3.2 Prepare the Housing
+
+1. Insert the switch into the housing. Make sure it is switched off (flipped to the O-marked side).
+2. Insert the USB-C connector into the housing.
+3. Feed the pump and moisture sensor cables into the housing.
+4. Optional: secure both cables using the 3D-printed cable plugs.
+
+### 3.3 Add the PCB Mount
+
+1. Insert the battery pack into the battery/PCB mount with the switch facing outward.
+2. Screw the PCB to the PCB mount.
+3. Insert the Waveshare microcontroller into the PCB socket.
+4. Attach a small strip of velcro (~2 cm) to the bottom of the PCB mount and a matching strip inside the housing. Keeping it short makes it easier to remove later.
+5. You can now fix the battery/PCB mount inside the housing — but wait until after programming (Section 4).
+
+<img src="../img/pcb_mount+housing.jpg" height="300">
+
+### 3.4 Connect Components to the PCB
 
 The PCB has labelled connectors for every component. Match the connector to its label on
-the silkscreen.
+the silkscreen. Connect the BME280 to "I2C D2-powered" and the TSL2591 to "I2C D3-powered".
 
-| PCB label | Connect |
-|-----------|---------|
-| `MOISTURE` | Moisture sensor Dupont connector |
-| `PUMP` | Pump Dupont connector |
-| `BME280` | BME280 module (I2C header) |
-| `TSL2591` | TSL2591 module (I2C header) |
-| `BAT` / `POWER` | Battery pack |
-
-> **Before connecting the battery:** complete programming and initial testing first
-> (Section 4). Only add the battery in Section 5.
-
-<!-- TODO: add annotated photo of populated PCB with connector labels -->
+TODO: add image here
 
 ---
 
@@ -273,31 +329,26 @@ dashboard at [plants.makeruniverse.de](https://plants.makeruniverse.de).
 
 ---
 
-## 5. Final Test and Assembly
+## 5. Final Test and Deployment
 
-1. With the USB cable still connected, confirm data appears on the dashboard.
-2. **Disconnect USB**, then connect the battery pack to the PCB battery connector.
+1. With the USB cable still connected, confirm data appears on the dashboard at [plants.makeruniverse.de](https://plants.makeruniverse.de).
+2. **Disconnect USB** and flip the power switch on.
 3. The device should wake, connect to Wi-Fi, send a reading, and go back to sleep.
 4. Confirm a new reading appears on the dashboard.
 
 Once confirmed:
 
-5. Mount the PCB in the housing. Use velcro or the mounting holes on the PCB.
-6. Attach the battery pack inside the housing with velcro.
-7. Route the sensor cable through the housing hole.
-8. Screw on the lid.
+5. Fix the PCB mount inside the housing using the velcro strips.
+6. Place the moisture sensor cable through the housing hole.
+7. Screw on the lid.
 
-> The device measures every time it wakes from sleep. Switching power off and on triggers
-> an immediate measurement — useful for testing without waiting an hour.
+> Switching the device off and on again triggers an immediate measurement — useful for testing without waiting an hour.
 
 ---
 
 ## What's Next?
 
-The base module measures **soil moisture** and **battery voltage**. If your kit includes
-additional sensors or a pump, they are already wired on the PCB and activated in firmware
-by default. No additional wiring is needed — just confirm the corresponding feature flags
-in `config.h` are set to `1`.
+Your device now measures soil moisture, temperature, humidity, light, and battery voltage, and waters automatically when the soil gets too dry. All readings appear on the dashboard.
 
 For background on how the sensors work and why certain design choices were made, see
-[`instructions/background_information.md`](background_information.md).
+[`background_information.md`](background_information.md).
