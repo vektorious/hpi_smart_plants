@@ -23,24 +23,23 @@
 // --- Waveshare ESP32-C6 Zero + smart_plants_breakout_ws-board_rev2 (main build) ---
 #define PIN_MOISTURE     1   // A1  — capacitive moisture sensor (ADC)
 #define PIN_BATTERY      0   // A0  — battery voltage via 2× divider (ADC)
-#define PIN_SENSOR_POWER 21  // D1  — moisture sensor power gate (GPIO high = on)
-#define PIN_BME_POWER    2   // D0  — BME280 power gate
-#define PIN_TSL_POWER    3   // D2  — TSL2591 power gate
-#define PIN_PUMP         22  // D10 — pump MOSFET gate
-#define PIN_SDA          4   // SDA — I2C data
-#define PIN_SCL          5   // SCL — I2C clock
+#define PIN_SENSOR_POWER 21  // GPIO 21 — moisture sensor power gate (PCB rev2 silkscreen incorrectly labels this "D1-powered")
+#define PIN_BME_POWER    2   // GPIO 2  — BME280 power gate
+#define PIN_TSL_POWER    3   // GPIO 3  — TSL2591 power gate
+#define PIN_PUMP         22  // GPIO 22 — pump MOSFET gate
+#define PIN_SDA          4   // GPIO 4  — I2C data
+#define PIN_SCL          5   // GPIO 5  — I2C clock
 
 // --- SEEED Studio XIAO ESP32-C6 + smart_plants_breakout_rev1 ---
-// TODO: verify and fill in the correct GPIO numbers for the XIAO board,
-// then swap the active block above with this one when building for XIAO.
-// #define PIN_MOISTURE     ?
-// #define PIN_BATTERY      ?
-// #define PIN_SENSOR_POWER ?
-// #define PIN_BME_POWER    ?
-// #define PIN_TSL_POWER    ?
-// #define PIN_PUMP         ?
-// #define PIN_SDA          ?
-// #define PIN_SCL          ?
+// To build for XIAO: comment out the Waveshare block above and uncomment this one.
+// #define PIN_MOISTURE     A1
+// #define PIN_BATTERY      A0
+// #define PIN_SENSOR_POWER D1
+// #define PIN_BME_POWER    D0
+// #define PIN_TSL_POWER    D2
+// #define PIN_PUMP         D10
+// #define PIN_SDA          SDA
+// #define PIN_SCL          SCL
 
 // ============ CALIBRATION ============
 // Adjust MIN/MAX per sensor batch — measure voltage in wet soil and dry air.

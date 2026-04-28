@@ -6,6 +6,13 @@ pump circuit are integrated on the PCB — no breadboard or loose resistors need
 
 ---
 
+> **Known issue — PCB rev2 silkscreen:** The moisture sensor power connector is labelled
+> **"D1-powered"** on the board, but the correct GPIO is **21**. This is a labelling error
+> on the PCB and does not affect functionality — just ignore the label and plug the connector
+> in as shown in the instructions.
+
+---
+
 ## 1. Collect All Parts
 
 Get all parts together before you start. The PCB replaces the breadboard, jumper wires,
