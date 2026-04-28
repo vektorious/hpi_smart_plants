@@ -224,6 +224,11 @@ In **Tools > Manage Libraries**, search for and install:
 | WiFiManager | tzapu |
 | Adafruit BME280 Library | Adafruit |
 | Adafruit TSL2591 Library | Adafruit |
+| Adafruit Unified Sensor | Adafruit |
+
+> When installing the Adafruit BME280 or TSL2591 libraries, the Library Manager will ask
+> whether to install missing dependencies. Click **Install All** — this installs
+> Adafruit Unified Sensor automatically.
 
 <img src="../img/install_wm.png" height="400">
 
@@ -256,14 +261,34 @@ In **Tools > Manage Libraries**, search for and install:
 > 3. Plug back in while holding BOOT.
 > 4. Release after 2 seconds, then retry Upload.
 
-### 4.4 Test the Moisture Sensor
+### 4.4 Connect to Wi-Fi
 
-Before uploading the final code, verify the sensor works on its own. Copy this sketch into
-Arduino IDE, upload it, and open the **Serial Monitor** at 115200 baud:
+The firmware uses WiFiManager. On first boot (or when no saved network is found):
+
+1. The device starts a temporary Wi-Fi access point named **`<DEVICE_NAME>-Setup`**
+   (e.g. `my-plant-Setup` if you used the default name).
+2. Connect to it from your phone or laptop — no password required.
+3. A configuration page opens automatically. Enter your Wi-Fi credentials.
+4. The device connects, saves the credentials, and starts measuring.
+
+From the next boot onward it connects automatically. Your device will appear on the
+dashboard at [plants.makeruniverse.de](https://plants.makeruniverse.de).
+
+> **Tip:** For battery-powered operation, keep `TIME_TO_SLEEP_SEC` at 3600 (1 hour).
+> This gives a good balance between data frequency and battery life.
+
+---
+
+## 5. Troubleshooting
+
+Use the sketches below to verify individual components if something does not work as
+expected. Upload each sketch separately, then open the **Serial Monitor** at **115200 baud**.
+
+### 5.1 Test the Moisture Sensor
 
 ```cpp
-const int moisturePin   = 1;   // A1 on Waveshare
-const int moisturePower = 21;  // sensor power gate
+const int moisturePin   = 1;   // GPIO 1 (A1) on Waveshare
+const int moisturePower = 21;  // GPIO 21 — sensor power gate
 
 const float minMoistureVoltage = 0.60;
 const float maxMoistureVoltage = 2.45;
@@ -297,48 +322,133 @@ void loop() {
 }
 ```
 
-You should see readings every 5 seconds. The voltage decreases as the soil gets wetter.
+You should see a reading every 5 seconds. The voltage decreases as the soil gets wetter.
+If you see a constant value near 0 V or 3.3 V, check that the sensor cable is fully seated.
 
-### 4.5 Calibrate the Moisture Sensor (recommended)
+### 5.2 Calibrate the Moisture Sensor
 
 The voltage-to-percentage conversion uses two reference points that vary slightly between
-sensors. Calibrating yours improves accuracy.
+sensors. Run the test sketch from 5.1 while doing the measurements below.
 
-**Dry measurement (0% moisture):**
+**Dry measurement (= 0 % moisture):**
 1. Hold the sensor in open air.
-2. Note the voltage from the Serial Monitor — this is your `MAX_MOIST_V`.
+2. Note the voltage — this is your `MAX_MOIST_V`.
 
-**Wet measurement (100% moisture):**
-1. Insert only the metal prongs into water or saturated soil.
+**Wet measurement (= 100 % moisture):**
+1. Insert only the metal prongs into a glass of water or saturated soil.
 2. Note the voltage — this is your `MIN_MOIST_V`.
 
 Update `code/sp_modular/config.h` with your measured values:
 
 ```cpp
-#define MIN_MOIST_V   0.60f  // your wet voltage
-#define MAX_MOIST_V   2.45f  // your dry voltage
+#define MIN_MOIST_V   0.60f  // replace with your wet voltage
+#define MAX_MOIST_V   2.45f  // replace with your dry voltage
 ```
 
-### 4.6 Connect to Wi-Fi
+Then re-upload the main sketch.
 
-The firmware uses WiFiManager. On first boot (or when no saved network is found):
+### 5.3 Test the Pump
 
-1. The device starts a temporary Wi-Fi access point named **`DEVICE_NAME-Setup`**.
-2. Connect to it from your phone or laptop.
-3. A configuration page opens — enter your Wi-Fi credentials.
-4. The device connects, saves the credentials, and starts measuring.
+```cpp
+const int PIN_PUMP = 22;  // GPIO 22 on Waveshare
 
-From the next boot onward it connects automatically. You can see your device appear on the
-dashboard at [plants.makeruniverse.de](https://plants.makeruniverse.de).
+void setup() {
+  Serial.begin(115200);
+  delay(1000);
+  pinMode(PIN_PUMP, OUTPUT);
 
-> **Tip:** For battery-powered operation, keep `TIME_TO_SLEEP_SEC` at 3600 (1 hour).
-> This balances data resolution with battery life.
+  Serial.println("Pump ON for 2 seconds...");
+  digitalWrite(PIN_PUMP, HIGH);
+  delay(2000);
+  digitalWrite(PIN_PUMP, LOW);
+  Serial.println("Pump OFF.");
+}
+
+void loop() {}
+```
+
+You should hear the pump run and see water flow through the tube. If nothing happens,
+check that the pump connector is fully seated and that the power supply can deliver
+enough current (USB power alone may be insufficient — use batteries).
+
+### 5.4 Test the I2C Sensors (BME280 + TSL2591)
+
+This sketch scans the I2C bus and reads both sensors. Expected I2C addresses are
+`0x76` (BME280) and `0x29` (TSL2591).
+
+```cpp
+#include <Wire.h>
+#include <Adafruit_BME280.h>
+#include <Adafruit_TSL2591.h>
+
+const int PIN_BME_POWER = 2;
+const int PIN_TSL_POWER = 3;
+const int PIN_SDA       = 4;
+const int PIN_SCL       = 5;
+
+Adafruit_BME280    bme;
+Adafruit_TSL2591   tsl(2591);
+
+void setup() {
+  Serial.begin(115200);
+  delay(1000);
+
+  pinMode(PIN_BME_POWER, OUTPUT);
+  pinMode(PIN_TSL_POWER, OUTPUT);
+  digitalWrite(PIN_BME_POWER, HIGH);
+  digitalWrite(PIN_TSL_POWER, HIGH);
+  delay(300);
+
+  Wire.begin(PIN_SDA, PIN_SCL);
+
+  // I2C bus scan
+  Serial.println("Scanning I2C bus...");
+  int found = 0;
+  for (byte addr = 1; addr < 127; addr++) {
+    Wire.beginTransmission(addr);
+    if (Wire.endTransmission() == 0) {
+      Serial.printf("  Device at 0x%02X\n", addr);
+      found++;
+    }
+  }
+  if (found == 0) Serial.println("  No devices found — check wiring and power gates.");
+  Serial.println();
+
+  // BME280
+  if (bme.begin(0x76, &Wire)) {
+    Serial.printf("BME280  — Temp: %.1f °C  Humidity: %.1f %%  Pressure: %.0f hPa\n",
+      bme.readTemperature(), bme.readHumidity(), bme.readPressure() / 100.0f);
+  } else {
+    Serial.println("BME280  — not found. Check connector and wire order.");
+  }
+
+  // TSL2591 (Adafruit_I2CDevice requires Wire to be re-initialised)
+  Wire.begin(PIN_SDA, PIN_SCL);
+  if (tsl.begin()) {
+    tsl.setGain(TSL2591_GAIN_MED);
+    tsl.setTiming(TSL2591_INTEGRATIONTIME_100MS);
+    uint32_t lum  = tsl.getFullLuminosity();
+    uint16_t ir   = lum >> 16;
+    uint16_t full = lum & 0xFFFF;
+    Serial.printf("TSL2591 — Lux: %.1f  IR: %d  Full: %d\n",
+      tsl.calculateLux(full, ir), ir, full);
+  } else {
+    Serial.println("TSL2591 — not found. Check connector and wire order.");
+  }
+}
+
+void loop() {}
+```
+
+If a sensor is not found but appears on the I2C scan, the most likely cause is a
+wrong wire order on the connector — double-check the colour order from section 2.5/2.6.
 
 ---
 
-## 5. Final Test and Deployment
+## 6. Final Test and Deployment
 
-1. With the USB cable still connected, confirm data appears on the dashboard at [plants.makeruniverse.de](https://plants.makeruniverse.de).
+1. With the USB cable still connected, confirm data appears on the dashboard at
+   [plants.makeruniverse.de](https://plants.makeruniverse.de).
 2. **Disconnect USB** and flip the power switch on.
 3. The device should wake, connect to Wi-Fi, send a reading, and go back to sleep.
 4. Confirm a new reading appears on the dashboard.
@@ -349,13 +459,15 @@ Once confirmed:
 6. Place the moisture sensor cable through the housing hole.
 7. Screw on the lid.
 
-> Switching the device off and on again triggers an immediate measurement — useful for testing without waiting an hour.
+> Switching the device off and on again triggers an immediate measurement — useful for
+> testing without waiting an hour.
 
 ---
 
 ## What's Next?
 
-Your device now measures soil moisture, temperature, humidity, light, and battery voltage, and waters automatically when the soil gets too dry. All readings appear on the dashboard.
+Your device now measures soil moisture, temperature, humidity, light, and battery voltage,
+and waters automatically when the soil gets too dry. All readings appear on the dashboard.
 
 For background on how the sensors work and why certain design choices were made, see
 [`background_information.md`](background_information.md).
