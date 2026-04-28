@@ -91,9 +91,9 @@ Suggested soldering order:
 
 ### 2.2 Crimp the Moisture Sensor Cable
 
-The moisture sensor uses a custom cable with a JST connector on either side
+The moisture sensor uses a custom cable with a JST connector on either side.
 
-1. Cut 3-core cable to preferred length
+1. Cut the 3-core cable to your preferred length.
 2. Crimp **3-pin JST PH** connectors on both ends.
 3. Wire order: **GND (black) — VCC (red) — SIGNAL (yellow)** . This must match the sensor
    connector and the PCB header labels.
@@ -128,9 +128,10 @@ The moisture sensor uses a custom cable with a JST connector on either side
 > **Note:** The black/red wire colours are swapped relative to convention — black is VCC and red is GND. This is a quirk of the pre-crimped cables. Double-check against the labels above before soldering.
 
 <img src="../img/bme_insertion.jpg" height="200"> <img src="../img/bme_assembled.jpg" height="200">
+
 ### 2.6 Prepare the TSL2591 Sensor
 
-1. Solder the pre-crimped cable to the sensor.
+1. Solder the pre-crimped cable to the sensor. Wires should not be on the sensor side (see pictures).
 2. Wire order: **VCC (black) — GND (red) — SCL (yellow) — SDA (white)**
 3. Thread the cables through the housing bottom and hot-glue the sensor onto it. The sensor should face upwards.
 4. Cut a ping-pong ball in half and glue it onto the sensor housing as a diffuser. It should fit tightly into the groove.
@@ -139,18 +140,18 @@ The moisture sensor uses a custom cable with a JST connector on either side
 
 The ping-pong ball half acts as a diffuser: it scatters incoming light so the sensor measures ambient light from a wide angle rather than a narrow beam from one direction. This makes readings less sensitive to the exact orientation of the housing and reduces the effect of direct sunlight hitting the sensor from a single spot. The same principle is used in professional lux meters and pyranometers.
 
-<!-- TODO: add TSL2591 assembly images -->
+<img src="../img/TSL_base.jpg" height="200"> <img src="../img/tsl_assembled.jpg" height="200">
 
 ### 2.7 Prepare the Switch
 
-1. Solder two wires to the switch. 
-2. Add a 2-pin JST connector. 
-3. Wire order: does not matter in this case but to stay consistent: VCC (black), GND (red)
+1. Solder two wires to the switch.
+2. Add a 2-pin JST XH connector.
+3. Wire order does not matter for a switch, but to stay consistent: VCC (black), GND (red).
 
 ### 2.8 Prepare the battery pack
 
-1. Add a 2-pin JST connector to the battery cables
-2. Wire order: VCC (black), GND (red)
+1. Add a 2-pin JST XH connector to the battery cables.
+2. Wire order: VCC (black), GND (red).
 
 ### 2.9 Assemble the Laser-Cut Enclosure
 
@@ -188,7 +189,7 @@ after components are mounted.
 2. Screw the PCB to the PCB mount.
 3. Insert the Waveshare microcontroller into the PCB socket.
 4. Attach a small strip of velcro (~2 cm) to the bottom of the PCB mount and a matching strip inside the housing. Keeping it short makes it easier to remove later.
-5. You can now fix the battery/PCB mount inside the housing — but wait until after programming (Section 4).
+5. You can now fix the battery/PCB mount inside the housing — but wait until after programming. If you position the PCB mount close to the walls, you might be able to access the microcontroller for programming while inside the housing. Just try it. (Section 4).
 
 <img src="../img/pcb_mount+housing.jpg" height="300">
 
@@ -197,7 +198,7 @@ after components are mounted.
 The PCB has labelled connectors for every component. Match the connector to its label on
 the silkscreen. Connect the BME280 to "I2C D2-powered" and the TSL2591 to "I2C D3-powered".
 
-TODO: add image here
+<img src="../img/assembled.jpg" height="400">
 
 ---
 
