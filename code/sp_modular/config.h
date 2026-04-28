@@ -7,11 +7,13 @@
 #define USE_PUMP      1   // Automatic watering pump via MOSFET
 
 // ============ DEVICE INFO ============
-// These are defined in sp_modular.ino — edit them there.
-extern const char* DEVICE_NAME;
-extern const char* DEVICE_UUID;
-extern const char* API_URL;
-extern const char* API_KEY;
+// *** Change these for your device before uploading ***
+// Device name and UUID are shown on the dashboard.
+// API key is provided at the workshop.
+#define DEVICE_NAME  "my-plant"
+#define DEVICE_UUID  "00000000"
+#define API_URL      "https://plants.makeruniverse.de/plants/measurements"
+#define API_KEY      "vKpsikScqRUt2CdC"
 
 // ============ SLEEP SETTINGS ============
 #define TIME_TO_SLEEP_SEC 3600      // Wake interval in seconds (default: 1 hour)
