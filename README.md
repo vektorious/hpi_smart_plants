@@ -31,7 +31,7 @@ Two controller boards are supported. Both run the same firmware (`code/sp_modula
 
 ## Build Instructions
 
-**Start here:** [`instructions/waveshare_pcb.md`](instructions/waveshare_pcb.md)
+**Start here:** [`instructions/waveshare_pcb.md`](build_instructions.md)
 
 That guide covers the full assembly, programming, calibration, and deployment for the main
 Waveshare build.

@@ -33,6 +33,56 @@ For this workshop I recommend using the an off-the-shelf capacitive sensor. They
 
 ![image](img/moisture_sensor.png)
 
+### Environmental Sensors (Temperature, Humidity, Pressure)
+
+#### Overview
+
+| Sensor       | Measures                          | Interface   | Advantages                                  | Limitations                                  |
+|--------------|-----------------------------------|-------------|---------------------------------------------|----------------------------------------------|
+| DHT11 / DHT22 | Temperature, humidity            | 1-Wire      | Cheap, very common in tutorials             | Slow (1 reading/sec), low accuracy           |
+| SHT31 / SHT40 | Temperature, humidity           | I2C         | High accuracy, fast, compact                | Slightly more expensive                      |
+| BMP280       | Temperature, pressure             | I2C / SPI   | Compact, low power                          | No humidity                                  |
+| **BME280**   | **Temperature, humidity, pressure** | **I2C / SPI** | **All-in-one, accurate, low power, well-supported** | **Sensitive to self-heating if powered continuously** |
+
+#### Background
+
+Temperature and humidity sensors are used in countless IoT projects. The main trade-offs are accuracy, update speed, and what quantities they measure. Simple sensors like the DHT11 are popular in beginner tutorials due to their low cost, but they are slow and imprecise. More modern I2C sensors are generally faster, more accurate, and easier to wire since they share the bus with other components.
+
+Pressure adds another useful dimension: it reflects altitude, weather trends, and — in indoor setups — rough air quality changes. Few sensors combine all three at a good price point.
+
+#### Workshop Sensor Choice
+
+For this project we use the **Bosch BME280**. It measures temperature, relative humidity, and barometric pressure in a single compact package. It communicates over I2C (address `0x76` on this PCB), is well-supported by the Adafruit BME280 library, and draws very little current in forced mode — important for a battery-powered device.
+
+One caveat: the BME280 is sensitive to heat from nearby components. The PCB isolates the sensor from the microcontroller, and the 3D-printed Stevenson screen in `hardware/3d-print/bme_housing/` provides additional shielding from direct sunlight and rain while still allowing airflow.
+
+---
+
+### Light Sensors
+
+#### Overview
+
+| Sensor      | Measurement          | Interface | Dynamic Range         | Advantages                              | Limitations                         |
+|-------------|----------------------|-----------|----------------------|------------------------------------------|-------------------------------------|
+| LDR (photoresistor) | Relative light level | Analog  | Low               | Extremely cheap, no library needed       | Not calibrated, non-linear response |
+| BH1750      | Lux                  | I2C       | 1 – 65535 lux        | Simple, calibrated lux output            | Saturates in direct sunlight        |
+| VEML7700    | Lux, white channel   | I2C       | 0.0036 – 120000 lux  | Very wide range, low power               | Slower at high gain settings        |
+| **TSL2591** | **Lux, IR, full spectrum** | **I2C** | **188 μlux – 88000 lux** | **Extremely wide dynamic range, separate IR channel** | **Can saturate in direct noon sun** |
+
+#### Background
+
+Light is a key factor in plant health, but the range of light intensities that matter spans many orders of magnitude — from a dimly lit indoor shelf (~50 lux) to bright outdoor sun (~100 000 lux). Simple sensors like LDRs give a rough relative reading but are not calibrated to any physical unit. Calibrated lux sensors give more meaningful data that can be compared across devices and locations.
+
+The separate IR channel available on some sensors is particularly useful: plants respond mainly to visible light (photosynthetically active radiation), while IR is absorbed less. Comparing the full-spectrum and IR channels gives a rough estimate of the visible component.
+
+#### Workshop Sensor Choice
+
+For this project we use the **AMS TSL2591**. Its extremely wide dynamic range makes it useful both indoors and outdoors without needing to change settings. It exposes both a full-spectrum channel and a separate IR channel over I2C, which the firmware uses to calculate lux and log raw channel values for later analysis.
+
+The sensor is housed in the small mount in `hardware/3d-print/light_sensor/` to shield it from direct contact while keeping it exposed to ambient light.
+
+---
+
 ### Pump Systems
 
 | Pump Type         | Working Principle                             | Advantages                        | Suitable For                     |
