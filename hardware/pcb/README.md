@@ -12,6 +12,7 @@ The primary board used in student workshops. Designed for the
 
 - **Gerber files:** `sp_ws_breakout_rev2/` folder and `sp_ws_breakout_rev2.zip`
 - **KiCAD project:** `smart_plants_breakout_ws-board_rev2.kicad_pro`
+- **Firmware pin config:** active block in `code/sp_modular/config.h`
 
 ### SEEED Studio XIAO ESP32-C6 — `smart_plants_breakout_rev1/` (alternative build)
 
@@ -20,6 +21,7 @@ Alternative build based on the [XIAO ESP32-C6](https://wiki.seeedstudio.com/xiao
 - **Gerber files:** `smart_plants_breakout_rev1_gerber/` folder and `smart_plants_breakout_rev1_gerber.zip`
 - **KiCAD project:** `smart_plants_breakout_rev1.kicad_pro`
 - **BOM:** `smart_plants_breakout_rev1.csv`
+- **Firmware pin config:** see the commented-out XIAO block in `code/sp_modular/config.h` (TODO: GPIO numbers need to be verified)
 
 ## Ordering PCBs
 

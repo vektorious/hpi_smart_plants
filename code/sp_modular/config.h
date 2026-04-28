@@ -18,11 +18,7 @@ extern const char* API_KEY;
 #define uS_TO_S_FACTOR 1000000ULL
 
 // ============ PIN CONFIG ============
-// Tested on:
-//   - Waveshare ESP32-C6 Zero + smart_plants_breakout_ws-board_rev2 (main build)
-//   - SEEED Studio XIAO ESP32-C6 + smart_plants_breakout_rev1
-// Both PCBs route sensors to the same GPIO numbers, so no changes are needed
-// when switching between boards.
+// --- Waveshare ESP32-C6 Zero + smart_plants_breakout_ws-board_rev2 (main build) ---
 #define PIN_MOISTURE     1   // A1  — capacitive moisture sensor (ADC)
 #define PIN_BATTERY      0   // A0  — battery voltage via 2× divider (ADC)
 #define PIN_SENSOR_POWER 21  // D1  — moisture sensor power gate (GPIO high = on)
@@ -31,6 +27,18 @@ extern const char* API_KEY;
 #define PIN_PUMP         22  // D10 — pump MOSFET gate
 #define PIN_SDA          4   // SDA — I2C data
 #define PIN_SCL          5   // SCL — I2C clock
+
+// --- SEEED Studio XIAO ESP32-C6 + smart_plants_breakout_rev1 ---
+// TODO: verify and fill in the correct GPIO numbers for the XIAO board,
+// then swap the active block above with this one when building for XIAO.
+// #define PIN_MOISTURE     ?
+// #define PIN_BATTERY      ?
+// #define PIN_SENSOR_POWER ?
+// #define PIN_BME_POWER    ?
+// #define PIN_TSL_POWER    ?
+// #define PIN_PUMP         ?
+// #define PIN_SDA          ?
+// #define PIN_SCL          ?
 
 // ============ CALIBRATION ============
 // Adjust MIN/MAX per sensor batch — measure voltage in wet soil and dry air.
