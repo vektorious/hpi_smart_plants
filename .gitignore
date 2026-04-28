@@ -1,3 +1,7 @@
 
 instructions/.~lock.full_BOM.ods#
 .obsidian
+.tmp/
+
+# KiCAD auto-generated backup archives
+hardware/pcb/**/*-backups/
