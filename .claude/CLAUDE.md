@@ -12,7 +12,8 @@ POSTs the payload, then sleeps again to conserve battery.
 **Two supported boards** (same firmware, different GPIO pins in `config.h`):
 - **Waveshare ESP32-C6 Zero** + `smart_plants_breakout_ws-board_rev2` — main workshop build
 - **SEEED Studio XIAO ESP32-C6** + `smart_plants_breakout_rev1` — alternative build
-  (XIAO GPIO pin numbers are not yet confirmed — see TODO in `config.h`)
+  (XIAO pin labels in `config.h` use Arduino symbolic names D0/D1/A0/etc. — not yet verified
+  on real hardware)
 
 ## Build & Upload
 
@@ -27,6 +28,8 @@ No Makefile or build script. This is an Arduino IDE project.
    - WiFiManager by tzapu
    - Adafruit BME280 (required when `USE_BME280 1`)
    - Adafruit TSL2591 (required when `USE_TSL2591 1`)
+   - Adafruit Unified Sensor (dependency of both Adafruit sensor libraries — install via
+     "Install All" when prompted, or manually)
 
 **Upload:** Select the correct board and COM port, click Upload.
 
@@ -60,8 +63,8 @@ sensor support:
 
 | File | Responsibility |
 |------|---------------|
-| `config.h` | Feature flags, pin assignments, calibration values |
-| `sp_modular.ino` | Entry point; device credentials; wires together all modules |
+| `config.h` | Feature flags, pin assignments, calibration values, device credentials |
+| `sp_modular.ino` | Entry point; wires together all modules |
 | `send_data.ino` | Builds JSON and POSTs to API; conditionally includes fields |
 | `moisture.ino` | ADC read + voltage-to-percentage conversion |
 | `battery.ino` | ADC read multiplied by `BATT_DIVIDER` |
@@ -77,22 +80,37 @@ Legacy monolithic sketches are in `code/legacy/` — unsupported, breadboard-era
 
 ## Configuration
 
-- **Device identity:** defined at the top of `sp_modular.ino` — `DEVICE_NAME`, `DEVICE_UUID`,
-  `API_KEY` must match the dashboard
+- **Device identity:** `DEVICE_NAME`, `DEVICE_UUID`, `API_KEY` are `#define`s in `config.h`
+  (not in `sp_modular.ino`). The API key is not sensitive and can stay in the code.
 - **Sleep interval:** `TIME_TO_SLEEP_SEC` in `config.h` (default 3600)
 - **Moisture calibration:** `MIN_MOIST_V` (wet, ~0.60 V) / `MAX_MOIST_V` (dry, ~2.45 V)
 - **Pump:** `MOISTURE_THRESHOLD` (%) and `PUMP_DURATION_SEC`
 - **Pin assignments:** in `config.h` — active block is Waveshare; XIAO block is commented out
-  with a TODO to verify GPIO numbers
 
 ## Hardware
 
 - **MCU:** Waveshare ESP32-C6 Zero (primary) or XIAO ESP32-C6 (alternative) — both RISC-V,
   WiFi, deep sleep <10 µA
 - **Moisture sensor:** Capacitive (preferred over resistive to avoid corrosion), analog output
-- **Sensors on PCB:** BME280 (temp/humidity/pressure), TSL2591 (lux/IR) — I2C, power-gated
-- **Power:** 3× AA or Li-ion; sensor power gated via GPIO to minimise idle current
-- **Pump:** Diaphragm pump driven via MOSFET on the PCB (IRLZ14)
+- **Sensors on PCB:** BME280 (temp/humidity/pressure, I2C 0x76), TSL2591 (lux/IR, I2C 0x29)
+  — both power-gated via GPIO
+- **Power:** 3× AA; sensor power gated via GPIO to minimise idle current
+- **Pump:** Diaphragm pump driven via IRLZ14 MOSFET on the PCB
+
+**Known PCB bug — ws-board rev2 silkscreen:** The moisture sensor power connector is labelled
+"D1-powered" on the board. The correct GPIO is 21. This is a labelling error only; wiring and
+firmware are correct.
+
+**TSL2591 quirk:** `Wire.begin()` must be called a second time (with correct SDA/SCL pins)
+immediately before `tsl.begin()` due to Adafruit_I2CDevice internals resetting the bus.
 
 PCB design files (KiCAD) are in `hardware/pcb/`. Enclosures are in `hardware/3d-print/`
 (STL/OBJ) and `hardware/laser_files/` (SVG). See `hardware/pcb/README.md` for ordering info.
+
+## Documentation
+
+- `instructions/build_instructions.md` — main student-facing build guide (start here)
+- `instructions/background_information.md` — sensor theory, system architecture, design rationale
+- `instructions/legacy/` — old breadboard-era guides, unsupported
+- The server at `plants.makeruniverse.de` runs FastAPI → PostgreSQL; Grafana dashboard is public
+  at the same domain
