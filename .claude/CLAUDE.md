@@ -111,6 +111,10 @@ PCB design files (KiCAD) are in `hardware/pcb/`. Enclosures are in `hardware/3d-
 
 - `instructions/build_instructions.md` — main student-facing build guide (start here)
 - `instructions/background_information.md` — sensor theory, system architecture, design rationale
+- `instructions/quick_reference/` — printable one-pager (md, html, pdf) with all build steps
+  and PCB BOM; QR code at `img/qr_build_instructions.png` links to the full instructions.
+  To regenerate the PDF after editing the HTML:
+  `cd instructions/quick_reference && libreoffice --headless --convert-to pdf quick_reference.html`
 - `instructions/legacy/` — old breadboard-era guides, unsupported
 - The server at `plants.makeruniverse.de` runs FastAPI → PostgreSQL; Grafana dashboard is public
   at the same domain
