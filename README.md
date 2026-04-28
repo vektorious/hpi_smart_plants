@@ -1,88 +1,108 @@
 # Smart Plants Starter Kit
 
-This project is a hands-on introduction to building low-power, Wi-Fi-connected plant monitoring systems using the SEEED Studio XIAO ESP32-C6 microcontroller and a simple soil moisture sensor.
+A hands-on educational IoT project for building a low-power, Wi-Fi-connected plant monitoring
+device. Participants learn microcontroller programming, analog sensing, and Wi-Fi data transfer
+— while building something that actually keeps their plants alive.
 
-Participants will learn the basics of microcontroller programming, moisture sensing, analog-to-digital conversion, and Wi-Fi data transfer – all while building a device that helps monitor plant health in real-time.
-
----
-
-## 🌱 What You'll Build
-
-By the end of this starter workshop, you'll have a battery-powered soil moisture sensor that:
-- Measures soil moisture every few minutes or hours
-- Sends the data to an online dashboard via Wi-Fi
-- Sleeps in between measurements to conserve energy
-
-No soldering experience required – but you'll have the chance to try!
+The device wakes from deep sleep, reads soil moisture (and optionally temperature, humidity,
+light, and battery level), sends data to an online dashboard, then sleeps again.
 
 ---
 
-## 🧰 What's in the Starter Kit?
+## What You'll Build
 
-- XIAO ESP32-C6 microcontroller  
-- Soil moisture sensor with cable  
-- Breadboard and jumper wires  
-- Battery case and Schottky diode  
-- Laser-cut housing  
-- Resistors, screws, Velcro, and more
-
-> 🛠️ Optional extensions like weather sensing (via BME280) or automatic watering (via a pump) are covered in follow-up workshops.
+By the end of the workshop you'll have a battery-powered soil moisture sensor that:
+- Measures soil moisture every hour (configurable)
+- Sends data to an online dashboard via Wi-Fi
+- Sleeps between measurements to conserve battery
 
 ---
 
-## 📝 Build Instructions
+## Board Variants
 
-Detailed step-by-step assembly, wiring, programming, and calibration instructions are provided here:
+Two controller boards are supported. Both run the same firmware (`code/sp_modular/`).
 
-📄 [**instructions.md**](./instructions/base_module_batteries.md)
-
----
-
-## 🔌 Requirements
-
-Before you begin, make sure you have:
-
-- A computer with USB-C port or adapter
-- [Arduino IDE](https://www.arduino.cc/en/software) installed
-- Board support package for **XIAO ESP32C6**
-- A 2.4 GHz Wi-Fi network
+| Variant | Board | PCB | Who it's for |
+|---------|-------|-----|--------------|
+| **Main build** | Waveshare ESP32-C6 Zero | `smart_plants_breakout_ws-board_rev2` | Student workshops |
+| **Alternative** | SEEED Studio XIAO ESP32-C6 | `smart_plants_breakout_rev1` | Alternative / reference build |
 
 ---
 
-## 📦 Modular Extensions
+## Build Instructions
 
-You can upgrade your kit over time with additional components and follow-on workshops:
+**Start here:** [`instructions/waveshare_pcb.md`](instructions/waveshare_pcb.md)
 
-- **BME280 Sensor** – to measure temperature, humidity, and air pressure
-- **Pump module** – to enable automated plant watering based on soil data
-
-These modules are not required for the starter project. Maybe we will add more in the future!
+That guide covers the full assembly, programming, calibration, and deployment for the main
+Waveshare build.
 
 ---
 
-## 🧪 Learning Goals
+## What's in the Kit
 
-- Understand analog sensor readings and voltage mapping  
-- Practice safe circuit assembly and sensor calibration  
-- Learn how to minimize energy consumption on microcontrollers  
-- Send data securely via HTTP using Arduino and the ESP32-C6  
+- Waveshare ESP32-C6 Zero microcontroller
+- Smart Plants breakout PCB
+- Capacitive soil moisture sensor + cable
+- BME280 sensor (temperature, humidity, pressure)
+- TSL2591 sensor (light)
+- Mini diaphragm pump
+- Battery pack
+- Laser-cut housing
+- 3D-printed sensor and pump housings
+- Screws, velcro, cable gland
 
 ---
 
-## 📷 Example Setup
+## Modular Firmware
 
-![Example device](img/final_build.png)
+All features are toggled via flags in `code/sp_modular/config.h`:
+
+```c
+#define USE_BME280    1   // temperature, humidity, pressure
+#define USE_TSL2591   1   // light sensor
+#define USE_PUMP      1   // automatic watering pump
+```
+
+Set any flag to `0` to disable that module — no code changes needed elsewhere.
 
 ---
 
-## 📘 Licenses
+## Repository Structure
 
-This project uses separate licenses for its different components:
+```
+code/
+  sp_modular/        Modular firmware (current, for all builds)
+  legacy/            Old monolithic sketches (breadboard era, unsupported)
+
+hardware/
+  pcb/               KiCAD projects + Gerber files for both PCB variants
+  3d-print/          STL/OBJ files for sensor and pump housings
+  laser_files/       SVG templates for the laser-cut enclosure
+
+instructions/
+  waveshare_pcb.md          Main build guide (start here)
+  background_information.md Sensor theory and design rationale
+  legacy/                   Old breadboard-era guides (unsupported)
+
+img/               Photos and diagrams referenced by the instructions
+```
+
+---
+
+## Background Reading
+
+[`instructions/background_information.md`](instructions/background_information.md) explains
+sensor selection, pump control, and design decisions — useful context for understanding *why*
+things are built the way they are.
+
+---
+
+## Licenses
 
 | Component | License |
 |-----------|---------|
 | Software (`code/`) | [MIT](LICENSE.code) |
-| Hardware (`hardware/`, `src/`) | [CERN-OHL-W 2.0](LICENSE.hardware) |
+| Hardware (`hardware/`) | [CERN-OHL-W 2.0](LICENSE.hardware) |
 | Documentation (`instructions/`, `README.md`, `img/`) | [CC-BY 4.0](LICENSE.docs) |
 
 ![Open Source Licenses](img/open-source-licenses.svg)
@@ -90,5 +110,3 @@ This project uses separate licenses for its different components:
 This project is certified open source hardware by OSHWA under certification ID `DE000173`.
 
 ![OSHWA certification mark](img/oshwa-certification-mark-stacked-DE000173.svg)
-
----
