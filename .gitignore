@@ -5,3 +5,6 @@ instructions/.~lock.full_BOM.ods#
 
 # KiCAD auto-generated backup archives
 hardware/pcb/**/*-backups/
+
+# R history
+.Rhistory
