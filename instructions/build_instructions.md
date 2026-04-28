@@ -1,7 +1,7 @@
 # Build Instructions — Waveshare ESP32-C6 Zero + PCB
 
 This guide covers the **main workshop build**: the Waveshare ESP32-C6 Zero on the
-`smart_plants_breakout_ws-board_rev2` PCB. All sensors (BME280, TSL2591) and the
+`smart_plants_breakout_ws-board_rev2` PCB powered by 3 AA batteries. All sensors (BME280, TSL2591) and the
 pump circuit are integrated on the PCB — no breadboard or loose resistors needed.
 
 ---
@@ -13,24 +13,26 @@ and discrete resistors from the old build.
 
 **Electronics**
 - Waveshare ESP32-C6 Zero microcontroller
-- Smart Plants Breakout PCB (ws-board rev2)
-- Capacitive soil moisture sensor with cable
+- Smart Plants Breakout PCB (ws-board rev2) + all components
+- Capacitive soil moisture sensor + 3-core cable
 - BME280 sensor module (temperature, humidity, pressure)
 - TSL2591 sensor module (light)
 - Mini diaphragm pump + 2-core cable
-- Battery pack (3× AA or Li-ion, depending on your kit variant)
+- Battery pack (3× AA)
+- USB-C connector with cable
+- On/Off Switch
 
 **Mechanical**
+- 3D-printed battery housing and PCB mount
 - 3D-printed moisture sensor housing + lid
 - 3D-printed pump housing
+- 3D-printed BME280 housing (Stevenson Screen)
+- 3D-printed TSL2591 housing + half ping pong ball as diffusor
 - Laser-cut enclosure
 - 8× wood screws
 - Velcro tape
 - PG7 cable gland (for pump cable)
 - Tubes (pump inlet/outlet)
-
-> **Note:** Your exact kit contents may differ. Check `instructions/full_BOM.ods` for the
-> complete bill of materials.
 
 ---
 
@@ -39,24 +41,44 @@ and discrete resistors from the old build.
 Several parts need preparation before assembly. These steps can be done in any order —
 if a tool you need is in use, move on to another step.
 
-### 2.1 Solder the Microcontroller to the PCB
+### 2.1 Prepare the PCB
 
-The Waveshare ESP32-C6 Zero must be soldered to the pin headers on the PCB.
+Solder all components on the PCB (suggested order below). Component orientation is indicated by the silkscreen markings. All components but the resitstors are orientation sensitive!
 
-1. Place the board in the designated footprint on the PCB (component side up, aligned with
-   the silkscreen outline).
-2. Solder all pins. Work diagonally — tack one corner, then the opposite, then fill in the
-   rest to keep the board flat.
+| Reference | Component | Qty | Value | Notes |
+|-----------|-----------|-----|-------|-------|
+| R1, R2 | Resistor | 2 | 220 kΩ | Battery voltage divider |
+| R3 | Resistor | 1 | 10 kΩ | MOSFET gate pull-down |
+| R4 | Resistor | 1 | 22 Ω | MOSFET gate protection |
+| R5, R6 | Resistor | 2 | 4.7 kΩ | I2C pull-up |
+| D1 | Diode | 1 | 1N4001 | Flyback diode — stripe (cathode) faces pump + |
+| D2 | Diode | 1 | 1N5817 | Schottky diode — stripe (cathode) per silkscreen |
+| C2 | Capacitor | 1 | 220 µF | Electrolytic — long leg to + hole |
+| C3 | Capacitor | 1 | 22 µF | Electrolytic — long leg to + hole |
+| Q1 | MOSFET | 1 | IRLZ14 | Flat side matches silkscreen outline |
+| J3, J5, J6, J11 | I2C JST connector | 4 | 4-pin JST XH | |
+| J9 | Moisture sensor connector | 1 | 3-pin JST XH | |
+| J7, SW1 | Battery / switch connector | 2 | 2-pin JST XH | |
+| J10 | Pump connector | 1 | 2-pin JST XH | |
+| J4 | USB-C power connector | 1 | 2-pin JST PH | Smaller pitch (2.0 mm) than the XH connectors |
+| J1, J2 | Microcontroller socket | 2 | 9-pin pin socket | Solder to PCB; insert the Waveshare board after |
 
-> **First time soldering?** Ask a workshop helper for a quick demo. This joint is the most
-> important one — a cold joint here will cause intermittent problems.
+Resistors are not orientation-sensitive. All other components are — match the silkscreen carefully.
 
-<!-- TODO: add photo of Waveshare board soldered to PCB -->
+Suggested soldering order:
+1. Resistors, Diodes
+2. JST connectors. Tip: place all connectors, put a paper on it and try to flip the PCB holding all connectors in place with the paper. Solder the connector pins on the back
+3. Microcontroller socket
+4. Capacitors, Mosfet
+5. optional: pin header to expose microcontroller pins
+
+> **First time soldering?** Ask a workshop helper for a quick demo. A cold solder joint here will cause intermittent problems that are hard to debug later.
+
+<img src="../img/wv_pcb_soldering.jpg" height="400">
 
 ### 2.2 Crimp the Sensor Cable
 
-The moisture sensor uses a custom cable with a JST connector on the sensor side and a
-Dupont connector on the PCB side.
+The moisture sensor uses a custom cable with a JST connector on either side
 
 1. Crimp a **3-pin JST PH** connector on one end.
 2. Crimp a **3-pin male Dupont** connector on the other end.
@@ -145,15 +167,15 @@ In **Tools > Manage Libraries**, search for and install:
 ### 4.3 Upload the Code
 
 1. Open `code/sp_modular/sp_modular.ino` in Arduino IDE.
-2. In `sp_modular.ino`, update the device credentials at the top of the file:
+2. Open `code/sp_modular/config.h` and fill in your device credentials near the top:
 
 ```cpp
-const char* DEVICE_NAME = "my-plant";       // choose a unique name
-const char* DEVICE_UUID = "00000000";       // 8-character ID from the dashboard
-const char* API_KEY     = "vKpsikScqRUt2CdC"; // provided at the workshop
+#define DEVICE_NAME  "my-plant"   // choose a unique name
+#define DEVICE_UUID  "00000000"   // 8-character ID from the dashboard
+#define API_KEY      "vKpsikScqRUt2CdC"  // provided at the workshop
 ```
 
-3. If you are not using all sensors, open `config.h` and set unused flags to `0`:
+3. If you are not using all sensors, set unused flags to `0` in the same file:
 
 ```cpp
 #define USE_BME280    1   // set to 0 if no BME280 connected
