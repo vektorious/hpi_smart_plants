@@ -7,11 +7,12 @@
 // RTC boot counter (definition, with attribute)
 RTC_DATA_ATTR uint32_t bootCount = 0;
 
-// Define the externs from config.h
-const char* DEVICE_NAME = "Test_ws_pcbv2";
-const char* DEVICE_UUID = "22593b33";
+// *** CHANGE THESE for your device ***
+// Device name and UUID are shown on the dashboard; API key is provided by the workshop.
+const char* DEVICE_NAME = "my-plant";         // Choose a unique name
+const char* DEVICE_UUID = "00000000";         // 8-character UUID from the dashboard
 const char* API_URL     = "https://plants.makeruniverse.de/plants/measurements";
-const char* API_KEY     = "vKpsikScqRUt2CdC";
+const char* API_KEY     = "vKpsikScqRUt2CdC"; // Workshop API key
 
 static void printWakeupReason() {
   esp_sleep_wakeup_cause_t cause = esp_sleep_get_wakeup_cause();
