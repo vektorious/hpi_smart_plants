@@ -117,6 +117,68 @@ NOTE: Microcontroller AND MOSFET/Pump Power Source MUST HAVE THE SAME GROUND!!
 
 
 
+## How the System Works
+
+### The Firmware
+
+The code running on the microcontroller follows the same cycle every time the device wakes up:
+
+1. **Wake up** — the ESP32 wakes from deep sleep on a timer (default: every hour). Deep sleep draws less than 10 µA, which is why the batteries last weeks instead of hours.
+2. **Read sensors** — moisture, battery voltage, temperature, humidity, air pressure, and light level are all read in sequence.
+3. **Connect to Wi-Fi** — the device connects to the saved Wi-Fi network. If no network is saved yet, it opens a temporary access point so you can enter your credentials.
+4. **Send data** — the readings are packaged as a JSON message and sent to the API server over HTTPS.
+5. **Go back to sleep** — Wi-Fi is switched off and the chip enters deep sleep until the next cycle.
+
+The code lives in `code/sp_modular/`. The main file (`sp_modular.ino`) ties the modules together; everything you need to configure is in `config.h`.
+
+### Sending Data — What is an API?
+
+An **API** (Application Programming Interface) is a defined way for two programs to talk to each other. In this project, the device acts as a *client* that sends data, and a server receives it.
+
+Each time the device wakes up, it sends a small **JSON** message — a structured text format that both machines and humans can read — that looks roughly like this:
+
+```json
+{
+  "name": "my-plant",
+  "device_uuid": "a1b2c3d4",
+  "sensors": {
+    "moisture": { "value": 62.3, "unit": "%" },
+    "temperature": { "value": 21.4, "unit": "°C" },
+    "battery_voltage": { "value": 4.1, "unit": "V" }
+  }
+}
+```
+
+This message is sent using **HTTP POST** — the same protocol your browser uses when you submit a form on a website. The server checks the API key in the request header to confirm the device is authorised, then stores the reading.
+
+### The Server
+
+The server runs a **FastAPI** service at `plants.makeruniverse.de`. FastAPI is a modern Python web framework designed for building APIs quickly. When it receives a reading from your device, it validates the data and writes it to a **PostgreSQL** database — a reliable, open-source relational database. Every measurement from every device in the workshop is stored there, identified by the device UUID you set in `config.h`.
+
+### The Dashboard
+
+The readings are visualised in **Grafana**, an open-source dashboarding tool that can connect to many data sources including PostgreSQL. The public dashboard at [plants.makeruniverse.de](https://plants.makeruniverse.de) shows live and historical readings for all devices. You can filter by device name or UUID to see only your plant's data.
+
+```
+[Device]
+   │  wakes up, reads sensors
+   │  sends JSON over HTTPS
+   ▼
+[FastAPI server]
+   │  validates API key
+   │  stores reading
+   ▼
+[PostgreSQL database]
+   │  queried by Grafana
+   ▼
+[Grafana dashboard]
+   │  shows live + historical data
+   ▼
+[You]
+```
+
+---
+
 ## Similar Projects
 
 ### Self-Watering Flower Pot "Flaura"
