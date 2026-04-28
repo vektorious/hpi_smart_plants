@@ -7,6 +7,8 @@ device. Participants learn microcontroller programming, analog sensing, and Wi-F
 The device wakes from deep sleep, reads soil moisture (and optionally temperature, humidity,
 light, and battery level), sends data to an online dashboard, then sleeps again.
 
+![Smart Plants rev2 build](img/final_build2.jpg)
+
 ---
 
 ## What You'll Build
@@ -31,7 +33,7 @@ Two controller boards are supported. Both run the same firmware (`code/sp_modula
 
 ## Build Instructions
 
-**Start here:** [`instructions/waveshare_pcb.md`](build_instructions.md)
+**Start here:** [`instructions/build_instructions.md`](instructions/build_instructions.md)
 
 That guide covers the full assembly, programming, calibration, and deployment for the main
 Waveshare build.
@@ -91,9 +93,16 @@ img/               Photos and diagrams referenced by the instructions
 
 ## Background Reading
 
-[`instructions/background_information.md`](instructions/background_information.md) explains
-sensor selection, pump control, and design decisions — useful context for understanding *why*
-things are built the way they are.
+[`instructions/background_information.md`](instructions/background_information.md) covers:
+
+- **Sensor selection** — why capacitive over resistive moisture sensors, why BME280 and TSL2591
+  were chosen over simpler alternatives, and the trade-offs involved
+- **Pump control** — how MOSFETs and relays work, and why this design uses an IRLZ14
+- **How the system works** — the full data path from firmware wake-up cycle through the FastAPI
+  server and PostgreSQL database to the live Grafana dashboard
+- **Similar projects** — related open-source plant monitoring builds for further inspiration
+
+Useful context for understanding *why* things are built the way they are.
 
 ---
 
