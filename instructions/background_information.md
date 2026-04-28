@@ -54,7 +54,7 @@ Pressure adds another useful dimension: it reflects altitude, weather trends, an
 
 For this project we use the **Bosch BME280**. It measures temperature, relative humidity, and barometric pressure in a single compact package. It communicates over I2C (address `0x76` on this PCB), is well-supported by the Adafruit BME280 library, and draws very little current in forced mode — important for a battery-powered device.
 
-One caveat: the BME280 is sensitive to heat from nearby components. The PCB isolates the sensor from the microcontroller, and the 3D-printed Stevenson screen in `hardware/3d-print/bme_housing/` provides additional shielding from direct sunlight and rain while still allowing airflow.
+One caveat: the BME280 is sensitive to heat from nearby components. The PCB isolates the sensor from the microcontroller, and the 3D-printed miniature Stevenson screen in `hardware/3d-print/bme_housing/` illustrates the principle of shielding a sensor from direct sunlight and rain while allowing airflow. At this scale it has a limited practical effect, but it is a good way to understand why professional weather stations use the same concept at a much larger scale.
 
 ---
 
