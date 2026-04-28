@@ -1,11 +1,12 @@
 # Smart Plants Starter Kit
 
-A hands-on educational IoT project for building a low-power, Wi-Fi-connected plant monitoring
-device. Participants learn microcontroller programming, analog sensing, and Wi-Fi data transfer
-— while building something that actually keeps their plants alive.
+A hands-on introduction to building low-power, Wi-Fi-connected plant monitoring systems.
+You'll learn the basics of microcontroller programming, soil moisture sensing, and Wi-Fi data
+transfer — all while building a device that actually keeps your plants alive.
 
 The device wakes from deep sleep, reads soil moisture (and optionally temperature, humidity,
-light, and battery level), sends data to an online dashboard, then sleeps again.
+light, and battery level), sends data to an online dashboard, then sleeps again to conserve
+battery.
 
 ![Smart Plants rev2 build](img/final_build2.jpg)
 
@@ -17,26 +18,9 @@ By the end of the workshop you'll have a battery-powered soil moisture sensor th
 - Measures soil moisture every hour (configurable)
 - Sends data to an online dashboard via Wi-Fi
 - Sleeps between measurements to conserve battery
+- Waters your plant automatically when the soil gets too dry
 
----
-
-## Board Variants
-
-Two controller boards are supported. Both run the same firmware (`code/sp_modular/`).
-
-| Variant | Board | PCB | Who it's for |
-|---------|-------|-----|--------------|
-| **Main build** | Waveshare ESP32-C6 Zero | `smart_plants_breakout_ws-board_rev2` | Student workshops |
-| **Alternative** | SEEED Studio XIAO ESP32-C6 | `smart_plants_breakout_rev1` | Alternative / reference build |
-
----
-
-## Build Instructions
-
-**Start here:** [`instructions/build_instructions.md`](instructions/build_instructions.md)
-
-That guide covers the full assembly, programming, calibration, and deployment for the main
-Waveshare build.
+No soldering experience required — but you'll get the chance to try!
 
 ---
 
@@ -55,6 +39,36 @@ Waveshare build.
 
 ---
 
+## Before You Begin
+
+Make sure you have:
+- A computer with a USB-C port (or adapter)
+- [Arduino IDE](https://www.arduino.cc/en/software) installed
+- A 2.4 GHz Wi-Fi network
+
+Everything else — board support packages, libraries, and configuration — is covered step by
+step in the build instructions below.
+
+---
+
+## Build Instructions
+
+**Start here:** [`instructions/build_instructions.md`](instructions/build_instructions.md)
+
+That guide covers the full assembly, programming, calibration, and deployment for the main
+Waveshare build — from soldering the PCB to seeing your first readings on the dashboard.
+
+---
+
+## Learning Goals
+
+- Read analog sensor data and convert it to meaningful values
+- Understand how to minimise power consumption with deep sleep
+- Send data securely to a server over Wi-Fi using HTTP
+- Learn how a cloud dashboard receives and displays live sensor readings
+
+---
+
 ## Modular Firmware
 
 All features are toggled via flags in `code/sp_modular/config.h`:
@@ -66,6 +80,17 @@ All features are toggled via flags in `code/sp_modular/config.h`:
 ```
 
 Set any flag to `0` to disable that module — no code changes needed elsewhere.
+
+---
+
+## Board Variants
+
+Two controller boards are supported. Both run the same firmware (`code/sp_modular/`).
+
+| Variant | Board | PCB | Who it's for |
+|---------|-------|-----|--------------|
+| **Main build** | Waveshare ESP32-C6 Zero | `smart_plants_breakout_ws-board_rev2` | Student workshops |
+| **Alternative** | SEEED Studio XIAO ESP32-C6 | `smart_plants_breakout_rev1` | Alternative / reference build |
 
 ---
 
