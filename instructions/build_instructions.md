@@ -44,8 +44,12 @@ and discrete resistors from the old build.
 
 **Tools**
 - Soldering iron + solder
+- Crimping tool (for JST connectors)
+- Wire cutters / flush cutters
+- Wire strippers
 - Screwdriver
 - Hot-glue gun (or other glue)
+- Drill with 8 mm bit (only needed if the housing cable hole is not pre-cut)
 
 ---
 
