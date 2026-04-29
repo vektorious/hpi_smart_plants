@@ -16,6 +16,7 @@ void setupWiFi() {
   }
 
   WiFiManager wm;
-  wm.setConfigPortalTimeout(120);
+  wm.setConnectTimeout(8);
+  wm.setConfigPortalTimeout(180);
   wm.autoConnect((String(DEVICE_NAME) + "-Setup").c_str());
 }
