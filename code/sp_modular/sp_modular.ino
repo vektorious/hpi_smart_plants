@@ -35,6 +35,7 @@ void setup() {
   d.temp = d.hum = d.press = NAN;
   d.lux = NAN; d.ir = d.full = 0;
   d.pumpSeconds = 0;
+  d.wifiRssi = WiFi.RSSI();
 
   // Moisture always on
   d.moistV   = readMoistureVoltage();

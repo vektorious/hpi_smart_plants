@@ -10,6 +10,7 @@ void sendData(const SensorPacket &d) {
   json += "\"moisture_pct\":{\"value\":" + String(d.moistPct, 1) + "},";
   json += "\"moisture_voltage\":{\"value\":" + String(d.moistV, 3) + "},";
   json += "\"battery_voltage\":{\"value\":" + String(d.battV, 2) + "},";
+  json += "\"wifi_rssi\":{\"value\":" + String(d.wifiRssi) + "},";
 
 #if USE_BME280
   if (isValidFloat(d.temp)) {
