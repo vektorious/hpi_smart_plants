@@ -10,8 +10,8 @@
 // *** Change these for your device before uploading ***
 // Device name and UUID are shown on the dashboard.
 // API key is provided at the workshop.
-#define DEVICE_NAME  "aisc_plant_bot"
-#define DEVICE_UUID  "00000003"
+#define DEVICE_NAME  "my-plant"
+#define DEVICE_UUID  "00000000"
 #define API_URL      "https://plants.makeruniverse.de/plants/measurements"
 #define API_KEY      "vKpsikScqRUt2CdC"
 
