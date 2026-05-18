@@ -10,8 +10,8 @@
 // *** Change these for your device before uploading ***
 // Device name and UUID are shown on the dashboard.
 // API key is provided at the workshop.
-#define DEVICE_NAME  "my-plant"
-#define DEVICE_UUID  "00000000"
+#define DEVICE_NAME  "the_experiment"
+#define DEVICE_UUID  "00000006"
 #define API_URL      "https://plants.makeruniverse.de/plants/measurements"
 #define API_KEY      "vKpsikScqRUt2CdC"
 
@@ -48,7 +48,7 @@
 #define BATT_DIVIDER  2.0f   // Voltage divider ratio on the battery ADC pin
 
 // Pump settings
-#define MOISTURE_THRESHOLD  30.0f  // Pump triggers below this moisture percentage
+#define MOISTURE_THRESHOLD  50.0f  // Pump triggers below this moisture percentage
 #define PUMP_DURATION_SEC   2      // How long to run the pump per cycle (seconds)
 
 // Shared data struct

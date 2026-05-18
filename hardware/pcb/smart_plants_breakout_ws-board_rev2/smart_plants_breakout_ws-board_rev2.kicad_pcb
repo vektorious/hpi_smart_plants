@@ -9588,6 +9588,18 @@
 			(justify left bottom)
 		)
 	)
+	(gr_text "Certified \nOpen Source Hardware\nOSHWA ID: DE000173"
+		(at 54.102 96.52 0)
+		(layer "B.SilkS")
+		(uuid "73c307b4-9d86-4fbd-b9ce-32dd755f9658")
+		(effects
+			(font
+				(size 2 2)
+				(thickness 0.1)
+			)
+			(justify bottom mirror)
+		)
+	)
 	(segment
 		(start 45.75 36.64)
 		(end 45.76 36.63)
