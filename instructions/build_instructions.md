@@ -21,6 +21,21 @@ and discrete resistors from the old build.
 **Electronics**
 - Waveshare ESP32-C6 Zero microcontroller
 - Smart Plants Breakout PCB (ws-board rev2) + all components
+  - 2× 220 kΩ resistor (R1, R2 — battery voltage divider)
+  - 1× 10 kΩ resistor (R3 — MOSFET gate pull-down)
+  - 1× 22 Ω resistor (R4 — MOSFET gate protection)
+  - 2× 4.7 kΩ resistor (R5, R6 — I2C pull-up)
+  - 1× 1N4001 diode (D1 — flyback diode)
+  - 1× 1N5817 Schottky diode (D2)
+  - 1× 220 µF electrolytic capacitor (C2)
+  - 1× 22 µF electrolytic capacitor (C3)
+  - 1× IRLZ14 MOSFET (Q1)
+  - 4× 4-pin JST XH connector (J3, J5, J6, J11 — I2C)
+  - 1× 3-pin JST XH connector (J9 — moisture sensor)
+  - 2× 2-pin JST XH connector (J7, SW1 — battery / switch)
+  - 1× 2-pin JST XH connector (J10 — pump)
+  - 1× 2-pin JST PH connector (J4 — USB-C power, 2.0 mm pitch)
+  - 2× 9-pin pin socket (J1, J2 — microcontroller socket)
 - Capacitive soil moisture sensor + 3-core cable
 - BME280 sensor module (temperature, humidity, pressure) + pre-crimped 4-core cable
 - TSL2591 sensor module (light) + pre-crimped 4-core cable
