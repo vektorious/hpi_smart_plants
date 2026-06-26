@@ -18,6 +18,9 @@ pump circuit are integrated on the PCB — no breadboard or loose resistors need
 Get all parts together before you start. The PCB replaces the breadboard, jumper wires,
 and discrete resistors from the old build.
 
+> For a complete itemised parts list (including all PCB components, cables, and quantities),
+> see the [Bill of Materials](bom.md) ([CSV version](bom.csv)).
+
 **Electronics**
 - Waveshare ESP32-C6 Zero microcontroller
 - Smart Plants Breakout PCB (ws-board rev2) + all components

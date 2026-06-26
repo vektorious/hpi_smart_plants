@@ -6,6 +6,7 @@ All parts can be printed in PLA. No supports needed unless otherwise noted.
 
 | Folder | Parts | Used for |
 |--------|-------|---------|
+| `battery_pcb_mount/` | `battery_case-Body6.3mf` | Battery housing and mount for the PCB |
 | `moisture_sensor/` | `moisture_sensor_housing.stl`, `moisture_sensor_lid.stl` | Enclosure for the capacitive soil moisture sensor |
 | `bme_housing/` | `ring_smaller_scaled.stl`, `stevenson_hat_scaled.stl`, `thread_scaled.stl`, `tube_scaled.stl` | Stevenson screen — protects the BME280 from direct sun/rain while allowing airflow |
 | `light_sensor/` | `light_sensor_bottom.stl` | Mount for the TSL2591 light sensor |

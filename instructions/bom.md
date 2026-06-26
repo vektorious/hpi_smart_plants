@@ -8,6 +8,7 @@ else needed for the full build.
 
 | Reference | Component | Qty | Value | Notes |
 |-----------|-----------|-----|-------|-------|
+| — | Smart Plants Breakout PCB (bare board) | 1 | ws-board rev2 | Populated with the components below |
 | R1, R2 | Resistor | 2 | 220 kΩ | Battery voltage divider |
 | R3 | Resistor | 1 | 10 kΩ | MOSFET gate pull-down |
 | R4 | Resistor | 1 | 22 Ω | MOSFET gate protection |
@@ -30,13 +31,19 @@ else needed for the full build.
 |------|-----|------|-------|
 | Microcontroller | 1 | Waveshare ESP32-C6 Zero | |
 | Smart Plants Breakout PCB | 1 | ws-board rev2 | Populated with the PCB components above |
-| Capacitive soil moisture sensor | 1 | | + 3-core cable |
-| BME280 sensor module | 1 | Temperature/humidity/pressure | + pre-crimped 4-core cable |
-| TSL2591 sensor module | 1 | Light | + pre-crimped 4-core cable |
-| Mini diaphragm pump | 1 | | + 2-core cable |
+| Capacitive soil moisture sensor | 1 | | |
+| 3-core cable | 1 | | Self-crimped for the moisture sensor |
+| 3-pin female JST XH connector | 2 | 3-pin JST XH | For the moisture sensor cable (both ends) |
+| BME280 sensor module | 1 | Temperature/humidity/pressure | |
+| TSL2591 sensor module | 1 | Light | |
+| Pre-crimped 4-core cable | 2 | 4-pin JST XH | For BME280 and TSL2591 sensors |
+| Mini diaphragm pump | 1 | | |
+| 2-core cable | 1 | | Self-crimped for the pump |
+| 2-pin female JST XH connector | 1 | 2-pin JST XH | For the pump cable |
 | Battery pack | 1 | 3× AA | |
 | USB-C connector | 1 | | With cable |
 | On/Off switch | 1 | | |
+| Pre-crimped 2-core cable | 1 | 2-pin JST XH | For the on/off switch |
 
 ## Mechanical
 
@@ -46,7 +53,8 @@ else needed for the full build.
 | 3D-printed moisture sensor housing + lid | 1 | |
 | 3D-printed pump housing | 1 | |
 | 3D-printed BME280 housing | 1 | Stevenson Screen |
-| 3D-printed TSL2591 housing | 1 | + half ping pong ball as diffusor |
+| 3D-printed TSL2591 housing | 1 | |
+| Ping pong ball half | 1 | Diffusor for the TSL2591 light sensor |
 | 3D-printed cable plugs | 2 | |
 | Laser-cut enclosure | 1 | |
 | Wood screws | 12 | |
