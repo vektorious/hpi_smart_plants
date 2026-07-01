@@ -37,8 +37,9 @@ static WiFiManagerParameter *p_usePump;
 static WiFiManagerParameter *makeCheckbox(const char *id, const char *label, bool checked) {
   // WiFiManager checkbox idiom: value "T", pre-check via the "checked" attribute.
   // When submitted unchecked the browser omits the field, so getValue() is empty.
+  // WFM_LABEL_AFTER renders the label to the right of the box so it lines up.
   const char *custom = checked ? "type=\"checkbox\" checked" : "type=\"checkbox\"";
-  return new WiFiManagerParameter(id, label, "T", 2, custom);
+  return new WiFiManagerParameter(id, label, "T", 2, custom, WFM_LABEL_AFTER);
 }
 
 static bool checkboxChecked(WiFiManagerParameter *p) {
