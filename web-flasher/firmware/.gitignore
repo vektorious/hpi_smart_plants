@@ -1,0 +1,4 @@
+# The built firmware image is generated, not tracked by default.
+# If you host the flasher from this repo (e.g. GitHub Pages), commit it
+# explicitly with:  git add -f web-flasher/firmware/smart_plants.bin
+*.bin
