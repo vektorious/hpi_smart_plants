@@ -104,6 +104,11 @@ static String buildSensorJson() {
     j += "\"full\":" + String(d.full) + ",";
   }
 
+  bool wifiConnected = WiFi.status() == WL_CONNECTED;
+  j += "\"wifi_connected\":" + String(wifiConnected ? "true" : "false") + ",";
+  j += "\"ssid\":\"" + WiFi.SSID() + "\",";
+  j += "\"ip\":\"" + (wifiConnected ? WiFi.localIP().toString() : String("")) + "\",";
+
   j += "\"keep_awake\":" + String(keepAwake ? "true" : "false");
   j += "}";
   return j;
@@ -130,8 +135,12 @@ static const char LIVE_PAGE[] PROGMEM = R"HTML(
  #sendresult{font-weight:600}
  #sendresult.ok{color:#4ade80}
  #sendresult.err{color:#ff6b6b}
+ header{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+ .wbadge{font-size:.75rem;font-weight:600;padding:4px 12px;border-radius:20px}
+ .wbadge.ok{background:#14361f;color:#4ade80}
+ .wbadge.err{background:#3a1414;color:#ff6b6b}
 </style></head><body>
-<header>🌱 Live Sensor Readings</header>
+<header>🌱 Live Sensor Readings <span id="wifi" class="wbadge err">WiFi: …</span></header>
 <div class="grid" id="grid"></div>
 <div class="send">
  <button id="sendbtn">Send to API (test connection)</button>
@@ -165,6 +174,9 @@ function render(d){
  if(d.tsl_enabled&&!d.tsl_ok)h+=`<div class="card"><div class="label">TSL2591</div><div class="value bad">not detected</div></div>`;
  document.getElementById("grid").innerHTML=h;
  document.getElementById("ka").checked=!!d.keep_awake;
+ const w=document.getElementById("wifi");
+ if(d.wifi_connected){w.className="wbadge ok";w.textContent="WiFi: "+(d.ssid||"connected")+" · "+d.ip;}
+ else{w.className="wbadge err";w.textContent="WiFi: not connected";}
 }
 async function tick(){
  try{const r=await fetch("/sensors.json",{cache:"no-store"});render(await r.json());
@@ -290,10 +302,11 @@ void runCommissioningPortal() {
   std::vector<const char *> menu = {"wifi", "param", "custom", "sep", "info", "restart", "exit"};
   wm.setMenu(menu);
   wm.setCustomMenuHTML(
-      "<form action='/livesensors' method='get'><button class='D'>Live Sensor Readings</button></form>"
-      "<form action='/finish' method='post'>"
+      "<form action='/livesensors' method='get' style='margin:16px 0'>"
+      "<button class='D'>Live Sensor Readings</button></form>"
+      "<form action='/finish' method='post' style='margin:16px 0'>"
       "<button style='background:#2f855a'>Finish setup &amp; start monitoring</button></form>"
-      "<form action='/factoryreset' method='post' "
+      "<form action='/factoryreset' method='post' style='margin:16px 0' "
       "onsubmit='return confirm(\"Erase all settings AND saved WiFi, restore defaults?\")'>"
       "<button style='background:#a12222'>Factory Reset (settings + WiFi)</button></form>");
 
