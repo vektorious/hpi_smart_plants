@@ -1,5 +1,6 @@
-void sendData(const SensorPacket &d) {
-  if (WiFi.status() != WL_CONNECTED) return;
+// Returns the HTTP response code, or -1 if WiFi is not connected.
+int sendData(const SensorPacket &d) {
+  if (WiFi.status() != WL_CONNECTED) return -1;
 
   String json = "{";
   json += "\"name\":\"" + String(settings.deviceName) + "\",";
@@ -51,4 +52,5 @@ void sendData(const SensorPacket &d) {
   Serial.println("Payload: " + json);
 
   http.end();
+  return code;
 }

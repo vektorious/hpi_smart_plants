@@ -11,8 +11,7 @@
 #include <WiFiManager.h>
 #include <Wire.h>
 
-// Provided by sp_modular.ino — reads every sensor once (no pump action).
-SensorPacket readAllSensors();
+// readAllSensors() and sendData() are declared in config.h.
 
 static const uint32_t PORTAL_TIMEOUT_MS = 5UL * 60UL * 1000UL;  // 5 minutes
 
@@ -124,9 +123,19 @@ static const char LIVE_PAGE[] PROGMEM = R"HTML(
  .bad{color:#ff6b6b}
  .foot{padding:12px 20px;color:#9aa0aa;font-size:.85rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
  a{color:#7aa2ff}
+ .send{padding:4px 20px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+ .send button{background:#2f855a;color:#fff;border:0;border-radius:8px;padding:10px 16px;font-size:.95rem;font-weight:600;cursor:pointer}
+ .send button:disabled{opacity:.6;cursor:default}
+ #sendresult{font-weight:600}
+ #sendresult.ok{color:#4ade80}
+ #sendresult.err{color:#ff6b6b}
 </style></head><body>
 <header>🌱 Live Sensor Readings</header>
 <div class="grid" id="grid"></div>
+<div class="send">
+ <button id="sendbtn">Send to API (test connection)</button>
+ <span id="sendresult"></span>
+</div>
 <div class="foot">
  <label><input type="checkbox" id="ka"> Keep portal awake (debug — disables 5&nbsp;min timeout)</label>
  <span id="status">refreshing every 10 s…</span>
@@ -161,6 +170,17 @@ async function tick(){
 document.getElementById("ka").addEventListener("change",async e=>{
  await fetch("/keepawake?v="+(e.target.checked?1:0));
 });
+const sendbtn=document.getElementById("sendbtn"),sendres=document.getElementById("sendresult");
+sendbtn.addEventListener("click",async()=>{
+ sendbtn.disabled=true;sendres.className="";sendres.textContent="Sending…";
+ try{
+  const r=await fetch("/sendtest",{method:"POST"});const d=await r.json();
+  if(d.ok){sendres.className="ok";sendres.textContent="✓ "+d.code+" OK — data sent to API";}
+  else if(d.code===-1){sendres.className="err";sendres.textContent="✗ Not connected to WiFi — configure WiFi first";}
+  else{sendres.className="err";sendres.textContent="✗ API returned "+d.code;}
+ }catch(e){sendres.className="err";sendres.textContent="✗ Request failed";}
+ sendbtn.disabled=false;
+});
 tick();setInterval(tick,10000);
 </script></body></html>
 )HTML";
@@ -179,6 +199,13 @@ static void bindCustomRoutes() {
   });
   wm.server->on("/livesensors", []() {
     wm.server->send_P(200, "text/html", LIVE_PAGE);
+  });
+  wm.server->on("/sendtest", HTTP_POST, []() {
+    SensorPacket d = readAllSensors();
+    int code = sendData(d);   // -1 if WiFi not connected
+    wm.server->send(200, "application/json",
+                    String("{\"code\":") + code +
+                    ",\"ok\":" + (code == 200 ? "true" : "false") + "}");
   });
   wm.server->on("/factoryreset", HTTP_POST, []() {
     Serial.println("Portal: factory reset requested");

@@ -105,3 +105,8 @@ struct SensorPacket {
   int pumpSeconds;
   int wifiRssi;
 };
+
+// Functions taking SensorPacket by reference need explicit prototypes: the
+// Arduino auto-prototype generator skips reference parameters.
+SensorPacket readAllSensors();              // sp_modular.ino
+int          sendData(const SensorPacket &d);  // send_data.ino — HTTP code, -1 if offline
