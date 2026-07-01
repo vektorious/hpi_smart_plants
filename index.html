@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Plants — Web Flasher</title>
+  <script type="module"
+          src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 640px; margin: 0 auto; padding: 40px 24px;
+      line-height: 1.6; color: #1a1d24; background: #f7f8fa;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { color: #e8eaed; background: #0f1115; }
+      .card { background: #1a1d24 !important; border-color: #2a2e37 !important; }
+      code { background: #2a2e37; }
+    }
+    h1 { font-size: 1.8rem; margin-bottom: 4px; }
+    .lead { color: #6b7280; margin-top: 0; }
+    .card {
+      background: #fff; border: 1px solid #e3e6eb; border-radius: 14px;
+      padding: 24px; margin: 24px 0; text-align: center;
+    }
+    esp-web-install-button { --esp-tools-button-color: #2f855a; }
+    ol { padding-left: 20px; }
+    code { background: #eceef1; padding: 1px 6px; border-radius: 5px; font-size: 0.9em; }
+    .note { font-size: 0.9rem; color: #6b7280; }
+    .callout {
+      background: #fff8e6; border: 1px solid #f0d98c; border-radius: 12px;
+      padding: 16px 20px; margin: 24px 0;
+    }
+    @media (prefers-color-scheme: dark) {
+      .callout { background: #2a2410; border-color: #5c4d1a; }
+    }
+    .tight { margin: 8px 0 4px; }
+    .tight li { margin: 2px 0; }
+  </style>
+</head>
+<body>
+  <h1>🌱 Smart Plants Web Flasher</h1>
+  <p class="lead">Install the Smart Plants firmware onto your board straight from the browser.</p>
+
+  <div class="card">
+    <esp-web-install-button manifest="./manifest.json">
+      <span slot="unsupported">
+        Your browser doesn’t support Web Serial. Use <strong>Chrome</strong>, <strong>Edge</strong>,
+        or <strong>Opera</strong> on a desktop computer.
+      </span>
+      <span slot="not-allowed">
+        Web Serial needs a secure (HTTPS) connection. Open this page over <code>https://</code>.
+      </span>
+    </esp-web-install-button>
+  </div>
+
+  <div class="callout">
+    <strong>⚠️ First, put the board into flashing mode.</strong>
+    The firmware deep-sleeps within seconds of booting, which disconnects the USB port — so
+    you must start the board in its bootloader before flashing:
+    <ol class="tight">
+      <li><strong>Unplug</strong> the board.</li>
+      <li><strong>Hold the BOOT button</strong> down.</li>
+      <li><strong>Plug in</strong> the USB-C cable while still holding BOOT.</li>
+      <li><strong>Release BOOT</strong> after about 2 seconds.</li>
+    </ol>
+    The board now stays awake in flashing mode. Do this every time before you click Connect.
+  </div>
+
+  <h2>How to flash</h2>
+  <ol>
+    <li>Put the board into flashing mode (BOOT-hold steps above), using a USB-C
+        <em>data</em> cable.</li>
+    <li>Click <strong>Connect</strong> above and pick the
+        <code>USB JTAG/serial debug unit</code> port.</li>
+    <li>Choose <strong>Install Smart Plants Firmware</strong> and wait for it to finish.</li>
+    <li>When done, the board reboots. On first boot it opens a WiFi setup access
+        point named <code>&lt;device&gt;-Setup</code> — connect to it to configure
+        WiFi, device settings, and check live sensor readings.</li>
+  </ol>
+
+  <p class="note">
+    Still can’t connect? On Linux, wait a couple of seconds after plugging in (a service may
+    briefly hold the port). Make sure you’re using a data cable, not a charge-only one.
+  </p>
+
+  <p class="note">
+    Firmware target: Waveshare ESP32-C6-Zero. See <code>web-flasher/README.md</code> in the
+    repository for how the firmware image is built and updated.
+  </p>
+</body>
+</html>
