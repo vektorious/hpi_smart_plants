@@ -201,6 +201,19 @@ tick();setInterval(tick,10000);
 </script></body></html>
 )HTML";
 
+// Injected into the <head> of every WiFiManager page. On the "credentials
+// saved" page (/wifisave) it replaces the default "reconnect to AP to try
+// again" message with useful links, since the AP stays up (AP+STA) so the
+// student can go straight back or check the live sensor page.
+static const char SAVED_PAGE_HEAD[] =
+    "<script>addEventListener('load',function(){"
+    "if(location.pathname.indexOf('wifisave')<0)return;"
+    "var m=document.querySelector('.msg');if(!m)return;"
+    "m.innerHTML=\"Credentials saved. The device is connecting to your WiFi network.<br><br>"
+    "<a href='/'>Return to setup home</a><br><br>"
+    "<a href='/livesensors'>Check WiFi connection &amp; sensor values</a>\";"
+    "});</script>";
+
 // Registered after WiFiManager starts its web server.
 static void bindCustomRoutes() {
   wm.server->on("/sensors.json", []() {
@@ -290,6 +303,7 @@ void runCommissioningPortal() {
 
   wm.setSaveParamsCallback(saveParamsCallback);
   wm.setWebServerCallback(bindCustomRoutes);
+  wm.setCustomHeadElement(SAVED_PAGE_HEAD);   // rewrite the "credentials saved" message
   wm.setConfigPortalBlocking(false);
   wm.setConfigPortalTimeout(0);          // we enforce the timeout ourselves
   wm.setBreakAfterConfig(true);          // return control after WiFi is saved
