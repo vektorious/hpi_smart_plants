@@ -17,6 +17,7 @@ static const uint32_t PORTAL_TIMEOUT_MS = 5UL * 60UL * 1000UL;  // 5 minutes
 
 static WiFiManager wm;
 static volatile bool keepAwake = false;
+static volatile bool portalDone = false;   // set by /finish — the student is done
 
 // Custom parameters (allocated once; the portal runs a single time per boot).
 static WiFiManagerParameter *p_deviceName;
@@ -140,6 +141,9 @@ static const char LIVE_PAGE[] PROGMEM = R"HTML(
  <label><input type="checkbox" id="ka"> Keep portal awake (debug — disables 5&nbsp;min timeout)</label>
  <span id="status">refreshing every 10 s…</span>
  <a href="/">&larr; Back to setup</a>
+ <form action="/finish" method="post" style="margin:0">
+  <button style="background:#2f855a;color:#fff;border:0;border-radius:6px;padding:6px 12px;cursor:pointer">Finish setup</button>
+ </form>
 </div>
 <script>
 const cards=[
@@ -199,6 +203,15 @@ static void bindCustomRoutes() {
   });
   wm.server->on("/livesensors", []() {
     wm.server->send_P(200, "text/html", LIVE_PAGE);
+  });
+  wm.server->on("/finish", HTTP_POST, []() {
+    wm.server->send(200, "text/html",
+                    "<!doctype html><meta charset=utf-8>"
+                    "<body style='font-family:system-ui;padding:24px'>"
+                    "<h3>Setup finished</h3>"
+                    "<p>The device will take a measurement and start its normal "
+                    "monitoring cycle. You can close this page.</p>");
+    portalDone = true;
   });
   wm.server->on("/sendtest", HTTP_POST, []() {
     SensorPacket d = readAllSensors();
@@ -278,6 +291,8 @@ void runCommissioningPortal() {
   wm.setMenu(menu);
   wm.setCustomMenuHTML(
       "<form action='/livesensors' method='get'><button class='D'>Live Sensor Readings</button></form>"
+      "<form action='/finish' method='post'>"
+      "<button style='background:#2f855a'>Finish setup &amp; start monitoring</button></form>"
       "<form action='/factoryreset' method='post' "
       "onsubmit='return confirm(\"Erase all settings AND saved WiFi, restore defaults?\")'>"
       "<button style='background:#a12222'>Factory Reset (settings + WiFi)</button></form>");
@@ -286,12 +301,15 @@ void runCommissioningPortal() {
   Serial.println("Portal: starting AP '" + apName + "'");
   wm.startConfigPortal(apName.c_str());
 
+  // Keep the portal open (AP+STA) after WiFi connects instead of exiting
+  // immediately, so the student can view live sensors and use the "Send to API"
+  // test over the live STA connection. Exit on an explicit Finish, or timeout.
   uint32_t start = millis();
   while (true) {
     wm.process();
 
-    if (WiFi.status() == WL_CONNECTED && wm.getWiFiIsSaved()) {
-      Serial.println("Portal: WiFi configured — connected");
+    if (portalDone) {
+      Serial.println("Portal: finished by user");
       break;
     }
     if (!keepAwake && (millis() - start > PORTAL_TIMEOUT_MS)) {
