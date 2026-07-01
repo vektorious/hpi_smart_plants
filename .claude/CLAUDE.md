@@ -135,7 +135,10 @@ PCB design files (KiCAD) are in `hardware/pcb/`. Enclosures are in `hardware/3d-
 
 ## Documentation
 
-- `instructions/build_instructions.md` — main student-facing build guide (start here)
+- `instructions/build_instructions.md` — main student-facing build guide (start here); firmware
+  install now defaults to the web flasher, then runtime configuration via the setup portal
+- `instructions/firmware_from_source.md` — build/upload from Arduino IDE (huge_app partition) and
+  standalone component test sketches — the "bare code" path, split out of the main guide
 - `instructions/background_information.md` — sensor theory, system architecture, design rationale
 - `instructions/quick_reference/` — printable one-pager (md, html, pdf) with all build steps
   and PCB BOM; QR code at `img/qr_build_instructions.png` links to the full instructions.

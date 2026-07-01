@@ -224,247 +224,102 @@ the silkscreen. Connect the BME280 to "I2C D2-powered" and the TSL2591 to "I2C D
 
 ---
 
-## 4. Program the Microcontroller
+## 4. Install & Configure the Firmware
 
-### 4.1 Install Arduino IDE and Board Package
+You flash the firmware from your **browser** — no Arduino IDE or drivers needed — then configure
+everything (Wi-Fi, sensors, calibration) on the device itself through a setup page. Nothing in the
+code needs editing.
 
-If you haven't set up Arduino IDE yet:
+> Prefer to build and upload from source (to change the code, or if your browser isn't supported)?
+> See [`firmware_from_source.md`](firmware_from_source.md), then come back to
+> [4.2 Configure via the setup portal](#42-configure-via-the-setup-portal).
 
-1. Download and install [Arduino IDE](https://www.arduino.cc/en/software).
-2. Open **File > Preferences** and add this URL to *Additional Boards Manager URLs*:
-   `https://dl.espressif.com/dl/package_esp32_index.json`
-3. Go to **Tools > Board > Boards Manager**, search for `esp32`, and install the
-   **ESP32 by Espressif Systems** package.
-4. Select board: **Tools > Board > ESP32 Arduino > Waveshare ESP32-C6-Zero**
-   (or search for "ESP32-C6-Zero" in the board list).
+### 4.1 Flash the firmware (web flasher)
 
-### 4.2 Install Required Libraries
+You'll need **Chrome, Edge, or Opera** on a desktop computer (Web Serial isn't in Firefox/Safari
+or on phones) and a USB-C **data** cable.
 
-In **Tools > Manage Libraries**, search for and install:
+1. **Put the board into flashing mode.** The firmware sleeps a few seconds after boot, which
+   disconnects the USB port, so start it in its bootloader first:
+   1. Unplug the board.
+   2. Hold the **BOOT** button.
+   3. Plug in the USB-C cable while still holding BOOT.
+   4. Release BOOT after ~2 seconds.
+2. Open the flasher page: **[plants.makeruniverse.de/flash](https://vektorious.github.io/hpi_smart_plants/)**
+   *(https://vektorious.github.io/hpi_smart_plants/)*.
+3. Click **Connect**, choose the `USB JTAG/serial debug unit` port, then **Install Smart Plants
+   Firmware** and wait for it to finish.
+4. The board reboots automatically. Continue below.
 
-| Library | Author |
-|---------|--------|
-| WiFiManager | tzapu |
-| Adafruit BME280 Library | Adafruit |
-| Adafruit TSL2591 Library | Adafruit |
-| Adafruit Unified Sensor | Adafruit |
+### 4.2 Configure via the setup portal
 
-> When installing the Adafruit BME280 or TSL2591 libraries, the Library Manager will ask
-> whether to install missing dependencies. Click **Install All** — this installs
-> Adafruit Unified Sensor automatically.
+On first boot the device has no Wi-Fi yet, so it opens its own temporary Wi-Fi access point.
 
-<img src="../img/install_wm.png" height="400">
+1. On your phone or laptop, connect to the network named **`SmartPlant-XXXXXXXX-Setup`**
+   (each board has a unique name/ID, so many students can set up side by side without clashing).
+   No password required.
+2. A setup page opens automatically (if not, browse to `http://192.168.4.1`).
+3. Tap **Configure WiFi**, pick your network, and enter the password. You can also set:
+   - **Device name** and **UUID** (pre-filled with the board's unique ID — change the name if you
+     like something friendlier on the dashboard),
+   - which **sensors / pump** are enabled (tick/untick),
+   - **sleep interval**, **moisture calibration**, and **pump** thresholds.
+   The **API key** is already filled in.
+4. **Save.** The device connects to your Wi-Fi and keeps the setup page open so you can check it
+   works (next step). The saved-confirmation page links you straight there.
 
-### 4.3 Upload the Code
+> **Reopen the setup page later** (to change Wi-Fi or settings) by **pressing the reset button
+> twice quickly** (a double-press). It also opens automatically whenever the saved Wi-Fi can't be
+> found.
 
-1. Open `code/sp_modular/sp_modular.ino` in Arduino IDE.
-2. Open `code/sp_modular/config.h` and fill in your device credentials near the top:
+### 4.3 Check the sensors and test the connection
 
-```cpp
-#define DEVICE_NAME  "my-plant"   // choose a unique name
-#define DEVICE_UUID  "00000000"   // 8-character ID from the dashboard
-#define API_KEY      "vKpsikScqRUt2CdC"  // provided at the workshop
-```
+From the setup menu, open **Live Sensor Readings**:
 
-3. If you are not using all sensors, set unused flags to `0` in the same file:
+- The values **refresh every 10 seconds** — gently breathe on the humidity sensor or shade the
+  light sensor and watch them change.
+- The **Wi-Fi badge** at the top turns green with your network name and IP once connected.
+- If a sensor shows **"not detected"**, its cable or wire order is wrong — re-check the
+  colour order from sections 2.5 / 2.6.
+- Click **Send to API (test connection)**. A green **✓ 200 OK** confirms the whole chain works
+  (Wi-Fi + API key + server). Anything else points at the Wi-Fi or key.
 
-```cpp
-#define USE_BME280    1   // set to 0 if no BME280 connected
-#define USE_TSL2591   1   // set to 0 if no TSL2591 connected
-#define USE_PUMP      1   // set to 0 if no pump connected
-```
+### 4.4 Finish
 
-4. Connect the Waveshare board to your computer via USB-C.
-5. Select the correct port: **Tools > Port**.
-6. Click **Upload**.
-
-> **Upload fails?** The board may be stuck in deep sleep from a previous upload.
-> 1. Unplug the board.
-> 2. Hold the **BOOT** button.
-> 3. Plug back in while holding BOOT.
-> 4. Release after 2 seconds, then retry Upload.
-
-### 4.4 Connect to Wi-Fi
-
-The firmware uses WiFiManager. On first boot (or when no saved network is found):
-
-1. The device starts a temporary Wi-Fi access point named **`<DEVICE_NAME>-Setup`**
-   (e.g. `my-plant-Setup` if you used the default name).
-2. Connect to it from your phone or laptop — no password required.
-3. A configuration page opens automatically. Enter your Wi-Fi credentials.
-4. The device connects, saves the credentials, and starts measuring.
-
-From the next boot onward it connects automatically. Your device will appear on the
-dashboard at [plants.makeruniverse.de](https://plants.makeruniverse.de).
-
-> **Tip:** For battery-powered operation, keep `TIME_TO_SLEEP_SEC` at 3600 (1 hour).
-> This gives a good balance between data frequency and battery life.
+Click **Finish setup & start monitoring**. The device takes a measurement and begins its normal
+cycle: wake every hour, read sensors, send data, sleep. Your device appears on the dashboard at
+[plants.makeruniverse.de](https://plants.makeruniverse.de).
 
 ---
 
 ## 5. Troubleshooting
 
-Use the sketches below to verify individual components if something does not work as
-expected. Upload each sketch separately, then open the **Serial Monitor** at **115200 baud**.
+Most problems can be diagnosed right in the **Live Sensor Readings** page (section 4.3) — no extra
+tools needed:
 
-### 5.1 Test the Moisture Sensor
+| Symptom | Likely cause / fix |
+|---------|--------------------|
+| Sensor shows **"not detected"** | Connector not fully seated, or wrong wire order — recheck sections 2.5 / 2.6. |
+| **Moisture** stuck near 0 % or 100 % | Sensor cable not seated, or needs calibration (below). |
+| **Send to API** not `200` | `Not connected to WiFi` → Wi-Fi wrong; other codes → wrong API key or server issue. |
+| Wi-Fi badge stays red | Wrong password, or network out of range / 5 GHz-only (the ESP32-C6 needs 2.4 GHz). |
+| No setup AP appears | Board is asleep — press reset twice, or power-cycle, to open the portal. |
 
-```cpp
-const int moisturePin   = 1;   // GPIO 1 (A1) on Waveshare
-const int moisturePower = 21;  // GPIO 21 — sensor power gate
+### Calibrate the moisture sensor
 
-const float minMoistureVoltage = 0.60;
-const float maxMoistureVoltage = 2.45;
+The moisture-to-percent conversion uses a wet and a dry reference voltage that vary slightly per
+sensor. On the **Live Sensor Readings** page, read the **moisture voltage**:
 
-float readMoistureVoltage() {
-  uint32_t sum = 0;
-  for (int i = 0; i < 16; i++) sum += analogReadMilliVolts(moisturePin);
-  return sum / 16.0 / 1000.0;
-}
+- **In open air** → this is your **dry** voltage (0 %). Enter it as *Moisture dry voltage*.
+- **With only the metal prongs in water / saturated soil** → this is your **wet** voltage (100 %).
+  Enter it as *Moisture wet voltage*.
 
-float moistureVoltageToPercent(float v) {
-  return constrain((maxMoistureVoltage - v) /
-    (maxMoistureVoltage - minMoistureVoltage) * 100.0, 0.0, 100.0);
-}
+Set both in the setup portal (double-press reset to reopen it) and **Save** — no reflash needed.
 
-void setup() {
-  Serial.begin(115200);
-  delay(1000);
-}
+### Deeper component testing
 
-void loop() {
-  pinMode(moisturePower, OUTPUT);
-  digitalWrite(moisturePower, HIGH);
-  delay(200);
-
-  float v = readMoistureVoltage();
-  Serial.printf("Voltage: %.3f V  |  Moisture: %.1f %%\n", v, moistureVoltageToPercent(v));
-
-  digitalWrite(moisturePower, LOW);
-  delay(5000);
-}
-```
-
-You should see a reading every 5 seconds. The voltage decreases as the soil gets wetter.
-If you see a constant value near 0 V or 3.3 V, check that the sensor cable is fully seated.
-
-### 5.2 Calibrate the Moisture Sensor
-
-The voltage-to-percentage conversion uses two reference points that vary slightly between
-sensors. Run the test sketch from 5.1 while doing the measurements below.
-
-**Dry measurement (= 0 % moisture):**
-1. Hold the sensor in open air.
-2. Note the voltage — this is your `MAX_MOIST_V`.
-
-**Wet measurement (= 100 % moisture):**
-1. Insert only the metal prongs into a glass of water or saturated soil.
-2. Note the voltage — this is your `MIN_MOIST_V`.
-
-Update `code/sp_modular/config.h` with your measured values:
-
-```cpp
-#define MIN_MOIST_V   0.60f  // replace with your wet voltage
-#define MAX_MOIST_V   2.45f  // replace with your dry voltage
-```
-
-Then re-upload the main sketch.
-
-### 5.3 Test the Pump
-
-```cpp
-const int PIN_PUMP = 22;  // GPIO 22 on Waveshare
-
-void setup() {
-  Serial.begin(115200);
-  delay(1000);
-  pinMode(PIN_PUMP, OUTPUT);
-
-  Serial.println("Pump ON for 2 seconds...");
-  digitalWrite(PIN_PUMP, HIGH);
-  delay(2000);
-  digitalWrite(PIN_PUMP, LOW);
-  Serial.println("Pump OFF.");
-}
-
-void loop() {}
-```
-
-You should hear the pump run and see water flow through the tube. If nothing happens,
-check that the pump connector is fully seated and that the power supply can deliver
-enough current (USB power alone may be insufficient — use batteries).
-
-### 5.4 Test the I2C Sensors (BME280 + TSL2591)
-
-This sketch scans the I2C bus and reads both sensors. Expected I2C addresses are
-`0x76` (BME280) and `0x29` (TSL2591).
-
-```cpp
-#include <Wire.h>
-#include <Adafruit_BME280.h>
-#include <Adafruit_TSL2591.h>
-
-const int PIN_BME_POWER = 2;
-const int PIN_TSL_POWER = 3;
-const int PIN_SDA       = 4;
-const int PIN_SCL       = 5;
-
-Adafruit_BME280    bme;
-Adafruit_TSL2591   tsl(2591);
-
-void setup() {
-  Serial.begin(115200);
-  delay(1000);
-
-  pinMode(PIN_BME_POWER, OUTPUT);
-  pinMode(PIN_TSL_POWER, OUTPUT);
-  digitalWrite(PIN_BME_POWER, HIGH);
-  digitalWrite(PIN_TSL_POWER, HIGH);
-  delay(300);
-
-  Wire.begin(PIN_SDA, PIN_SCL);
-
-  // I2C bus scan
-  Serial.println("Scanning I2C bus...");
-  int found = 0;
-  for (byte addr = 1; addr < 127; addr++) {
-    Wire.beginTransmission(addr);
-    if (Wire.endTransmission() == 0) {
-      Serial.printf("  Device at 0x%02X\n", addr);
-      found++;
-    }
-  }
-  if (found == 0) Serial.println("  No devices found — check wiring and power gates.");
-  Serial.println();
-
-  // BME280
-  if (bme.begin(0x76, &Wire)) {
-    Serial.printf("BME280  — Temp: %.1f °C  Humidity: %.1f %%  Pressure: %.0f hPa\n",
-      bme.readTemperature(), bme.readHumidity(), bme.readPressure() / 100.0f);
-  } else {
-    Serial.println("BME280  — not found. Check connector and wire order.");
-  }
-
-  // TSL2591 (Adafruit_I2CDevice requires Wire to be re-initialised)
-  Wire.begin(PIN_SDA, PIN_SCL);
-  if (tsl.begin()) {
-    tsl.setGain(TSL2591_GAIN_MED);
-    tsl.setTiming(TSL2591_INTEGRATIONTIME_100MS);
-    uint32_t lum  = tsl.getFullLuminosity();
-    uint16_t ir   = lum >> 16;
-    uint16_t full = lum & 0xFFFF;
-    Serial.printf("TSL2591 — Lux: %.1f  IR: %d  Full: %d\n",
-      tsl.calculateLux(full, ir), ir, full);
-  } else {
-    Serial.println("TSL2591 — not found. Check connector and wire order.");
-  }
-}
-
-void loop() {}
-```
-
-If a sensor is not found but appears on the I2C scan, the most likely cause is a
-wrong wire order on the connector — double-check the colour order from section 2.5/2.6.
+For standalone test sketches (moisture, pump, I2C bus scan) and Serial-Monitor debugging, see
+[`firmware_from_source.md` → Component test sketches](firmware_from_source.md#5-component-test-sketches-advanced-troubleshooting).
 
 ---
 
