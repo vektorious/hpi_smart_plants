@@ -1,5 +1,3 @@
-#if USE_TSL2591
-
 #include <Adafruit_TSL2591.h>
 
 Adafruit_TSL2591 tsl = Adafruit_TSL2591(2591);
@@ -31,4 +29,3 @@ bool readTSL(float &lux, uint16_t &ir, uint16_t &full) {
   digitalWrite(PIN_TSL_POWER, LOW);
   return true;
 }
-#endif

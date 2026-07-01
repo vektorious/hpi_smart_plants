@@ -1,5 +1,3 @@
-#if USE_BME280
-
 #include <Adafruit_BME280.h>
 
 Adafruit_BME280 bme;
@@ -19,5 +17,3 @@ bool readBME280(float &t, float &h, float &p) {
   p = bme.readPressure() / 100.0F;
   return true;
 }
-
-#endif

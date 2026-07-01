@@ -13,6 +13,6 @@ float readMoistureVoltage() {
 }
 
 float moistureToPercent(float voltage) {
-  float pct = (MAX_MOIST_V - voltage) / (MAX_MOIST_V - MIN_MOIST_V) * 100;
+  float pct = (settings.maxMoistV - voltage) / (settings.maxMoistV - settings.minMoistV) * 100;
   return constrain(pct, 0, 100);
 }

@@ -8,6 +8,6 @@ void goToSleep() {
   WiFi.mode(WIFI_OFF);
   delay(100);
 
-  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP_SEC * uS_TO_S_FACTOR);
+  esp_sleep_enable_timer_wakeup(settings.sleepSec * uS_TO_S_FACTOR);
   esp_deep_sleep_start();
 }

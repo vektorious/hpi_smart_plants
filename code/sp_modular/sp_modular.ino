@@ -25,9 +25,11 @@ void setup() {
   Serial.println("Boot #" + String(bootCount));
   printWakeupReason();
 
-#if USE_BME280 || USE_TSL2591
-  Wire.begin(PIN_SDA, PIN_SCL);
-#endif
+  loadSettings();
+
+  if (settings.useBme || settings.useTsl) {
+    Wire.begin(PIN_SDA, PIN_SCL);
+  }
 
   setupWiFi();
 
@@ -44,21 +46,21 @@ void setup() {
   // Battery always on
   d.battV    = readBatteryVoltage();
 
-#if USE_BME280
-  if (!readBME280(d.temp, d.hum, d.press)) {
-    Serial.println("BME280 init failed");
+  if (settings.useBme) {
+    if (!readBME280(d.temp, d.hum, d.press)) {
+      Serial.println("BME280 init failed");
+    }
   }
-#endif
 
-#if USE_TSL2591
-  if (!readTSL(d.lux, d.ir, d.full)) {
-    Serial.println("TSL2591 init failed");
+  if (settings.useTsl) {
+    if (!readTSL(d.lux, d.ir, d.full)) {
+      Serial.println("TSL2591 init failed");
+    }
   }
-#endif
 
-#if USE_PUMP
-  d.pumpSeconds = runPump(d.moistPct);
-#endif
+  if (settings.usePump) {
+    d.pumpSeconds = runPump(d.moistPct);
+  }
 
   sendData(d);
   goToSleep();
