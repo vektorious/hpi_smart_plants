@@ -17,6 +17,28 @@ static void printWakeupReason() {
   }
 }
 
+// Read every enabled sensor once. Does NOT run the pump — that stays in the
+// normal measurement path so live-view polling can't trigger watering.
+SensorPacket readAllSensors() {
+  SensorPacket d;
+  d.temp = d.hum = d.press = NAN;
+  d.lux = NAN; d.ir = d.full = 0;
+  d.pumpSeconds = 0;
+  d.wifiRssi = WiFi.RSSI();
+
+  d.moistV   = readMoistureVoltage();       // moisture always on
+  d.moistPct = moistureToPercent(d.moistV);
+  d.battV    = readBatteryVoltage();        // battery always on
+
+  if (settings.useBme && !readBME280(d.temp, d.hum, d.press)) {
+    Serial.println("BME280 read failed");
+  }
+  if (settings.useTsl && !readTSL(d.lux, d.ir, d.full)) {
+    Serial.println("TSL2591 read failed");
+  }
+  return d;
+}
+
 void setup() {
   Serial.begin(115200);
   delay(800);
@@ -26,37 +48,22 @@ void setup() {
   printWakeupReason();
 
   loadSettings();
+  bool doubleReset = detectDoubleReset();
 
   if (settings.useBme || settings.useTsl) {
     Wire.begin(PIN_SDA, PIN_SCL);
   }
 
-  setupWiFi();
+  bool connected = setupWiFi();
 
-  SensorPacket d;
-  d.temp = d.hum = d.press = NAN;
-  d.lux = NAN; d.ir = d.full = 0;
-  d.pumpSeconds = 0;
-  d.wifiRssi = WiFi.RSSI();
-
-  // Moisture always on
-  d.moistV   = readMoistureVoltage();
-  d.moistPct = moistureToPercent(d.moistV);
-
-  // Battery always on
-  d.battV    = readBatteryVoltage();
-
-  if (settings.useBme) {
-    if (!readBME280(d.temp, d.hum, d.press)) {
-      Serial.println("BME280 init failed");
-    }
+  // Open the commissioning portal on a double reset, or when we have no valid
+  // saved credentials. The portal serves settings + a live sensor page and
+  // runs for 5 minutes (unless kept awake for debugging).
+  if (doubleReset || !connected) {
+    runCommissioningPortal();
   }
 
-  if (settings.useTsl) {
-    if (!readTSL(d.lux, d.ir, d.full)) {
-      Serial.println("TSL2591 init failed");
-    }
-  }
+  SensorPacket d = readAllSensors();
 
   if (settings.usePump) {
     d.pumpSeconds = runPump(d.moistPct);
