@@ -28,6 +28,15 @@
     ol { padding-left: 20px; }
     code { background: #eceef1; padding: 1px 6px; border-radius: 5px; font-size: 0.9em; }
     .note { font-size: 0.9rem; color: #6b7280; }
+    .callout {
+      background: #fff8e6; border: 1px solid #f0d98c; border-radius: 12px;
+      padding: 16px 20px; margin: 24px 0;
+    }
+    @media (prefers-color-scheme: dark) {
+      .callout { background: #2a2410; border-color: #5c4d1a; }
+    }
+    .tight { margin: 8px 0 4px; }
+    .tight li { margin: 2px 0; }
   </style>
 </head>
 <body>
@@ -46,10 +55,25 @@
     </esp-web-install-button>
   </div>
 
+  <div class="callout">
+    <strong>⚠️ First, put the board into flashing mode.</strong>
+    The firmware deep-sleeps within seconds of booting, which disconnects the USB port — so
+    you must start the board in its bootloader before flashing:
+    <ol class="tight">
+      <li><strong>Unplug</strong> the board.</li>
+      <li><strong>Hold the BOOT button</strong> down.</li>
+      <li><strong>Plug in</strong> the USB-C cable while still holding BOOT.</li>
+      <li><strong>Release BOOT</strong> after about 2 seconds.</li>
+    </ol>
+    The board now stays awake in flashing mode. Do this every time before you click Connect.
+  </div>
+
   <h2>How to flash</h2>
   <ol>
-    <li>Plug the board into your computer with a USB-C data cable.</li>
-    <li>Click <strong>Connect</strong> above and pick the board’s serial port.</li>
+    <li>Put the board into flashing mode (BOOT-hold steps above), using a USB-C
+        <em>data</em> cable.</li>
+    <li>Click <strong>Connect</strong> above and pick the
+        <code>USB JTAG/serial debug unit</code> port.</li>
     <li>Choose <strong>Install Smart Plants Firmware</strong> and wait for it to finish.</li>
     <li>When done, the board reboots. On first boot it opens a WiFi setup access
         point named <code>&lt;device&gt;-Setup</code> — connect to it to configure
@@ -57,8 +81,8 @@
   </ol>
 
   <p class="note">
-    Can’t connect? Unplug, hold the <strong>BOOT</strong> button, plug back in, release after
-    ~2&nbsp;seconds, then click Connect again. This wakes a board stuck in deep sleep.
+    Still can’t connect? On Linux, wait a couple of seconds after plugging in (a service may
+    briefly hold the port). Make sure you’re using a data cable, not a charge-only one.
   </p>
 
   <p class="note">
