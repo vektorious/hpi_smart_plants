@@ -245,8 +245,7 @@ or on phones) and a USB-C **data** cable.
    2. Hold the **BOOT** button.
    3. Plug in the USB-C cable while still holding BOOT.
    4. Release BOOT after ~2 seconds.
-2. Open the flasher page: **[plants.makeruniverse.de/flash](https://vektorious.github.io/hpi_smart_plants/)**
-   *(https://vektorious.github.io/hpi_smart_plants/)*.
+2. Open the flasher page: **[vektorious.github.io/hpi_smart_plants](https://vektorious.github.io/hpi_smart_plants/)**.
 3. Click **Connect**, choose the `USB JTAG/serial debug unit` port, then **Install Smart Plants
    Firmware** and wait for it to finish.
 4. The board reboots automatically. Continue below.

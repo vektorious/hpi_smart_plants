@@ -54,11 +54,33 @@ After copying, bump `"version"` in `manifest.json` so returning users get the up
 
 ## Hosting
 
-Any static HTTPS host works. The page is host-agnostic — no build step, just serve the
-`web-flasher/` directory. Two natural options:
+**Live at:** <https://vektorious.github.io/hpi_smart_plants/>
+(served over HTTPS, which Web Serial requires).
 
-- **GitHub Pages** off this repo (point Pages at `/web-flasher`).
-- Alongside the existing server at `plants.makeruniverse.de`.
+GitHub Pages can only publish from a branch root or `/docs`, not an arbitrary subfolder, so the
+site is published from a dedicated **`gh-pages`** branch that mirrors this folder at its root:
+
+```
+gh-pages/
+├── index.html          # copy of web-flasher/index.html
+├── manifest.json       # copy of web-flasher/manifest.json
+├── .nojekyll
+└── firmware/
+    └── smart_plants.bin   # the merged image (tracked here, not on main)
+```
+
+The 4 MB binary lives only on `gh-pages` to keep `main` history clean.
+
+**To publish a new firmware build:**
+
+```bash
+git worktree add /tmp/ghpages gh-pages           # check out the branch
+cp web-flasher/index.html web-flasher/manifest.json /tmp/ghpages/
+cp <build>/sp_modular.ino.merged.bin /tmp/ghpages/firmware/smart_plants.bin
+# bump "version" in /tmp/ghpages/manifest.json
+git -C /tmp/ghpages commit -am "Update flasher firmware" && git -C /tmp/ghpages push
+git worktree remove /tmp/ghpages
+```
 
 ## Local testing
 
