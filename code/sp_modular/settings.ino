@@ -17,8 +17,16 @@ static const char *NVS_NAMESPACE = "sp";
 static const uint32_t SETTINGS_VERSION = 1;
 
 void resetSettingsToDefaults() {
-  strlcpy(settings.deviceName, DEFAULT_DEVICE_NAME, sizeof(settings.deviceName));
-  strlcpy(settings.deviceUuid, DEFAULT_DEVICE_UUID, sizeof(settings.deviceUuid));
+  // Derive a unique per-device id from the factory-programmed MAC in efuse.
+  // Stable across reboots/reflashes/factory-reset and unique per board, so
+  // students' setup APs and dashboard entries never collide. DEFAULT_DEVICE_UUID
+  // in config.h is intentionally unused — the UUID is always generated.
+  uint32_t uid = (uint32_t)ESP.getEfuseMac();   // lower 32 bits of the 48-bit MAC
+  char uidStr[9];
+  snprintf(uidStr, sizeof(uidStr), "%08x", uid);
+
+  snprintf(settings.deviceName, sizeof(settings.deviceName), "%s-%s", DEFAULT_DEVICE_NAME, uidStr);
+  strlcpy(settings.deviceUuid, uidStr, sizeof(settings.deviceUuid));
   strlcpy(settings.apiKey,     DEFAULT_API_KEY,     sizeof(settings.apiKey));
   strlcpy(settings.apiUrl,     DEFAULT_API_URL,     sizeof(settings.apiUrl));
   settings.sleepSec          = DEFAULT_TIME_TO_SLEEP_SEC;

@@ -25,8 +25,8 @@
 // ============ DEVICE INFO DEFAULTS ============
 // Editable in the setup portal. Device name and UUID are shown on the
 // dashboard. API key is provided at the workshop.
-#define DEFAULT_DEVICE_NAME  "the_experiment"
-#define DEFAULT_DEVICE_UUID  "00000006"
+#define DEFAULT_DEVICE_NAME  "SmartPlant"
+#define DEFAULT_DEVICE_UUID  "00000000"
 #define DEFAULT_API_URL      "https://plants.makeruniverse.de/plants/measurements"
 #define DEFAULT_API_KEY      "vKpsikScqRUt2CdC"
 
