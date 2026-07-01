@@ -228,6 +228,10 @@ void runCommissioningPortal() {
   wm.setConfigPortalBlocking(false);
   wm.setConfigPortalTimeout(0);          // we enforce the timeout ourselves
   wm.setBreakAfterConfig(true);          // return control after WiFi is saved
+  // Don't let WiFiManager tear the portal down itself when it connects: it frees
+  // `server` and, since we manage the shutdown below, a second shutdown would
+  // deref the now-null server and crash. We own the portal lifecycle.
+  wm.setDisableConfigPortal(false);
 
   // Add a "Live Sensors" button to the menu (the "custom" slot renders our HTML).
   std::vector<const char *> menu = {"wifi", "param", "custom", "sep", "info", "restart", "exit"};
@@ -254,5 +258,9 @@ void runCommissioningPortal() {
     delay(10);
   }
 
-  wm.stopConfigPortal();
+  // Only shut down if still active — guards against a double shutdown (which
+  // would deref a freed server) in case WiFiManager already closed the portal.
+  if (wm.getConfigPortalActive()) {
+    wm.stopConfigPortal();
+  }
 }
