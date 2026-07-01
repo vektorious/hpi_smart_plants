@@ -180,6 +180,19 @@ static void bindCustomRoutes() {
   wm.server->on("/livesensors", []() {
     wm.server->send_P(200, "text/html", LIVE_PAGE);
   });
+  wm.server->on("/factoryreset", HTTP_POST, []() {
+    Serial.println("Portal: factory reset requested");
+    resetSettingsToDefaults();
+    saveSettings();
+    wm.resetSettings();     // also clear saved WiFi credentials
+    wm.server->send(200, "text/html",
+                    "<!doctype html><meta charset=utf-8>"
+                    "<body style='font-family:system-ui;padding:24px'>"
+                    "<h3>Factory reset done</h3>"
+                    "<p>Settings restored to defaults and WiFi cleared. Rebooting…</p>");
+    delay(800);
+    ESP.restart();
+  });
 }
 
 static void buildParameters() {
@@ -237,7 +250,10 @@ void runCommissioningPortal() {
   std::vector<const char *> menu = {"wifi", "param", "custom", "sep", "info", "restart", "exit"};
   wm.setMenu(menu);
   wm.setCustomMenuHTML(
-      "<form action='/livesensors' method='get'><button class='D'>Live Sensor Readings</button></form>");
+      "<form action='/livesensors' method='get'><button class='D'>Live Sensor Readings</button></form>"
+      "<form action='/factoryreset' method='post' "
+      "onsubmit='return confirm(\"Erase all settings AND saved WiFi, restore defaults?\")'>"
+      "<button style='background:#a12222'>Factory Reset (settings + WiFi)</button></form>");
 
   String apName = String(settings.deviceName) + "-Setup";
   Serial.println("Portal: starting AP '" + apName + "'");

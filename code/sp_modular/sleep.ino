@@ -1,6 +1,4 @@
 void goToSleep() {
-  disarmDoubleReset();   // clear the double-reset arming flag before sleeping
-
   pinMode(PIN_BME_POWER, OUTPUT);
   digitalWrite(PIN_BME_POWER, LOW);
   pinMode(PIN_TSL_POWER, OUTPUT);
