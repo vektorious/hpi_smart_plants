@@ -30,7 +30,6 @@ else needed for the full build.
 | Item | Qty | Spec | Notes |
 |------|-----|------|-------|
 | Microcontroller | 1 | Waveshare ESP32-C6 Zero | |
-| Smart Plants Breakout PCB | 1 | ws-board rev2 | Populated with the PCB components above |
 | Capacitive soil moisture sensor | 1 | | |
 | 3-core cable | 1 | | Self-crimped for the moisture sensor |
 | 3-pin female JST XH connector | 2 | 3-pin JST XH | For the moisture sensor cable (both ends) |

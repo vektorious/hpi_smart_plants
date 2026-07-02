@@ -16,7 +16,6 @@ PCB Component,Pump connector,J10,1,2-pin JST XH,
 PCB Component,USB-C power connector,J4,1,2-pin JST PH,Smaller pitch (2.0 mm) than the XH connectors
 PCB Component,Microcontroller socket,"J1, J2",2,9-pin pin socket,Solder to PCB; insert the Waveshare board after
 Electronics,Microcontroller,,1,Waveshare ESP32-C6 Zero,
-Electronics,Smart Plants Breakout PCB,,1,ws-board rev2,Populated with the PCB components above
 Electronics,Capacitive soil moisture sensor,,1,,
 Electronics,3-core cable,,1,,Self-crimped for the moisture sensor
 Electronics,3-pin female JST XH connector,,2,3-pin JST XH,For the moisture sensor cable (both ends)
