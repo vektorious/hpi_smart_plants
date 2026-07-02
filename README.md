@@ -42,12 +42,14 @@ No soldering experience required — but you'll get the chance to try!
 ## Before You Begin
 
 Make sure you have:
-- A computer with a USB-C port (or adapter)
-- [Arduino IDE](https://www.arduino.cc/en/software) installed
+- A computer with a USB-C port (or adapter) and a **Chrome, Edge, or Opera** browser
+  (used by the browser-based firmware installer)
+- A USB-C **data** cable
 - A 2.4 GHz Wi-Fi network
 
-Everything else — board support packages, libraries, and configuration — is covered step by
-step in the build instructions below.
+Everything else — firmware and configuration — is covered step by step in the build instructions
+below. You install the firmware straight from the browser; only building it from source needs the
+[Arduino IDE](https://www.arduino.cc/en/software).
 
 ---
 
@@ -57,6 +59,9 @@ step in the build instructions below.
 
 That guide covers the full assembly, programming, calibration, and deployment for the main
 Waveshare build — from soldering the PCB to seeing your first readings on the dashboard.
+
+Firmware installs from the browser — no toolchain needed — via the web flasher:
+**<https://vektorious.github.io/hpi_smart_plants/>**.
 
 ---
 
@@ -69,17 +74,18 @@ Waveshare build — from soldering the PCB to seeing your first readings on the 
 
 ---
 
-## Modular Firmware
+## Configured on the Device
 
-All features are toggled via flags in `code/sp_modular/config.h`:
+All per-device settings — Wi-Fi, device name/UUID, sleep interval, moisture calibration, and
+which sensors and the pump are enabled — are configured **on the device through a Wi-Fi setup
+portal** after flashing, and stored in non-volatile memory. No code edits or recompiling: one
+flashed binary works for every configuration.
 
-```c
-#define USE_BME280    1   // temperature, humidity, pressure
-#define USE_TSL2591   1   // light sensor
-#define USE_PUMP      1   // automatic watering pump
-```
-
-Set any flag to `0` to disable that module — no code changes needed elsewhere.
+The setup portal opens automatically on first boot (or on a double-press of the reset button) and
+also shows **live sensor readings** and an **API connection test** so you can confirm everything
+works. The `DEFAULT_*` values in `code/sp_modular/config.h` are only the factory defaults applied
+on first boot. Building from source? See
+[`instructions/firmware_from_source.md`](instructions/firmware_from_source.md).
 
 ---
 
@@ -99,10 +105,14 @@ Two controller boards are supported. Both run the same firmware (`code/sp_modula
 ```
 code/
   sp_modular/              Modular firmware (current, for all builds)
-    config.h               Feature flags, pin assignments, calibration
+    config.h               Factory defaults (DEFAULT_*), pin assignments, structs
+    settings.ino           Runtime settings stored in NVS/Preferences
+    portal.ino             WiFiManager setup portal + live sensor page
     sp_modular.ino         Entry point
     *.ino                  Sensor and actuator modules
   legacy/                  Old monolithic sketches (breadboard era, unsupported)
+
+web-flasher/               Browser-based firmware installer (ESP Web Tools)
 
 hardware/
   pcb/
@@ -122,7 +132,9 @@ hardware/
 
 instructions/
   build_instructions.md    Main build guide — start here
+  firmware_from_source.md  Build/upload from Arduino IDE + component test sketches
   background_information.md Sensor theory, system overview, design rationale
+  quick_reference/         Printable one-page build reference (md, html, pdf)
   legacy/                  Old breadboard-era guides (unsupported)
 
 img/                       Photos and diagrams referenced by the instructions
