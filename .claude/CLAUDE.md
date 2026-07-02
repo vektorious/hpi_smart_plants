@@ -142,8 +142,9 @@ PCB design files (KiCAD) are in `hardware/pcb/`. Enclosures are in `hardware/3d-
 - `instructions/background_information.md` — sensor theory, system architecture, design rationale
 - `instructions/quick_reference/` — printable one-pager (md, html, pdf) with all build steps
   and PCB BOM; QR code at `img/qr_build_instructions.png` links to the full instructions.
-  To regenerate the PDF after editing the HTML:
-  `cd instructions/quick_reference && libreoffice --headless --convert-to pdf quick_reference.html`
+  To regenerate the PDF after editing the HTML (rendered with headless Chromium — LibreOffice
+  mis-indents `<h2>`/`<th>` and ignores the CSS grid):
+  `cd instructions/quick_reference && chromium --headless=new --no-pdf-header-footer --print-to-pdf=quick_reference.pdf "file://$PWD/quick_reference.html"`
 - `instructions/legacy/` — old breadboard-era guides, unsupported
 - `web-flasher/` — browser-based firmware installer (ESP Web Tools). See its `README.md` for how
   to build/update the merged `.bin` and host the page
