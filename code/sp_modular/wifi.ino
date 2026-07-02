@@ -1,4 +1,7 @@
-void setupWiFi() {
+// Quick station connect using saved credentials.
+// Returns true if connected. If it returns false (no/invalid credentials),
+// the caller opens the commissioning portal (see portal.ino).
+bool setupWiFi() {
   WiFi.mode(WIFI_STA);
   WiFi.begin();
 
@@ -12,11 +15,9 @@ void setupWiFi() {
 
   if (WiFi.status() == WL_CONNECTED) {
     Serial.println("WiFi OK: " + WiFi.localIP().toString());
-    return;
+    return true;
   }
 
-  WiFiManager wm;
-  wm.setConnectTimeout(8);
-  wm.setConfigPortalTimeout(180);
-  wm.autoConnect((String(DEVICE_NAME) + "-Setup").c_str());
+  Serial.println("WiFi not connected with saved credentials");
+  return false;
 }

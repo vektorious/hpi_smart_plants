@@ -1,0 +1,13 @@
+{
+  "name": "Smart Plants Firmware",
+  "version": "1.0.0",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32-C6",
+      "parts": [
+        { "path": "firmware/smart_plants.bin", "offset": 0 }
+      ]
+    }
+  ]
+}

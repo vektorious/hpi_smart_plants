@@ -9,6 +9,10 @@ soil moisture, temperature, humidity, light, and battery level, then sends data 
 `https://plants.makeruniverse.de/plants/measurements`. It wakes from deep sleep, reads sensors,
 POSTs the payload, then sleeps again to conserve battery.
 
+Per-device settings (WiFi, device identity, calibration, feature toggles) are configured at
+runtime through the WiFiManager setup portal — see "Configuration" — not by editing source.
+Students can install the firmware from a browser via the web flasher in `web-flasher/`.
+
 **Two supported boards** (same firmware, different GPIO pins in `config.h`):
 - **Waveshare ESP32-C6 Zero** + `smart_plants_breakout_ws-board_rev2` — main workshop build
 - **SEEED Studio XIAO ESP32-C6** + `smart_plants_breakout_rev1` — alternative build
@@ -26,51 +30,58 @@ No Makefile or build script. This is an Arduino IDE project.
    - **XIAO build:** Seeed Studio XIAO → select "XIAO_ESP32C6"
 3. Libraries (via Library Manager):
    - WiFiManager by tzapu
-   - Adafruit BME280 (required when `USE_BME280 1`)
-   - Adafruit TSL2591 (required when `USE_TSL2591 1`)
+   - Adafruit BME280, Adafruit TSL2591 (both always required — all sensor code now compiles
+     in unconditionally; the sensors are enabled/disabled at runtime, not at compile time)
    - Adafruit Unified Sensor (dependency of both Adafruit sensor libraries — install via
      "Install All" when prompted, or manually)
 
-**Upload:** Select the correct board and COM port, click Upload.
+**Partition scheme:** set **Tools → Partition Scheme → "Huge APP (3MB No OTA/1MB SPIFFS)"**.
+The firmware no longer fits the default partition (all sensors + the portal web server are
+always compiled in). Canonical arduino-cli target:
+`esp32:esp32:waveshare_esp32_c6_zero:PartitionScheme=huge_app`.
+
+**Upload:** Select the correct board and COM port, click Upload. Alternatively, flash a merged
+binary from the browser via `web-flasher/` (ESP Web Tools; Chrome/Edge/Opera, HTTPS) — see
+`web-flasher/README.md`.
 
 **Recovery from deep sleep lock** (device won't accept uploads):
 1. Unplug, hold BOOT button, plug back in, release after 2 seconds, retry upload.
 
 ## Code Architecture
 
-The main firmware is `code/sp_modular/`. Feature flags in `config.h` conditionally compile
-sensor support:
-
-```c
-#define USE_BME280    1   // Temperature/humidity/pressure sensor
-#define USE_TSL2591   1   // Light sensor
-#define USE_PUMP      1   // Automatic watering pump
-```
+The main firmware is `code/sp_modular/`. All sensor code compiles in unconditionally; features
+are toggled at runtime via `settings.useBme` / `useTsl` / `usePump` (persisted in NVS). The
+`DEFAULT_*` macros in `config.h` are only the factory defaults applied on first boot.
 
 **Execution flow** (`sp_modular.ino`):
 1. Wake from deep sleep
-2. Power on sensors via GPIO gates
-3. Connect to WiFi (WiFiManager opens config AP if no saved credentials)
-4. Read moisture (16-sample ADC average, powered via GPIO 21)
-5. Read battery voltage (ADC through 2× voltage divider)
-6. Optionally read BME280 (I2C 0x76, powered via GPIO 2)
-7. Optionally read TSL2591 (I2C, powered via GPIO 3)
-8. Optionally activate pump if moisture below threshold (MOSFET on GPIO 22)
-9. POST JSON payload to API
-10. Enter deep sleep for `TIME_TO_SLEEP_SEC` (default 3600s)
+2. Load settings from NVS (`loadSettings()`); detect double reset (`detectDoubleReset()`)
+3. Quick-connect to WiFi with saved credentials (`setupWiFi()`)
+4. If double reset OR no valid credentials → open the commissioning portal
+   (`runCommissioningPortal()`): edit settings + view live sensor readings; 5-min timeout
+5. Read moisture (16-sample ADC average, powered via GPIO 21)
+6. Read battery voltage (ADC through 2× voltage divider)
+7. If enabled, read BME280 (I2C 0x76, powered via GPIO 2)
+8. If enabled, read TSL2591 (I2C, powered via GPIO 3)
+9. If enabled, activate pump when moisture below threshold (MOSFET on GPIO 22)
+10. POST JSON payload to API
+11. Disarm double-reset flag, enter deep sleep for `settings.sleepSec` (default 3600s)
 
 **Key files:**
 
 | File | Responsibility |
 |------|---------------|
-| `config.h` | Feature flags, pin assignments, calibration values, device credentials |
-| `sp_modular.ino` | Entry point; wires together all modules |
-| `send_data.ino` | Builds JSON and POSTs to API; conditionally includes fields |
+| `config.h` | `DEFAULT_*` factory values, pin assignments, `Settings` + `SensorPacket` structs |
+| `settings.ino` | `Settings` struct persisted in NVS/Preferences; load/save/reset |
+| `sp_modular.ino` | Entry point; boot flow + `readAllSensors()` helper |
+| `send_data.ino` | Builds JSON and POSTs to API; includes fields per `settings.*` toggles |
 | `moisture.ino` | ADC read + voltage-to-percentage conversion |
-| `battery.ino` | ADC read multiplied by `BATT_DIVIDER` |
-| `wifi.ino` | WiFiManager connection with AP fallback |
+| `battery.ino` | ADC read multiplied by `settings.battDivider` |
+| `wifi.ino` | Quick STA connect; returns whether it succeeded |
+| `portal.ino` | WiFiManager commissioning portal: editable settings + live `/sensors.json` page |
+| `resetdetect.ino` | NVS-backed double-reset detector (arm on reset, disarm at sleep) |
 | `sleep.ino` | Disables radio, configures timer wakeup, enters deep sleep |
-| `bme280.ino` / `tsl2591.ino` / `pump.ino` | Sensor/actuator modules, compiled only when flag is set |
+| `bme280.ino` / `tsl2591.ino` / `pump.ino` | Sensor/actuator modules (always compiled; gated at runtime) |
 | `utils.ino` | `isValidFloat()` — filters NaN before sending to API |
 
 All sensor readings are collected into a `SensorPacket` struct (defined in `config.h`) and
@@ -80,12 +91,27 @@ Legacy monolithic sketches are in `code/legacy/` — unsupported, breadboard-era
 
 ## Configuration
 
-- **Device identity:** `DEVICE_NAME`, `DEVICE_UUID`, `API_KEY` are `#define`s in `config.h`
-  (not in `sp_modular.ino`). The API key is not sensitive and can stay in the code.
-- **Sleep interval:** `TIME_TO_SLEEP_SEC` in `config.h` (default 3600)
-- **Moisture calibration:** `MIN_MOIST_V` (wet, ~0.60 V) / `MAX_MOIST_V` (dry, ~2.45 V)
-- **Pump:** `MOISTURE_THRESHOLD` (%) and `PUMP_DURATION_SEC`
-- **Pin assignments:** in `config.h` — active block is Waveshare; XIAO block is commented out
+Settings are edited at **runtime in the WiFiManager setup portal**, then persisted to
+NVS/Preferences (`settings.ino`). Editing `config.h` only changes the factory defaults used on
+first boot / after a reset. This is what lets a single web-flashed binary be reconfigured
+without recompiling.
+
+**Opening the portal:** it opens automatically when there are no saved WiFi credentials, or on
+a **double reset** (two presses of the reset button within one boot cycle). It runs for 5
+minutes, and the live-sensor page has a "keep awake" toggle that defeats the timeout for
+debugging.
+
+**In the portal you can set:** WiFi credentials; device identity (name, UUID, API key/URL);
+sleep interval; moisture calibration (wet/dry voltage); battery divider; pump threshold and
+duration; and enable/disable each sensor and the pump. The **"Live Sensor Readings"** menu page
+refreshes every 10 s so students can confirm connected sensors work.
+
+- **Factory defaults:** the `DEFAULT_*` macros in `config.h`. The API key is not sensitive and
+  can stay in the code as a default.
+- **Pin assignments:** compile-time in `config.h` (board-dependent) — active block is Waveshare;
+  XIAO block is commented out.
+- **Settings storage:** NVS namespace `sp`; the double-reset flag uses namespace `drd`. A
+  `version` key in `settings.ino` re-seeds defaults if the `Settings` layout changes.
 
 ## Hardware
 
@@ -109,12 +135,17 @@ PCB design files (KiCAD) are in `hardware/pcb/`. Enclosures are in `hardware/3d-
 
 ## Documentation
 
-- `instructions/build_instructions.md` — main student-facing build guide (start here)
+- `instructions/build_instructions.md` — main student-facing build guide (start here); firmware
+  install now defaults to the web flasher, then runtime configuration via the setup portal
+- `instructions/firmware_from_source.md` — build/upload from Arduino IDE (huge_app partition) and
+  standalone component test sketches — the "bare code" path, split out of the main guide
 - `instructions/background_information.md` — sensor theory, system architecture, design rationale
 - `instructions/quick_reference/` — printable one-pager (md, html, pdf) with all build steps
   and PCB BOM; QR code at `img/qr_build_instructions.png` links to the full instructions.
   To regenerate the PDF after editing the HTML:
   `cd instructions/quick_reference && libreoffice --headless --convert-to pdf quick_reference.html`
 - `instructions/legacy/` — old breadboard-era guides, unsupported
+- `web-flasher/` — browser-based firmware installer (ESP Web Tools). See its `README.md` for how
+  to build/update the merged `.bin` and host the page
 - The server at `plants.makeruniverse.de` runs FastAPI → PostgreSQL; Grafana dashboard is public
   at the same domain
