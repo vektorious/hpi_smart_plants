@@ -58,14 +58,16 @@ are toggled at runtime via `settings.useBme` / `useTsl` / `usePump` (persisted i
 2. Load settings from NVS (`loadSettings()`); detect double reset (`detectDoubleReset()`)
 3. Quick-connect to WiFi with saved credentials (`setupWiFi()`)
 4. If double reset OR no valid credentials → open the commissioning portal
-   (`runCommissioningPortal()`): edit settings + view live sensor readings; 5-min timeout
+   (`runCommissioningPortal()`): edit settings, view live sensor readings, and test the API.
+   Runs in AP+STA and stays open until the user taps "Finish" or a 5-min timeout
+   (defeatable via the live page's keep-awake toggle)
 5. Read moisture (16-sample ADC average, powered via GPIO 21)
 6. Read battery voltage (ADC through 2× voltage divider)
 7. If enabled, read BME280 (I2C 0x76, powered via GPIO 2)
 8. If enabled, read TSL2591 (I2C, powered via GPIO 3)
 9. If enabled, activate pump when moisture below threshold (MOSFET on GPIO 22)
 10. POST JSON payload to API
-11. Disarm double-reset flag, enter deep sleep for `settings.sleepSec` (default 3600s)
+11. Enter deep sleep for `settings.sleepSec` (default 3600s)
 
 **Key files:**
 
@@ -79,7 +81,7 @@ are toggled at runtime via `settings.useBme` / `useTsl` / `usePump` (persisted i
 | `battery.ino` | ADC read multiplied by `settings.battDivider` |
 | `wifi.ino` | Quick STA connect; returns whether it succeeded |
 | `portal.ino` | WiFiManager commissioning portal: editable settings + live `/sensors.json` page |
-| `resetdetect.ino` | NVS-backed double-reset detector (arm on reset, disarm at sleep) |
+| `resetdetect.ino` | NVS-backed double-reset detector (arm on manual reset, self-disarm after a ~3 s window; timer wakes skip it) |
 | `sleep.ino` | Disables radio, configures timer wakeup, enters deep sleep |
 | `bme280.ino` / `tsl2591.ino` / `pump.ino` | Sensor/actuator modules (always compiled; gated at runtime) |
 | `utils.ino` | `isValidFloat()` — filters NaN before sending to API |
@@ -104,8 +106,15 @@ debugging.
 **In the portal you can set:** WiFi credentials; device identity (name, UUID, API key/URL);
 sleep interval; moisture calibration (wet/dry voltage); battery divider; pump threshold and
 duration; and enable/disable each sensor and the pump. The **"Live Sensor Readings"** menu page
-refreshes every 10 s so students can confirm connected sensors work.
+refreshes every 10 s so students can confirm connected sensors work, includes a **"Send to API"**
+button that POSTs live readings to test the connection (green 200 = OK), and a **WiFi status
+badge**. The menu also has **"Finish setup"** (proceed to normal operation) and a **factory
+reset** (restore `DEFAULT_*` values + clear WiFi).
 
+- **Device identity:** on first boot `settings.ino` generates a unique name and UUID from the
+  chip's factory MAC (`ESP.getEfuseMac()`) — e.g. `SmartPlant-1a2b3c4d` — so many students'
+  setup APs and dashboard entries don't collide. Stable per board; editable in the portal.
+  `DEFAULT_DEVICE_NAME` is the name prefix; `DEFAULT_DEVICE_UUID` is unused.
 - **Factory defaults:** the `DEFAULT_*` macros in `config.h`. The API key is not sensitive and
   can stay in the code as a default.
 - **Pin assignments:** compile-time in `config.h` (board-dependent) — active block is Waveshare;
@@ -140,13 +149,15 @@ PCB design files (KiCAD) are in `hardware/pcb/`. Enclosures are in `hardware/3d-
 - `instructions/firmware_from_source.md` — build/upload from Arduino IDE (huge_app partition) and
   standalone component test sketches — the "bare code" path, split out of the main guide
 - `instructions/background_information.md` — sensor theory, system architecture, design rationale
-- `instructions/quick_reference/` — printable one-pager (md, html, pdf) with all build steps
-  and PCB BOM; QR code at `img/qr_build_instructions.png` links to the full instructions.
+- `instructions/quick_reference/` — printable quick reference (md, html, pdf) with all build
+  steps and PCB BOM; QR code at `img/qr_build_instructions.png` links to the full instructions.
   To regenerate the PDF after editing the HTML (rendered with headless Chromium — LibreOffice
   mis-indents `<h2>`/`<th>` and ignores the CSS grid):
   `cd instructions/quick_reference && chromium --headless=new --no-pdf-header-footer --print-to-pdf=quick_reference.pdf "file://$PWD/quick_reference.html"`
 - `instructions/legacy/` — old breadboard-era guides, unsupported
-- `web-flasher/` — browser-based firmware installer (ESP Web Tools). See its `README.md` for how
-  to build/update the merged `.bin` and host the page
+- `web-flasher/` — browser-based firmware installer (ESP Web Tools), live at
+  <https://vektorious.github.io/hpi_smart_plants/>. Published from the **`gh-pages`** branch
+  (mirrors this folder at its root; the merged `.bin` lives there, not on `main`). See its
+  `README.md` for how to build/update the `.bin` and republish.
 - The server at `plants.makeruniverse.de` runs FastAPI → PostgreSQL; Grafana dashboard is public
   at the same domain
