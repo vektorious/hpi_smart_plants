@@ -104,14 +104,9 @@
   </div>
 </div>
 
-<div class="layout">
-
-  <!-- LEFT COLUMN -->
-  <div class="col">
-
-    <h2>1. Solder the PCB</h2>
+<h2>1. Solder the PCB</h2>
     <p>Match orientation-sensitive components to the silkscreen. Resistors are not orientation-sensitive. Suggested order: resistors + diodes → JST connectors → pin sockets → capacitors + MOSFET.</p>
-    <table>
+    <table width="100%">
       <tr><th>Ref</th><th>Component</th><th>Value</th><th>Notes</th></tr>
       <tr><td>R1, R2</td><td>Resistor</td><td>220 kΩ</td><td>Battery voltage divider</td></tr>
       <tr><td>R3</td><td>Resistor</td><td>10 kΩ</td><td>MOSFET gate pull-down</td></tr>
@@ -130,6 +125,11 @@
       <tr><td>Q1</td><td>MOSFET</td><td>IRLZ14</td><td>Flat side matches silkscreen</td></tr>
     </table>
     <div class="warn">⚠ Legacy PCB bug: on old PCB versions the moisture connector (J9) is labelled "D1-powered" — correct GPIO is 21. Ignore the label.</div>
+
+<div class="layout">
+
+  <!-- LEFT COLUMN -->
+  <div class="col">
 
     <h2 style="page-break-before: always;">2. Prepare Sensors &amp; Actuators</h2>
     <p><strong>Moisture sensor cable</strong> — cut 3-core cable to length, crimp 3-pin JST XH on both ends.<br>
