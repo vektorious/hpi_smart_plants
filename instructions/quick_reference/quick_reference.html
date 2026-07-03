@@ -168,8 +168,9 @@ BME280 → <strong>I2C D2-powered</strong> &nbsp;|&nbsp; TSL2591 → <strong>I2C
 <p>On first boot the device opens a Wi-Fi hotspot <strong><code>SmartPlant-XXXXXXXX-Setup</code></strong> (unique per board, no password).</p>
 <ol style="margin:2px 0; padding-left:15px;">
 <li>Connect to it; the setup page opens automatically (or browse to <code>192.168.4.1</code>).</li>
-<li>Set <strong>Wi-Fi</strong>, and optionally device name, sensors/pump, and calibration. The API key is pre-filled. <strong>Save.</strong></li>
+<li>Set <strong>Wi-Fi</strong>, and optionally device name, <strong>project</strong> (a group name for the dashboard), sensors/pump, and calibration. The API key is pre-filled. <strong>Save.</strong></li>
 </ol>
+<div class="warn">The <strong>Device UUID</strong> (the board's permanent ID) is shown large at the top of the setup menu — it labels your plant on the dashboard and can't be changed.</div>
 <div class="warn">Reopen the setup page later to change anything: <strong>double-press the reset button</strong>.</div>
 
 <h2>6. Check &amp; Calibrate</h2>

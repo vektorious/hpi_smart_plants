@@ -259,11 +259,14 @@ On first boot the device has no Wi-Fi yet, so it opens its own temporary Wi-Fi a
    No password required.
 2. A setup page opens automatically (if not, browse to `http://192.168.4.1`).
 3. Tap **Configure WiFi**, pick your network, and enter the password. You can also set:
-   - **Device name** and **UUID** (pre-filled with the board's unique ID — change the name if you
-     like something friendlier on the dashboard),
+   - **Device name** — change it to something friendlier for the dashboard if you like,
+   - **Project** — an optional group name (e.g. `workshop-2026`) that clusters your class's
+     devices together on the dashboard; leave it blank to stay ungrouped,
    - which **sensors / pump** are enabled (tick/untick),
    - **sleep interval**, **moisture calibration**, and **pump** thresholds.
-   The **API key** is already filled in.
+   The **API key** is already filled in. Your **Device UUID** — the board's permanent ID, derived
+   from its chip — is shown in large type at the top of the setup menu. It identifies your plant on
+   the dashboard and **can't be changed**.
 4. **Save.** The device connects to your Wi-Fi and keeps the setup page open so you can check it
    works (next step). The saved-confirmation page links you straight there.
 

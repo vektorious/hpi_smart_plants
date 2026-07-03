@@ -103,9 +103,11 @@ a **double reset** (two presses of the reset button within one boot cycle). It r
 minutes, and the live-sensor page has a "keep awake" toggle that defeats the timeout for
 debugging.
 
-**In the portal you can set:** WiFi credentials; device identity (name, UUID, API key/URL);
-sleep interval; moisture calibration (wet/dry voltage); battery divider; pump threshold and
-duration; and enable/disable each sensor and the pump. The **"Live Sensor Readings"** menu page
+**In the portal you can set:** WiFi credentials; device name; project (dashboard grouping);
+API key/URL; sleep interval; moisture calibration (wet/dry voltage); battery divider; pump
+threshold and duration; and enable/disable each sensor and the pump. The **device UUID is not
+editable** — it is derived from the chip MAC and shown in large type at the top of the portal
+menu. The **"Live Sensor Readings"** menu page
 refreshes every 10 s so students can confirm connected sensors work, includes a **"Send to API"**
 button that POSTs live readings to test the connection (green 200 = OK), and a **WiFi status
 badge**. The menu also has **"Finish setup"** (proceed to normal operation) and a **factory
@@ -113,8 +115,12 @@ reset** (restore `DEFAULT_*` values + clear WiFi).
 
 - **Device identity:** on first boot `settings.ino` generates a unique name and UUID from the
   chip's factory MAC (`ESP.getEfuseMac()`) — e.g. `SmartPlant-1a2b3c4d` — so many students'
-  setup APs and dashboard entries don't collide. Stable per board; editable in the portal.
+  setup APs and dashboard entries don't collide. Both stable per board; the **name is editable**
+  in the portal, the **UUID is fixed** (read-only, displayed on the portal home page).
   `DEFAULT_DEVICE_NAME` is the name prefix; `DEFAULT_DEVICE_UUID` is unused.
+- **Project grouping:** optional `settings.project` string (portal-editable, `DEFAULT_PROJECT`
+  empty). When non-empty, `send_data.ino` adds a top-level `"project"` to the payload so the
+  dashboard can group a class's devices; omitted entirely when blank.
 - **Factory defaults:** the `DEFAULT_*` macros in `config.h`. The API key is not sensitive and
   can stay in the code as a default.
 - **Pin assignments:** compile-time in `config.h` (board-dependent) — active block is Waveshare;

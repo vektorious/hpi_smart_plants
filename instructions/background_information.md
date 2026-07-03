@@ -141,9 +141,10 @@ Each time the device wakes up, it sends a small **JSON** message — a structure
 {
   "name": "my-plant",
   "device_uuid": "a1b2c3d4",
+  "project": "workshop-2026",
   "sensors": {
     "moisture": { "value": 62.3, "unit": "%" },
-    "temperature": { "value": 21.4, "unit": "°C" },
+    "temperature": { "value": 21.4, "unit": "C" },
     "battery_voltage": { "value": 4.1, "unit": "V" }
   }
 }
@@ -153,7 +154,7 @@ This message is sent using **HTTP POST** — the same protocol your browser uses
 
 ### The Server
 
-The server runs a **FastAPI** service at `plants.makeruniverse.de`. FastAPI is a modern Python web framework designed for building APIs quickly. When it receives a reading from your device, it validates the data and writes it to a **PostgreSQL** database — a reliable, open-source relational database. Every measurement from every device in the workshop is stored there, identified by the device UUID you set in `config.h`.
+The server runs a **FastAPI** service at `plants.makeruniverse.de`. FastAPI is a modern Python web framework designed for building APIs quickly. When it receives a reading from your device, it validates the data and writes it to a **PostgreSQL** database — a reliable, open-source relational database. Every measurement from every device in the workshop is stored there, identified by the device UUID (generated automatically from the board's chip ID — see the portal home page). The optional `project` field lets the dashboard group a whole class's devices together.
 
 ### The Dashboard
 
