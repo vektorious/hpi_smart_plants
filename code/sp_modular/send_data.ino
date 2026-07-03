@@ -5,36 +5,42 @@ int sendData(const SensorPacket &d) {
   String json = "{";
   json += "\"name\":\"" + String(settings.deviceName) + "\",";
   json += "\"device_uuid\":\"" + String(settings.deviceUuid) + "\",";
+  // Optional top-level grouping — omit the key entirely when unset so ungrouped
+  // devices still produce a valid payload.
+  if (strlen(settings.project) > 0) {
+    json += "\"project\":\"" + String(settings.project) + "\",";
+  }
   json += "\"sensors\":{";
 
-  // Always included and always valid
-  json += "\"moisture_pct\":{\"value\":" + String(d.moistPct, 1) + "},";
-  json += "\"moisture_voltage\":{\"value\":" + String(d.moistV, 3) + "},";
-  json += "\"battery_voltage\":{\"value\":" + String(d.battV, 2) + "},";
-  json += "\"wifi_rssi\":{\"value\":" + String(d.wifiRssi) + "},";
+  // Always included and always valid. Each sensor carries an intrinsic unit;
+  // ir/full are raw counts and have no unit.
+  json += "\"moisture_pct\":{\"value\":" + String(d.moistPct, 1) + ",\"unit\":\"%\"},";
+  json += "\"moisture_voltage\":{\"value\":" + String(d.moistV, 3) + ",\"unit\":\"V\"},";
+  json += "\"battery_voltage\":{\"value\":" + String(d.battV, 2) + ",\"unit\":\"V\"},";
+  json += "\"wifi_rssi\":{\"value\":" + String(d.wifiRssi) + ",\"unit\":\"dBm\"},";
 
   if (settings.useBme) {
     if (isValidFloat(d.temp)) {
-      json += "\"temperature\":{\"value\":" + String(d.temp,2) + "},";
+      json += "\"temperature\":{\"value\":" + String(d.temp,2) + ",\"unit\":\"C\"},";
     }
     if (isValidFloat(d.hum)) {
-      json += "\"humidity\":{\"value\":" + String(d.hum,1) + "},";
+      json += "\"humidity\":{\"value\":" + String(d.hum,1) + ",\"unit\":\"%\"},";
     }
     if (isValidFloat(d.press)) {
-      json += "\"pressure\":{\"value\":" + String(d.press,1) + "},";
+      json += "\"pressure\":{\"value\":" + String(d.press,1) + ",\"unit\":\"hPa\"},";
     }
   }
 
   if (settings.useTsl) {
     if (isValidFloat(d.lux)) {
-      json += "\"lux\":{\"value\":" + String(d.lux,2) + "},";
+      json += "\"lux\":{\"value\":" + String(d.lux,2) + ",\"unit\":\"lx\"},";
     }
     json += "\"ir\":{\"value\":" + String(d.ir) + "},";
     json += "\"full\":{\"value\":" + String(d.full) + "},";
   }
 
   if (settings.usePump && d.pumpSeconds >= 0) {
-    json += "\"pump_duration\":{\"value\":" + String(d.pumpSeconds) + "},";
+    json += "\"pump_duration\":{\"value\":" + String(d.pumpSeconds) + ",\"unit\":\"s\"},";
   }
 
   // Remove trailing comma

@@ -27,6 +27,7 @@
 // dashboard. API key is provided at the workshop.
 #define DEFAULT_DEVICE_NAME  "SmartPlant"
 #define DEFAULT_DEVICE_UUID  "00000000"
+#define DEFAULT_PROJECT      ""   // Groups devices on the dashboard; empty = ungrouped. Set per workshop in the portal (e.g. "workshop-2026").
 #define DEFAULT_API_URL      "https://plants.makeruniverse.de/plants/measurements"
 #define DEFAULT_API_KEY      "vKpsikScqRUt2CdC"
 
@@ -72,6 +73,7 @@
 struct Settings {
   char     deviceName[32];
   char     deviceUuid[32];
+  char     project[48];         // dashboard grouping; empty = ungrouped
   char     apiKey[48];
   char     apiUrl[128];
   uint32_t sleepSec;

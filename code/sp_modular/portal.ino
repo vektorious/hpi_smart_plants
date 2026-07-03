@@ -21,7 +21,7 @@ static volatile bool portalDone = false;   // set by /finish — the student is 
 
 // Custom parameters (allocated once; the portal runs a single time per boot).
 static WiFiManagerParameter *p_deviceName;
-static WiFiManagerParameter *p_deviceUuid;
+static WiFiManagerParameter *p_project;
 static WiFiManagerParameter *p_apiKey;
 static WiFiManagerParameter *p_apiUrl;
 static WiFiManagerParameter *p_sleepSec;
@@ -49,7 +49,8 @@ static bool checkboxChecked(WiFiManagerParameter *p) {
 // Persist the edited parameters back into settings/NVS.
 static void saveParamsCallback() {
   strlcpy(settings.deviceName, p_deviceName->getValue(), sizeof(settings.deviceName));
-  strlcpy(settings.deviceUuid, p_deviceUuid->getValue(), sizeof(settings.deviceUuid));
+  // Device UUID is derived from the chip MAC and intentionally not user-editable.
+  strlcpy(settings.project,    p_project->getValue(),    sizeof(settings.project));
   strlcpy(settings.apiKey,     p_apiKey->getValue(),     sizeof(settings.apiKey));
   strlcpy(settings.apiUrl,     p_apiUrl->getValue(),     sizeof(settings.apiUrl));
 
@@ -270,7 +271,7 @@ static void buildParameters() {
   snprintf(pumpBuf,  sizeof(pumpBuf),  "%u", settings.pumpDurationSec);
 
   p_deviceName = new WiFiManagerParameter("dname", "Device name", settings.deviceName, sizeof(settings.deviceName) - 1);
-  p_deviceUuid = new WiFiManagerParameter("duuid", "Device UUID", settings.deviceUuid, sizeof(settings.deviceUuid) - 1);
+  p_project    = new WiFiManagerParameter("proj",  "Project (dashboard group)", settings.project, sizeof(settings.project) - 1);
   p_apiKey     = new WiFiManagerParameter("akey",  "API key",     settings.apiKey,     sizeof(settings.apiKey) - 1);
   p_apiUrl     = new WiFiManagerParameter("aurl",  "API URL",     settings.apiUrl,     sizeof(settings.apiUrl) - 1);
   p_sleepSec   = new WiFiManagerParameter("sleep", "Sleep interval (s)", sleepBuf, 11);
@@ -284,7 +285,7 @@ static void buildParameters() {
   p_usePump    = makeCheckbox("upump", "Enable watering pump", settings.usePump);
 
   wm.addParameter(p_deviceName);
-  wm.addParameter(p_deviceUuid);
+  wm.addParameter(p_project);
   wm.addParameter(p_apiKey);
   wm.addParameter(p_apiUrl);
   wm.addParameter(p_sleepSec);
@@ -315,14 +316,23 @@ void runCommissioningPortal() {
   // Add a "Live Sensors" button to the menu (the "custom" slot renders our HTML).
   std::vector<const char *> menu = {"wifi", "param", "custom", "sep", "info", "restart", "exit"};
   wm.setMenu(menu);
-  wm.setCustomMenuHTML(
+  // Show the (non-editable) device UUID prominently so students can identify
+  // their board on the dashboard. Kept in a static String because WiFiManager
+  // stores the pointer, not a copy — it must outlive the portal.
+  static String menuHtml =
+      "<div style='margin:16px 0;padding:14px;border:1px solid #ccc;border-radius:8px;text-align:center'>"
+      "<div style='font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:#666'>Device UUID</div>"
+      "<div style='font-size:2rem;font-weight:700;font-family:monospace;margin-top:4px;word-break:break-all'>"
+      + String(settings.deviceUuid) +
+      "</div></div>"
       "<form action='/livesensors' method='get' style='margin:16px 0'>"
       "<button class='D'>Live Sensor Readings</button></form>"
       "<form action='/finish' method='post' style='margin:16px 0'>"
       "<button style='background:#2f855a'>Finish setup &amp; start monitoring</button></form>"
       "<form action='/factoryreset' method='post' style='margin:16px 0' "
       "onsubmit='return confirm(\"Erase all settings AND saved WiFi, restore defaults?\")'>"
-      "<button style='background:#a12222'>Factory Reset (settings + WiFi)</button></form>");
+      "<button style='background:#a12222'>Factory Reset (settings + WiFi)</button></form>";
+  wm.setCustomMenuHTML(menuHtml.c_str());
 
   String apName = String(settings.deviceName) + "-Setup";
   Serial.println("Portal: starting AP '" + apName + "'");

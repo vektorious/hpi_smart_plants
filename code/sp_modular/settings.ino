@@ -14,7 +14,7 @@ static Preferences prefs;
 
 static const char *NVS_NAMESPACE = "sp";
 // Bump when the Settings layout changes so stale flash is re-initialised from defaults.
-static const uint32_t SETTINGS_VERSION = 1;
+static const uint32_t SETTINGS_VERSION = 2;
 
 void resetSettingsToDefaults() {
   // Derive a unique per-device id from the factory-programmed MAC in efuse.
@@ -27,6 +27,7 @@ void resetSettingsToDefaults() {
 
   snprintf(settings.deviceName, sizeof(settings.deviceName), "%s-%s", DEFAULT_DEVICE_NAME, uidStr);
   strlcpy(settings.deviceUuid, uidStr, sizeof(settings.deviceUuid));
+  strlcpy(settings.project,    DEFAULT_PROJECT,     sizeof(settings.project));
   strlcpy(settings.apiKey,     DEFAULT_API_KEY,     sizeof(settings.apiKey));
   strlcpy(settings.apiUrl,     DEFAULT_API_URL,     sizeof(settings.apiUrl));
   settings.sleepSec          = DEFAULT_TIME_TO_SLEEP_SEC;
@@ -55,6 +56,7 @@ void loadSettings() {
 
   prefs.getString("deviceName", settings.deviceName, sizeof(settings.deviceName));
   prefs.getString("deviceUuid", settings.deviceUuid, sizeof(settings.deviceUuid));
+  prefs.getString("project",    settings.project,    sizeof(settings.project));
   prefs.getString("apiKey",     settings.apiKey,     sizeof(settings.apiKey));
   prefs.getString("apiUrl",     settings.apiUrl,     sizeof(settings.apiUrl));
   settings.sleepSec          = prefs.getUInt("sleepSec",   DEFAULT_TIME_TO_SLEEP_SEC);
@@ -75,6 +77,7 @@ void saveSettings() {
   prefs.begin(NVS_NAMESPACE, /*readOnly=*/false);
   prefs.putString("deviceName", settings.deviceName);
   prefs.putString("deviceUuid", settings.deviceUuid);
+  prefs.putString("project",    settings.project);
   prefs.putString("apiKey",     settings.apiKey);
   prefs.putString("apiUrl",     settings.apiUrl);
   prefs.putUInt("sleepSec",   settings.sleepSec);
