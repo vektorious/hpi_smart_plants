@@ -28,8 +28,8 @@
 #define DEFAULT_DEVICE_NAME  "SmartPlant"
 #define DEFAULT_DEVICE_UUID  "00000000"
 #define DEFAULT_PROJECT      ""   // Groups devices on the dashboard; empty = ungrouped. Set per workshop in the portal (e.g. "workshop-2026").
-#define DEFAULT_API_URL      "https://plants.makeruniverse.de/plants/measurements"
-#define DEFAULT_API_KEY      "vKpsikScqRUt2CdC"
+#define DEFAULT_API_URL      "https://diy-sensor.org/sensor/measurement"
+#define DEFAULT_API_KEY      "public-test-key"
 
 // ============ SLEEP DEFAULTS ============
 #define DEFAULT_TIME_TO_SLEEP_SEC 3600      // Wake interval in seconds (default: 1 hour)
