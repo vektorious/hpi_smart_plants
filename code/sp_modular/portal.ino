@@ -49,7 +49,7 @@ static bool checkboxChecked(WiFiManagerParameter *p) {
 // Persist the edited parameters back into settings/NVS.
 static void saveParamsCallback() {
   strlcpy(settings.deviceName, p_deviceName->getValue(), sizeof(settings.deviceName));
-  // Device UUID is derived from the chip MAC and intentionally not user-editable.
+  // Device ID is derived from the chip MAC and intentionally not user-editable.
   strlcpy(settings.project,    p_project->getValue(),    sizeof(settings.project));
   strlcpy(settings.apiKey,     p_apiKey->getValue(),     sizeof(settings.apiKey));
   strlcpy(settings.apiUrl,     p_apiUrl->getValue(),     sizeof(settings.apiUrl));
@@ -242,9 +242,12 @@ static void bindCustomRoutes() {
   wm.server->on("/sendtest", HTTP_POST, []() {
     SensorPacket d = readAllSensors();
     int code = sendData(d);   // -1 if WiFi not connected
+    // The API answers 201 the first time it sees this device_id (claim) and
+    // 200 on every later write — both mean the reading was stored.
+    bool ok = (code == 200 || code == 201);
     wm.server->send(200, "application/json",
                     String("{\"code\":") + code +
-                    ",\"ok\":" + (code == 200 ? "true" : "false") + "}");
+                    ",\"ok\":" + (ok ? "true" : "false") + "}");
   });
   wm.server->on("/factoryreset", HTTP_POST, []() {
     Serial.println("Portal: factory reset requested");
@@ -316,14 +319,17 @@ void runCommissioningPortal() {
   // Add a "Live Sensors" button to the menu (the "custom" slot renders our HTML).
   std::vector<const char *> menu = {"wifi", "param", "custom", "sep", "info", "restart", "exit"};
   wm.setMenu(menu);
-  // Show the (non-editable) device UUID prominently so students can identify
+  // Show the (non-editable) device ID prominently so students can identify
   // their board on the dashboard. Kept in a static String because WiFiManager
   // stores the pointer, not a copy — it must outlive the portal.
   static String menuHtml =
       "<div style='margin:16px 0;padding:14px;border:1px solid #ccc;border-radius:8px;text-align:center'>"
-      "<div style='font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:#666'>Device UUID</div>"
-      "<div style='font-size:2rem;font-weight:700;font-family:monospace;margin-top:4px;word-break:break-all'>"
-      + String(settings.deviceUuid) +
+      "<div style='font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:#666'>Device ID</div>"
+      "<div style='font-size:1.6rem;font-weight:700;font-family:monospace;margin-top:4px;word-break:break-all'>"
+      + String(settings.deviceId) +
+      "</div>"
+      "<div style='font-size:.75rem;color:#666;margin-top:6px;word-break:break-all'>"
+      "diy-sensor.org/dashboard/device/" + String(settings.deviceId) +
       "</div></div>"
       "<form action='/livesensors' method='get' style='margin:16px 0'>"
       "<button class='D'>Live Sensor Readings</button></form>"

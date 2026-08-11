@@ -170,14 +170,14 @@ BME280 → <strong>I2C D2-powered</strong> &nbsp;|&nbsp; TSL2591 → <strong>I2C
 <li>Connect to it; the setup page opens automatically (or browse to <code>192.168.4.1</code>).</li>
 <li>Set <strong>Wi-Fi</strong>, and optionally device name, <strong>project</strong> (a group name for the dashboard), sensors/pump, and calibration. The API key is pre-filled. <strong>Save.</strong></li>
 </ol>
-<div class="warn">The <strong>Device UUID</strong> (the board's permanent ID) is shown large at the top of the setup menu — it labels your plant on the dashboard and can't be changed.</div>
+<div class="warn">The <strong>Device ID</strong> (the board's permanent ID, e.g. <code>smartplant-1a2b3c4d</code>) is shown at the top of the setup menu with your dashboard link — it labels your plant on the dashboard and can't be changed.</div>
 <div class="warn">Reopen the setup page later to change anything: <strong>double-press the reset button</strong>.</div>
 
 <h2>6. Check &amp; Calibrate</h2>
 <p>Open <strong>Live Sensor Readings</strong> in the portal:</p>
 <ul>
 <li>Values refresh every 10 s; the Wi-Fi badge shows the connection.</li>
-<li><strong>Send to API</strong> → green <strong>200 OK</strong> confirms Wi-Fi + key + server.</li>
+<li><strong>Send to API</strong> → green <strong>200 OK</strong> confirms Wi-Fi + key + server (<strong>201</strong> on a device's very first send is equally fine).</li>
 <li>A sensor showing <strong>"not detected"</strong> → check its cable / wire order.</li>
 </ul>
 <p><strong>Calibrate moisture</strong> from the same page — read the <em>moisture voltage</em>:
@@ -187,7 +187,7 @@ in the portal and save — no reflash. Defaults: wet 0.60 V, dry 2.45 V.</p>
 <h2>7. Finish &amp; Deploy</h2>
 <ol style="margin:2px 0; padding-left:15px;">
 <li>Click <strong>Finish setup</strong> → device takes a reading and starts its hourly cycle.</li>
-<li>Confirm it appears on <strong>plants.makeruniverse.de</strong>.</li>
+<li>Confirm it appears on <strong>diy-sensor.org/dashboard/device/&lt;device-id&gt;</strong>.</li>
 <li>Disconnect USB, flip the power switch on, screw the lid on.</li>
 </ol>
 <div class="warn">💡 A single reset triggers an immediate reading; a double-press reopens the setup page.</div>

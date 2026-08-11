@@ -6,7 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Smart Plants Starter Kit — an educational IoT project for student workshops. The device monitors
 soil moisture, temperature, humidity, light, and battery level, then sends data via HTTP to
-`https://plants.makeruniverse.de/plants/measurements`. It wakes from deep sleep, reads sensors,
+`https://diy-sensor.org/sensor/measurement` (the DIY Sensor dashboard — source in
+`~/GitHub/sensor_board`; its README is the ingestion contract). It wakes from deep sleep, reads sensors,
 POSTs the payload, then sleeps again to conserve battery.
 
 Per-device settings (WiFi, device identity, calibration, feature toggles) are configured at
@@ -105,19 +106,20 @@ debugging.
 
 **In the portal you can set:** WiFi credentials; device name; project (dashboard grouping);
 API key/URL; sleep interval; moisture calibration (wet/dry voltage); battery divider; pump
-threshold and duration; and enable/disable each sensor and the pump. The **device UUID is not
-editable** — it is derived from the chip MAC and shown in large type at the top of the portal
-menu. The **"Live Sensor Readings"** menu page
+threshold and duration; and enable/disable each sensor and the pump. The **device ID is not
+editable** — it is derived from the chip MAC (`smartplant-<8 hex>`) and shown at the top of the
+portal menu together with the device's dashboard link. The **"Live Sensor Readings"** menu page
 refreshes every 10 s so students can confirm connected sensors work, includes a **"Send to API"**
 button that POSTs live readings to test the connection (green 200 = OK), and a **WiFi status
 badge**. The menu also has **"Finish setup"** (proceed to normal operation) and a **factory
 reset** (restore `DEFAULT_*` values + clear WiFi).
 
-- **Device identity:** on first boot `settings.ino` generates a unique name and UUID from the
-  chip's factory MAC (`ESP.getEfuseMac()`) — e.g. `SmartPlant-1a2b3c4d` — so many students'
-  setup APs and dashboard entries don't collide. Both stable per board; the **name is editable**
-  in the portal, the **UUID is fixed** (read-only, displayed on the portal home page).
-  `DEFAULT_DEVICE_NAME` is the name prefix; `DEFAULT_DEVICE_UUID` is unused.
+- **Device identity:** on first boot `settings.ino` generates a unique name and device ID from the
+  chip's factory MAC (`ESP.getEfuseMac()`) — `SmartPlant-1a2b3c4d` / `smartplant-1a2b3c4d` — so many
+  students' setup APs and dashboard entries don't collide. Both stable per board; the **name is
+  editable** in the portal, the **device ID is fixed** (read-only, displayed on the portal home
+  page). `DEFAULT_DEVICE_NAME` is the name prefix, `DEFAULT_DEVICE_ID_PREFIX` the id prefix. The
+  API only accepts `[A-Za-z0-9_-]` in a device ID.
 - **Project grouping:** optional `settings.project` string (portal-editable, `DEFAULT_PROJECT`
   empty). When non-empty, `send_data.ino` adds a top-level `"project"` to the payload so the
   dashboard can group a class's devices; omitted entirely when blank.
@@ -165,5 +167,10 @@ PCB design files (KiCAD) are in `hardware/pcb/`. Enclosures are in `hardware/3d-
   <https://vektorious.github.io/hpi_smart_plants/>. Published from the **`gh-pages`** branch
   (mirrors this folder at its root; the merged `.bin` lives there, not on `main`). See its
   `README.md` for how to build/update the `.bin` and republish.
-- The server at `plants.makeruniverse.de` runs FastAPI → PostgreSQL; Grafana dashboard is public
-  at the same domain
+- The server at `diy-sensor.org` (repo `~/GitHub/sensor_board`) runs FastAPI → SQLite with a
+  self-populating dashboard at `/dashboard/device/{device_id}` and `/dashboard/project/{slug}`.
+  Ingestion is `POST /sensor/measurement` with `device_id` / optional `project` / optional `name` /
+  `sensors`; it answers **201** on the first write that claims a device ID and **200** afterwards.
+  Timestamps are server-assigned and unknown top-level fields are rejected. Ownership normally
+  uses a client-chosen `write_key`; this firmware deliberately sends none and relies on the
+  operator API key in `x-api-key` instead (keyless device)

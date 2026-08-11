@@ -106,7 +106,7 @@ Save in the portal — no reflash. Defaults: wet 0.60 V, dry 2.45 V.
 ## 7. Finish & Deploy
 
 Click **Finish setup** → the device takes a reading and starts its hourly cycle. Confirm it
-appears on [plants.makeruniverse.de](https://plants.makeruniverse.de). Disconnect USB, flip the
+appears on `diy-sensor.org/dashboard/device/<device-id>` (link shown in the portal). Disconnect USB, flip the
 power switch on, screw the lid on. Done.
 
 > A single reset triggers an immediate reading; a double-press reopens the setup page.

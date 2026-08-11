@@ -140,7 +140,7 @@ Each time the device wakes up, it sends a small **JSON** message — a structure
 ```json
 {
   "name": "my-plant",
-  "device_uuid": "a1b2c3d4",
+  "device_id": "smartplant-a1b2c3d4",
   "project": "workshop-2026",
   "sensors": {
     "moisture": { "value": 62.3, "unit": "%" },
@@ -154,11 +154,11 @@ This message is sent using **HTTP POST** — the same protocol your browser uses
 
 ### The Server
 
-The server runs a **FastAPI** service at `plants.makeruniverse.de`. FastAPI is a modern Python web framework designed for building APIs quickly. When it receives a reading from your device, it validates the data and writes it to a **PostgreSQL** database — a reliable, open-source relational database. Every measurement from every device in the workshop is stored there, identified by the device UUID (generated automatically from the board's chip ID — see the portal home page). The optional `project` field lets the dashboard group a whole class's devices together.
+The server runs a **FastAPI** service at `diy-sensor.org`. FastAPI is a modern Python web framework designed for building APIs quickly. When it receives a reading from your device, it validates the data and writes it to an **SQLite** database. Every measurement from every device in the workshop is stored there, identified by the device ID (generated automatically from the board's chip ID — see the portal home page). The optional `project` field lets the dashboard group a whole class's devices together. The database schema is generic — one row per (device, sensor, time) — so any sensor a device reports shows up on the dashboard without server-side changes.
 
 ### The Dashboard
 
-The readings are visualised in **Grafana**, an open-source dashboarding tool that can connect to many data sources including PostgreSQL. The public dashboard at [plants.makeruniverse.de](https://plants.makeruniverse.de) shows live and historical readings for all devices. You can filter by device name or UUID to see only your plant's data.
+The readings are visualised on a dashboard that builds itself from the data: every sensor a device reports becomes a chart. Your plant's page is at `https://diy-sensor.org/dashboard/device/<device-id>` (the device ID is shown at the top of the setup portal), and if you set a **project**, the whole class's devices are overlaid at `https://diy-sensor.org/dashboard/project/<project>`.
 
 ```
 [Device]

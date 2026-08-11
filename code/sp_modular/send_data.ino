@@ -4,7 +4,7 @@ int sendData(const SensorPacket &d) {
 
   String json = "{";
   json += "\"name\":\"" + String(settings.deviceName) + "\",";
-  json += "\"device_uuid\":\"" + String(settings.deviceUuid) + "\",";
+  json += "\"device_id\":\"" + String(settings.deviceId) + "\",";
   // Optional top-level grouping — omit the key entirely when unset so ungrouped
   // devices still produce a valid payload.
   if (strlen(settings.project) > 0) {

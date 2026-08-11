@@ -264,9 +264,10 @@ On first boot the device has no Wi-Fi yet, so it opens its own temporary Wi-Fi a
      devices together on the dashboard; leave it blank to stay ungrouped,
    - which **sensors / pump** are enabled (tick/untick),
    - **sleep interval**, **moisture calibration**, and **pump** thresholds.
-   The **API key** is already filled in. Your **Device UUID** — the board's permanent ID, derived
-   from its chip — is shown in large type at the top of the setup menu. It identifies your plant on
-   the dashboard and **can't be changed**.
+   The **API key** is already filled in. Your **Device ID** — the board's permanent ID, derived
+   from its chip (e.g. `smartplant-1a2b3c4d`) — is shown at the top of the setup menu, together with
+   the dashboard link for your plant. It identifies your plant on the dashboard and **can't be
+   changed**.
 4. **Save.** The device connects to your Wi-Fi and keeps the setup page open so you can check it
    works (next step). The saved-confirmation page links you straight there.
 
@@ -284,13 +285,16 @@ From the setup menu, open **Live Sensor Readings**:
 - If a sensor shows **"not detected"**, its cable or wire order is wrong — re-check the
   colour order from sections 2.5 / 2.6.
 - Click **Send to API (test connection)**. A green **✓ 200 OK** confirms the whole chain works
-  (Wi-Fi + API key + server). Anything else points at the Wi-Fi or key.
+  (Wi-Fi + API key + server). The very first send of a brand-new device answers **201** instead —
+  that means the server just registered your device ID, and is equally fine. Anything else points
+  at the Wi-Fi or key.
 
 ### 4.4 Finish
 
 Click **Finish setup & start monitoring**. The device takes a measurement and begins its normal
 cycle: wake every hour, read sensors, send data, sleep. Your device appears on the dashboard at
-[plants.makeruniverse.de](https://plants.makeruniverse.de).
+`https://diy-sensor.org/dashboard/device/<your-device-id>` — the link is printed under the Device
+ID on the setup menu.
 
 ---
 
@@ -328,7 +332,7 @@ For standalone test sketches (moisture, pump, I2C bus scan) and Serial-Monitor d
 ## 6. Final Test and Deployment
 
 1. With the USB cable still connected, confirm data appears on the dashboard at
-   [plants.makeruniverse.de](https://plants.makeruniverse.de).
+   `https://diy-sensor.org/dashboard/device/<your-device-id>`.
 2. **Disconnect USB** and flip the power switch on.
 3. The device should wake, connect to Wi-Fi, send a reading, and go back to sleep.
 4. Confirm a new reading appears on the dashboard.

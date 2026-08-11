@@ -76,7 +76,7 @@ Firmware installs from the browser — no toolchain needed — via the web flash
 
 ## Configured on the Device
 
-All per-device settings — Wi-Fi, device name/UUID, sleep interval, moisture calibration, and
+All per-device settings — Wi-Fi, device name, sleep interval, moisture calibration, and
 which sensors and the pump are enabled — are configured **on the device through a Wi-Fi setup
 portal** after flashing, and stored in non-volatile memory. No code edits or recompiling: one
 flashed binary works for every configuration.

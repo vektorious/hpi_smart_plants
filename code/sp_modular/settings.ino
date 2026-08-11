@@ -14,19 +14,20 @@ static Preferences prefs;
 
 static const char *NVS_NAMESPACE = "sp";
 // Bump when the Settings layout changes so stale flash is re-initialised from defaults.
-static const uint32_t SETTINGS_VERSION = 2;
+static const uint32_t SETTINGS_VERSION = 3;
 
 void resetSettingsToDefaults() {
   // Derive a unique per-device id from the factory-programmed MAC in efuse.
   // Stable across reboots/reflashes/factory-reset and unique per board, so
-  // students' setup APs and dashboard entries never collide. DEFAULT_DEVICE_UUID
-  // in config.h is intentionally unused — the UUID is always generated.
+  // students' setup APs and dashboard entries never collide. The prefix keeps
+  // the id recognisable on a shared public instance; the API only accepts
+  // [A-Za-z0-9_-], which both parts satisfy.
   uint32_t uid = (uint32_t)ESP.getEfuseMac();   // lower 32 bits of the 48-bit MAC
   char uidStr[9];
   snprintf(uidStr, sizeof(uidStr), "%08x", uid);
 
   snprintf(settings.deviceName, sizeof(settings.deviceName), "%s-%s", DEFAULT_DEVICE_NAME, uidStr);
-  strlcpy(settings.deviceUuid, uidStr, sizeof(settings.deviceUuid));
+  snprintf(settings.deviceId, sizeof(settings.deviceId), "%s-%s", DEFAULT_DEVICE_ID_PREFIX, uidStr);
   strlcpy(settings.project,    DEFAULT_PROJECT,     sizeof(settings.project));
   strlcpy(settings.apiKey,     DEFAULT_API_KEY,     sizeof(settings.apiKey));
   strlcpy(settings.apiUrl,     DEFAULT_API_URL,     sizeof(settings.apiUrl));
@@ -55,7 +56,7 @@ void loadSettings() {
   }
 
   prefs.getString("deviceName", settings.deviceName, sizeof(settings.deviceName));
-  prefs.getString("deviceUuid", settings.deviceUuid, sizeof(settings.deviceUuid));
+  prefs.getString("deviceId",   settings.deviceId,   sizeof(settings.deviceId));
   prefs.getString("project",    settings.project,    sizeof(settings.project));
   prefs.getString("apiKey",     settings.apiKey,     sizeof(settings.apiKey));
   prefs.getString("apiUrl",     settings.apiUrl,     sizeof(settings.apiUrl));
@@ -76,7 +77,7 @@ void loadSettings() {
 void saveSettings() {
   prefs.begin(NVS_NAMESPACE, /*readOnly=*/false);
   prefs.putString("deviceName", settings.deviceName);
-  prefs.putString("deviceUuid", settings.deviceUuid);
+  prefs.putString("deviceId",   settings.deviceId);
   prefs.putString("project",    settings.project);
   prefs.putString("apiKey",     settings.apiKey);
   prefs.putString("apiUrl",     settings.apiUrl);

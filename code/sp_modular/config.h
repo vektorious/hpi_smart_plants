@@ -23,10 +23,12 @@
 #define DEFAULT_USE_PUMP     true   // Automatic watering pump via MOSFET
 
 // ============ DEVICE INFO DEFAULTS ============
-// Editable in the setup portal. Device name and UUID are shown on the
+// Editable in the setup portal. Device name and ID are shown on the
 // dashboard. API key is provided at the workshop.
 #define DEFAULT_DEVICE_NAME  "SmartPlant"
-#define DEFAULT_DEVICE_UUID  "00000000"
+// Prefix for the generated device_id (the chip-derived suffix is appended).
+// Keep to [A-Za-z0-9_-] — the API rejects anything else.
+#define DEFAULT_DEVICE_ID_PREFIX "smartplant"
 #define DEFAULT_PROJECT      ""   // Groups devices on the dashboard; empty = ungrouped. Set per workshop in the portal (e.g. "workshop-2026").
 #define DEFAULT_API_URL      "https://diy-sensor.org/sensor/measurement"
 #define DEFAULT_API_KEY      "public-test-key"
@@ -72,7 +74,7 @@
 // Defined in settings.ino; loaded once at boot via loadSettings().
 struct Settings {
   char     deviceName[32];
-  char     deviceUuid[32];
+  char     deviceId[32];        // public device_id on the dashboard; not user-editable
   char     project[48];         // dashboard grouping; empty = ungrouped
   char     apiKey[48];
   char     apiUrl[128];
