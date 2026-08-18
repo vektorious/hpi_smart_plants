@@ -114,3 +114,5 @@ struct SensorPacket {
 // Arduino auto-prototype generator skips reference parameters.
 SensorPacket readAllSensors();              // sp_modular.ino
 int          sendData(const SensorPacket &d);  // send_data.ino — HTTP code, -1 if offline
+bool         setupWiFi();                   // wifi.ino — associate with saved credentials
+bool         ensureWiFi();                  // wifi.ino — reconnect if the link dropped
