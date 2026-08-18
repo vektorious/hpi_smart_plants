@@ -56,10 +56,17 @@ void setup() {
 
   bool connected = setupWiFi();
 
-  // Open the commissioning portal on a double reset, or when we have no valid
-  // saved credentials. The portal serves settings + a live sensor page and
-  // runs for 5 minutes (unless kept awake for debugging).
-  if (doubleReset || !connected) {
+  // Open the commissioning portal on a double reset, or when a *fresh start*
+  // cannot get online — that is the case where the user is standing there with
+  // the device and needs to enter credentials.
+  //
+  // A scheduled wake is deliberately excluded. Deep in a measurement series a
+  // failed association means the network blipped, not that the device needs
+  // commissioning, and opening a 5-minute AP there would cost the reading we
+  // woke up to take plus a large share of the hourly power budget. Better to
+  // skip the cycle and try again next hour.
+  bool timerWake = (esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_TIMER);
+  if (doubleReset || (!connected && !timerWake)) {
     runCommissioningPortal();
   }
 
@@ -69,7 +76,13 @@ void setup() {
     d.pumpSeconds = runPump(d.moistPct);
   }
 
-  sendData(d);
+  int code = sendData(d);
+  if (code != 200 && code != 201) {
+    // The reading only lives in RAM and deep sleep destroys it, so this is the
+    // moment it is lost. Nothing records that yet — see the diagnostics note.
+    Serial.println("Measurement NOT delivered (code " + String(code) + ") — reading lost");
+  }
+
   goToSleep();
 }
 
